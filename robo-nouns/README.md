@@ -1,26 +1,23 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Robo Nouns 🤖 ⌐◨-◨
 
-## Getting Started
+Robo Nouns is a project to test out a new minting mechanism for nouns using a Variable Rate Gradual Dutch Auction mechanism instead of english auctions. Robo Nouns' artwork is in the public domain. Robo Nouns are born and trustlessly auctioned via a Gradual Dutch Auction, forever. Settlement of one auction kicks off the next. Artwork is generative and stored directly on-chain (not IPFS). No explicit rules exist for attribute scarcity; all Nouns are equally rare.
 
-First, run the development server:
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+## The project introduces three new concepts:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Pseudo-random block traits generation
++ At the core of Robo Nouns is the concept of on-chain generated NFTs with traits that change every block. This means that, approximately every ~12.1 seconds, a new NFT with distinct attributes will be created. Users can monitor the Nouns's traits as they evolve and purchase it when it matches their preferences. This approach ensures that NFTs are not only rare and valuable but also highly customizable (pseudo-randomly), catering to individual tastes and desires.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+### Variable rate token issuance mechanism:
++ The Robo Nouns Variable Rate Gradual Dutch Auction, forked from Paradigm's implementation - https://www.paradigm.xyz/2022/08/vrgda
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+### On-chain pool of saved and unbought NFTs:
++ Robo Nouns introduces an on-chain pool of last 3 block unsold Nouns, giving users a second chance to acquire NFTs they may have missed during the 12-second block generation period. The pool maintains a record of the three most recent unsold Nouns. When a new NFT is generated, it overwrites the oldest NFT in the pool, ensuring that users always have access to a diverse selection of previously generated NFTs.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
-## Learn More
+
+
 
 To learn more about Next.js, take a look at the following resources:
 
@@ -29,8 +26,11 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+## Technologies
+[68747470733a2f2f6173736574732e76657263656c2e636f6d2f696d6167652f75706c6f61642f76313636323133303535392f6e6578746a732f49636f6e5f6461726b5f6261636b67726f756e642e706e67](https://user-images.githubusercontent.com/33820055/233872466-af7679f0-6487-41d3-8d77-93fabd7338ca.png)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+<img src="https://user-images.githubusercontent.com/33820055/211115496-ebffab3b-6d65-448b-8ef8-29ab956bc76d.png" width=10% height=10%>![thirdweb-logo-transparent-white](https://user-images.githubusercontent.com/33820055/233872105-2f74cbec-f528-4745-99b4-fbacd5e7fdc2.svg)
+![tailwindcss-logotype-white](https://user-images.githubusercontent.com/33820055/233872261-7fbe3789-e6a2-49b9-bdf3-758060bb453c.svg)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+<img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original-wordmark.svg" width=10% height=10%><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original-wordmark.svg" width=10% height=10%><img src="https://user-images.githubusercontent.com/33820055/211115756-1498003e-a59f-4ef3-8721-65d11f43c78d.png" width=10% height=10%><img src="https://user-images.githubusercontent.com/33820055/211115670-3be19d99-b0b9-437d-901d-b32510e34576.png" width=30% height=50%>
