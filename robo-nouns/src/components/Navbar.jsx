@@ -6,7 +6,7 @@ export default function Navbar({ className, ...rest }) {
     return (
         <header className="bg-nouns-lime py-12">
             <div className="container mx-auto flex items-center justify-between md:px-32 px-4">
-                <Link href="/">
+                <Link href="https://nouns.wtf/">
                     <Image
                         src="/noggles.7644bfd0.svg"
                         width="100"
