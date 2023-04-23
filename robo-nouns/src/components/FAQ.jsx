@@ -5,12 +5,12 @@ const faq = [
     {
         title: "Summary",
         description:
-            "Nouns VRGDA artwork is in the public domain. Nouns VRGDA are born and trustlessly auctioned via a Gradual Dutch Auction, forever. Settlement of one auction kicks off the next. Artwork is generative and stored directly on-chain (not IPFS). No explicit rules exist for attribute scarcity; all Nouns are equally rare.",
+            "Robo Nouns' artwork is in the public domain. Robo Nouns are born and trustlessly auctioned via a Gradual Dutch Auction, forever. Settlement of one auction kicks off the next. Artwork is generative and stored directly on-chain (not IPFS). No explicit rules exist for attribute scarcity; all Nouns are equally rare.",
     },
     {
         title: "Variable Rate Gradual Dutch Auctions",
         description:
-            "The Nouns Variable Rate Gradual Dutch Auction, forked from Paradigms implementation - https://www.paradigm.xyz/2022/08/vrgda",
+            "The Robo Nouns Variable Rate Gradual Dutch Auction mechanism is forked from Paradigm's implementation - https://www.paradigm.xyz/2022/08/vrgda.",
     },
     {
         title: "Pseudo-random block traits generation",
@@ -29,12 +29,12 @@ const faq = [
             "Nouns VRGDA are stored directly on Goerli and do not utilize pointers to other networks such as IPFS. This is possible because Noun parts are compressed and stored on-chain using a custom run-length encoding (RLE), which is a form of lossless compression. The compressed parts are efficiently converted into a single base64 encoded SVG image on-chain. To accomplish this, each part is decoded into an intermediate format before being converted into a series of SVG rects using batched, on-chain string concatenation. Once the entire SVG has been generated, it is base64 encoded.",
     },
     {
-        title: "Nouns VRGDA Noun Traits",
+        title: "Robo Noun Traits",
         description:
             "Nouns VRGDA are generated randomly based on Goerli block hashes. There are no 'if' statements or other rules governing Lil Noun trait scarcity, which makes all Lil Nouns equally rare. As of this writing, Lil Nouns are made up of: backgrounds (2), bodies (30)accessories (140), heads (242),glasses (23), You can experiment with off-chain Lil Sandbox Noun generation at the Playground.",
     },
     {
-        title: "Noun VRGDA Seeder Contract",
+        title: "Robo Noun Seeder Contract",
         description:
             "The Noun Seeder contract is used to determine Noun traits during the minting process. The seeder contract can be replaced to allow for future trait generation algorithm upgrades. Currently, Noun traits are determined using pseudo-random number generation:keccak256(abi.encodePacked(blockhash(block.number - 1), nounId)). Trait generation is not truly random. Traits can be predicted when minting a Noun on the pending block. Will work on possible improvement later",
     },
@@ -57,19 +57,19 @@ export default function FAQ() {
                                 WTF is this?
                             </h1>
                             <span className="mt-4">
-                                <span className="font-medium">Nouns VRGDA</span>{" "}
-                                is project to test out a new minting mechanism
-                                for nouns using a Variable Rate Gradual Dutch
+                                <span className="font-medium">Robo Nouns</span>{" "}
+                                is a project to test out a new minting mechanism
+                                for Nouns using a Variable Rate Gradual Dutch
                                 Auction mechanism instead of english auctions.
                                 <br />
                                 <br />
                                 Introducing three concepts:
-                                <li>pseudo-random block traits generation</li>
+                                <li>Pseudo-random block traits generation</li>
                                 <li>
-                                    a variable rate token issuance mechanism
+                                    Variable rate token issuance mechanism
                                 </li>
                                 <li>
-                                    an on-chain pool of saved and unbought NFTs
+                                    On-chain pool of saved and unbought NFTs
                                 </li>
                             </span>
                         </div>

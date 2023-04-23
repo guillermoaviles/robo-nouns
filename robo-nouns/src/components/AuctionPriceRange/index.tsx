@@ -62,7 +62,7 @@ export default function AuctionPriceRange() {
         // Need to figure out correct order of prices
         <>
             <div className="inline-block relative">
-                <div className="flex lg:justify-between justify-start lg:space-x-0 md:space-x-48 space-x-32 text-dark-gray">
+                <div className="flex lg:justify-between justify-start lg:space-x-0 md:space-x-32 space-x-32 text-dark-gray">
                     <h4 className="text-sm -mb-2">Ξ{minMintPrice ?? ""}</h4>
                     <h4 className="text-sm -mb-2">
                         {/* Ξ{currVRGDAPrice && utils.formatEther(currVRGDAPrice.toString())} */}

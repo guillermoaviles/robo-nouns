@@ -17,9 +17,9 @@ const Auction = () => {
 
     return (
         <div className="container bg-white md:bg-nouns-lime mx-auto mt-2">
-            <div className="flex flex-wrap -mx-6 md:mx-0 -mt-0">
+            <div className="flex flex-wrap md:mx-0 -mt-0">
                 <NounImg />
-                <div className="flex w-full lg:w-1/2 items-center ml-10 md:mx-auto pb-0 md:pr-20 min-h-[520px]">
+                <div className="flex w-full lg:w-1/2 items-center md:mx-auto pb-0 min-h-[520px]">
                     <div>
                         <div className="mb-2">
                             <div className="flex flex-col mb-0">
@@ -32,7 +32,7 @@ const Auction = () => {
                                 </div>
                                 <div className="w-full">
                                     <div className="font-press">
-                                        <h1 className="text-dark-gray text-5xl mt-2">
+                                        <h1 className="text-dark-gray text-4xl mt-2">
                                             Robo Noun {nounNFTMeta && nounNFTMeta[0]?.nounId.toNumber()}
                                         </h1>
                                     </div>

@@ -87,7 +87,7 @@ export default function BuyNow({ nft, currMintPrice, nftNo }) {
         <div className="input-group">
             <button
                 type="button"
-                className="Buy_bidBtn__O3Zyw btn btn-primary hover:bg-slate-800"
+                className="BuyBtn btn-primary hover:text-nouns-lime hover:scale-105"
                 onClick={call}
             >
                 Buy Now

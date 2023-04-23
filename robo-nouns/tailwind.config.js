@@ -9,6 +9,7 @@ module.exports = {
 		// Or if using `src` directory:
 		"./src/**/*.{js,ts,jsx,tsx}",
 	],
+    important: true,
 	theme: {
 		extend: {
 			fontFamily: {
@@ -29,10 +30,7 @@ module.exports = {
 				'nouns-blue': '#d5d7e1',
 				'nouns-lime': '#70e890',
 				'dark-gray' : '#252526',
-			},
-			textColor: {
-				'neon-blue': '#252526',
-			  },		
+			},		
 			boxShadow: {
 				'3xl': '0 35px 60px -15px rgba(0, 0, 0, 0.3)',
 			  }

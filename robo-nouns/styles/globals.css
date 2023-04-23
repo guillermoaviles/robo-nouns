@@ -121,221 +121,244 @@ a {
 .container-sm,
 .container-xl,
 .container-xxl {
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: 0.75rem;
-    padding-left: var(--bs-gutter-x, 0.75rem);
-    padding-right: 0.75rem;
-    padding-right: var(--bs-gutter-x, 0.75rem);
-    width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 0.75rem;
+  padding-left: var(--bs-gutter-x, 0.75rem);
+  padding-right: 0.75rem;
+  padding-right: var(--bs-gutter-x, 0.75rem);
+  width: 100%;
 }
-@media (min-width: 1400px) .container,
-    .container-lg,
-    .container-md,
-    .container-sm,
-    .container-xl,
-    .container-xxl {
+
+@media (min-width: 1400px) {
+
+  .container,
+  .container-lg,
+  .container-md,
+  .container-sm,
+  .container-xl,
+  .container-xxl {
     max-width: 1320px;
+  }
 }
-@media (min-width: 1200px) .container,
+  @media (min-width: 1200px) {
+
+    .container,
     .container-lg,
     .container-md,
     .container-sm,
     .container-xl {
-    max-width: 1140px;
-}
-@media (min-width: 1400px) .container,
-    .container-lg,
-    .container-xl,
-    .container-xxl {
-    max-width: 1140px !important;
-}
+      max-width: 1140px;
+    }
+  }
+    @media (min-width: 1400px) {
 
-.row {
-    --bs-gutter-x: 1.5rem;
-    --bs-gutter-y: 0;
-    display: flex;
-    flex-wrap: wrap;
-    margin-left: calc(var(--bs-gutter-x) * -0.5);
-    margin-right: calc(var(--bs-gutter-x) * -0.5);
-    margin-top: calc(var(--bs-gutter-y) * -1);
-}
+      .container,
+      .container-lg,
+      .container-xl,
+      .container-xxl {
+        max-width: 1140px !important;
+      }
+    }
+      .row {
+        --bs-gutter-x: 1.5rem;
+        --bs-gutter-y: 0;
+        display: flex;
+        flex-wrap: wrap;
+        margin-left: calc(var(--bs-gutter-x) * -0.5);
+        margin-right: calc(var(--bs-gutter-x) * -0.5);
+        margin-top: calc(var(--bs-gutter-y) * -1);
+      }
 
-.Auction_nounContentCol__I0oG2 {
-    display: flex;
-}
-@media (max-width: 568px) .Auction_nounContentCol__I0oG2 {
-    padding: 0;
-}
+      .Auction_nounContentCol__I0oG2 {
+        display: flex;
+      }
 
-.row > * {
-    flex-shrink: 0;
-    margin-top: var(--bs-gutter-y);
-    max-width: 100%;
-    padding-left: calc(var(--bs-gutter-x) * 0.5);
-    padding-right: calc(var(--bs-gutter-x) * 0.5);
-    width: 100%;
-}
+      @media (max-width: 568px) {
+        .Auction_nounContentCol__I0oG2 {
+          padding: 0;
+        }
+      }
 
-.Auction_nounWrapper__WMUGh {
-    align-self: flex-end;
-    width: 100%;
-}
-@media (max-width: 568px) .Auction_nounWrapper__WMUGh {
-    margin-left: 10%;
-    margin-right: 10%;
-    margin-top: 2rem;
-    width: 80%;
-}
-@media (max-width: 992px) .Auction_nounWrapper__WMUGh {
-    margin-left: 15%;
-    margin-right: 15%;
-    width: 70%;
-}
+      .row>* {
+        flex-shrink: 0;
+        margin-top: var(--bs-gutter-y);
+        max-width: 100%;
+        padding-left: calc(var(--bs-gutter-x) * 0.5);
+        padding-right: calc(var(--bs-gutter-x) * 0.5);
+        width: 100%;
+      }
 
-.img-fluid,
-.img-thumbnail {
-    height: auto;
-    max-width: 100%;
-}
-img,
-svg {
-    vertical-align: middle;
-}
+      .Auction_nounWrapper__WMUGh {
+        align-self: flex-end;
+        width: 100%;
+      }
+
+      @media (max-width: 568px) {.Auction_nounWrapper__WMUGh {
+        margin-left: 10%;
+        margin-right: 10%;
+        margin-top: 2rem;
+        width: 80%;
+      }
+    }
+
+      @media (max-width: 992px) {.Auction_nounWrapper__WMUGh {
+        margin-left: 15%;
+        margin-right: 15%;
+        width: 70%;
+      }
+    }
+
+      .img-fluid,
+      .img-thumbnail {
+        height: auto;
+        max-width: 100%;
+      }
+
+      img,
+      svg {
+        vertical-align: middle;
+      }
 
 
 
-.Noun_imgWrapper__JbApJ {
-    height: 0;
-    padding-top: 100%;
-    position: relative;
-    width: 100%;
-}
+      .Noun_imgWrapper__JbApJ {
+        height: 0;
+        padding-top: 100%;
+        position: relative;
+        width: 100%;
+      }
 
-.Noun_img__Q5SWg {
-    -ms-interpolation-mode: nearest-neighbor;
-    height: auto;
-    image-rendering: pixelated;
-    image-rendering: -moz-crisp-edges;
-    left: 0;
-    position: absolute;
-    top: 0;
-    vertical-align: middle;
-    width: 100%;
-}
+      .Noun_img__Q5SWg {
+        -ms-interpolation-mode: nearest-neighbor;
+        height: auto;
+        image-rendering: pixelated;
+        image-rendering: -moz-crisp-edges;
+        left: 0;
+        position: absolute;
+        top: 0;
+        vertical-align: middle;
+        width: 100%;
+      }
 
-.App_wrapper__Mru9Z {
-    display: flex;
-    flex-direction: column;
-    max-width: 100vw;
-    min-height: 100vh;
-    overflow-x: hidden;
-}
+      .App_wrapper {
+        display: flex;
+        flex-direction: column;
+        max-width: 100vw;
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
 
-.Auction_auctionActivityCol__KuMUP {
-    align-self: flex-end !important;
-    min-height: 520px;
-    padding-bottom: 0;
-    padding-right: 5rem;
-}
-@media (max-width: 568px) .Auction_auctionActivityCol__KuMUP {
-    margin-left: 0;
-    margin-right: 0;
-    padding: 2rem 0;
-    width: 100%;
-}
-@media (max-width: 992px) .Auction_auctionActivityCol__KuMUP {
-    background-color: #fff;
-    padding-left: 5%;
-    padding-right: 5%;
-    padding-top: 5%;
-    width: 100%;
-}
+      .Auction_auctionActivityCol__KuMUP {
+        align-self: flex-end !important;
+        min-height: 520px;
+        padding-bottom: 0;
+        padding-right: 5rem;
+      }
 
-@media (max-width: 992px) .AuctionActivityWrapper_wrapper__q1NGu {
-    margin-left: 1rem;
-    margin-right: 1rem;
-}
+      @media (max-width: 568px) {.Auction_auctionActivityCol__KuMUP {
+        margin-left: 0;
+        margin-right: 0;
+        padding: 2rem 0;
+        width: 100%;
+      }
+    }
 
-.AuctionActivity_informationRow__\+caD2 {
-    margin-bottom: 0.5rem;
-}
+      @media (max-width: 992px) {.Auction_auctionActivityCol__KuMUP {
+        background-color: #fff;
+        padding-left: 5%;
+        padding-right: 5%;
+        padding-top: 5%;
+        width: 100%;
+      }
+    }
 
-.AuctionActivity_activityRow__UDwpz {
-    margin-bottom: 0;
-}
+      @media (max-width: 992px) {.AuctionActivityWrapper_wrapper__q1NGu {
+        margin-left: 1rem;
+        margin-right: 1rem;
+      }
+    }
+      .AuctionActivity_informationRow__\+caD2 {
+        margin-bottom: 0.5rem;
+      }
 
-.AuctionTitleAndNavWrapper_auctionTitleAndNavContainer__FbkuP {
-    display: flex;
-}
+      .AuctionActivity_activityRow__UDwpz {
+        margin-bottom: 0;
+      }
 
-.AuctionActivityDateHeadline_wrapper__SwL\+v {
-    width: auto;
-}
+      .AuctionTitleAndNavWrapper_auctionTitleAndNavContainer__FbkuP {
+        display: flex;
+      }
 
-.AuctionActivityDateHeadline_date__d1PDA {
-    font-family: PT Sans;
-    font-size: 17px;
-    font-weight: 700;
-    line-height: 27px;
-    margin-top: 0.22rem;
-}
-h4 {
-    font-size: 1rem;
-    font-weight: 400;
-}
-.h4,
-h4 {
-    font-size: calc(1.275rem + 0.3vw);
-}
-.h1,
-.h2,
-.h3,
-.h4,
-.h5,
-.h6,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    font-weight: 500;
-    line-height: 1.2;
-    margin-bottom: 0.5rem;
-    margin-top: 0;
-}
+      .AuctionActivityDateHeadline_wrapper__SwL\+v {
+        width: auto;
+      }
 
-.AuctionActivityNounTitle_wrapper__gTYLG {
-    display: inline-block;
-}
+      .AuctionActivityDateHeadline_date__d1PDA {
+        font-family: PT Sans;
+        font-size: 17px;
+        font-weight: 700;
+        line-height: 27px;
+        margin-top: 0.22rem;
+      }
 
-.AuctionActivity_activityRow__UDwpz {
-    margin-bottom: 0;
-}
+      h4 {
+        font-size: 1rem;
+        font-weight: 400;
+      }
 
-.btn-primary {
-    background-color: #0d6efd;
-    border-color: #0d6efd;
-    color: #fff;
-}
+      .h4,
+      h4 {
+        font-size: calc(1.275rem + 0.3vw);
+      }
 
-.Buy_bidBtn__O3Zyw {
-    background-color: #000;
-    border: transparent;
-    border-radius: 12px !important;
-    color: #fff;
-    font-family: PT Sans;
-    font-size: 19px;
-    font-weight: 700;
-    height: 3rem;
-    letter-spacing: normal;
-    padding: 8px 70px;
-    transition: all 0.2s ease-in-out;
-    width: auto;
-}
+      .h1,
+      .h2,
+      .h3,
+      .h4,
+      .h5,
+      .h6,
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-weight: 500;
+        line-height: 1.2;
+        margin-bottom: 0.5rem;
+        margin-top: 0;
+      }
 
-/* .btn {
+      .AuctionActivityNounTitle_wrapper__gTYLG {
+        display: inline-block;
+      }
+
+      .AuctionActivity_activityRow__UDwpz {
+        margin-bottom: 0;
+      }
+
+      .BuyBtn {
+        background-color: #000;
+        border: transparent;
+        border-radius: 12px !important;
+        color: #fff;
+        font-family: PT Sans;
+        font-size: 19px;
+        font-weight: 700;
+        height: 3rem;
+        letter-spacing: normal;
+        padding: 8px 70px;
+        transition: all 0.2s ease-in-out;
+        width: auto;
+      }
+
+      .connectWallet:hover {
+        color: #70e890;
+        transition: all 0.2s ease-in-out;
+        scale: 1.05;
+      }
+      /* .btn {
     background-color: transparent;
     border: 1px solid transparent;
     border-radius: 0.25rem;
@@ -357,50 +380,46 @@ h6 {
     vertical-align: middle;
 } */
 
-.input-group .btn {
-    position: relative;
-    z-index: 2;
-}
+      .input-group .btn {
+        position: relative;
+        z-index: 2;
+      }
 
-.accordion-button {
-    align-items: center;
-    background-color: #fff;
-    border: 0;
-    border-radius: 0;
-    color: #212529;
-    display: flex;
-    font-size: 1rem;
-    overflow-anchor: none;
-    padding: 1rem 1.25rem;
-    position: relative;
-    text-align: left;
-    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
-        border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out,
-        border-radius 0.15s ease;
-    width: 100%;
-}
+      .accordion-button {
+        align-items: center;
+        background-color: #fff;
+        border: 0;
+        border-radius: 0;
+        color: #212529;
+        display: flex;
+        font-size: 1rem;
+        overflow-anchor: none;
+        padding: 1rem 1.25rem;
+        position: relative;
+        text-align: left;
+        transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+          border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out,
+          border-radius 0.15s ease;
+        width: 100%;
+      }
 
-.Footer_footerSignature__wnClW {
-    align-items: center;
-    color: var(--brand-black) !important;
-    display: flex;
-    flex-flow: row wrap;
-    font-size: 18px;
-    font-weight: 500;
-    justify-content: flex-start;
-    margin: auto auto 0;
-    padding-bottom: 3rem;
-    padding-top: 3rem;
-}
+      .Footer_footerSignature__wnClW {
+        align-items: center;
+        color: var(--brand-black) !important;
+        display: flex;
+        flex-flow: row wrap;
+        font-size: 18px;
+        font-weight: 500;
+        justify-content: flex-start;
+        margin: auto auto 0;
+        padding-bottom: 3rem;
+        padding-top: 3rem;
+      }
 
-.Footer_footerSignature__wnClW a {
-    color: #000;
-    margin: 8px 14px;
-    text-decoration: none;
-    transition: all 0.15s ease-in-out;
-}
-
-.text-neon-blue{
-	--tw-text-opacity: 1 !important;
-	color: rgba(80, 193, 255, var(--tw-text-opacity)) !important;
-}
+      .Footer_footerSignature__wnClW a {
+        color: #000;
+        margin: 8px 14px;
+        text-decoration: none;
+        transition: all 0.15s ease-in-out;
+      }
+  
