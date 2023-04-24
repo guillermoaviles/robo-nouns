@@ -4,7 +4,7 @@
   </a>
 </p>
 
-Robo Nouns is a project to test out a new minting mechanism for Nouns using a Variable Rate Gradual Dutch Auction mechanism instead of english auctions. Robo Nouns' artwork is in the public domain. Robo Nouns are born and trustlessly auctioned via a Gradual Dutch Auction, forever. Settlement of one auction kicks off the next. Artwork is generative and stored directly on-chain (not IPFS). No explicit rules exist for attribute scarcity; all Nouns are equally rare.
+<strong>Robo Nouns</strong> is a project to test out a new minting mechanism for Nouns using a Variable Rate Gradual Dutch Auction mechanism instead of english auctions. Robo Nouns' artwork is in the public domain. Robo Nouns are born and trustlessly auctioned via a Gradual Dutch Auction, forever. Settlement of one auction kicks off the next. Artwork is generative and stored directly on-chain (not IPFS). No explicit rules exist for attribute scarcity; all Nouns are equally rare.
 
 
 ## The project introduces three new concepts:
