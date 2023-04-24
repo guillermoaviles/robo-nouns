@@ -15,34 +15,34 @@ const faq = [
     {
         title: "Pseudo-random block traits generation",
         description:
-            "At the core of Nouns VRGDA is the concept of on-chain generated NFTs with traits that change every block. This means that, approximately every ~12.1 seconds, a new NFT with distinct attributes will be created. Users can monitor the Nouns's traits as they evolve and purchase it when it matches their preferences. This approach ensures that NFTs are not only rare and valuable but also highly customizable (pseudo-randomly), catering to individual tastes and desires.",
+            "At the core of Robo Nouns is the concept of on-chain generated NFTs with traits that change every block. This means that, approximately every ~12.1 seconds, a new NFT with distinct attributes will be created. Users can monitor the Nouns's traits as they evolve and purchase it when it matches their preferences. This approach ensures that NFTs are not only rare and valuable but also highly customizable (pseudo-randomly), catering to individual tastes and desires.",
     },
 
     {
         title: "On-chain pool of last 3 block unsold Nouns",
         description:
-            "Nouns VRGDA introduces an on-chain pool of last 3 block unsold Nouns, giving users a second chance to acquire NFTs they may have missed during the 12-second block generation period. The pool maintains a record of the three most recent unsold Nouns. When a new NFT is generated, it overwrites the oldest NFT in the pool, ensuring that users always have access to a diverse selection of previously generated NFTs.",
+            "Robo Nouns introduces an on-chain pool of last 3 block unsold Nouns, giving users a second chance to acquire NFTs they may have missed during the 12-second block generation period. The pool maintains a record of the three most recent unsold Nouns. When a new NFT is generated, it overwrites the oldest NFT in the pool, ensuring that users always have access to a diverse selection of previously generated NFTs.",
     },
     {
         title: "On-Chain Artwork",
         description:
-            "Nouns VRGDA are stored directly on Goerli and do not utilize pointers to other networks such as IPFS. This is possible because Noun parts are compressed and stored on-chain using a custom run-length encoding (RLE), which is a form of lossless compression. The compressed parts are efficiently converted into a single base64 encoded SVG image on-chain. To accomplish this, each part is decoded into an intermediate format before being converted into a series of SVG rects using batched, on-chain string concatenation. Once the entire SVG has been generated, it is base64 encoded.",
+            "Robo Nouns are stored directly on Goerli and do not utilize pointers to other networks such as IPFS. This is possible because Noun parts are compressed and stored on-chain using a custom run-length encoding (RLE), which is a form of lossless compression. The compressed parts are efficiently converted into a single base64 encoded SVG image on-chain. To accomplish this, each part is decoded into an intermediate format before being converted into a series of SVG rects using batched, on-chain string concatenation. Once the entire SVG has been generated, it is base64 encoded.",
     },
     {
         title: "Robo Noun Traits",
         description:
-            "Nouns VRGDA are generated randomly based on Goerli block hashes. There are no 'if' statements or other rules governing Lil Noun trait scarcity, which makes all Lil Nouns equally rare. As of this writing, Lil Nouns are made up of: backgrounds (2), bodies (30)accessories (140), heads (242),glasses (23), You can experiment with off-chain Lil Sandbox Noun generation at the Playground.",
+            "Robo Nouns are generated randomly based on Goerli block hashes. There are no 'if' statements or other rules governing Lil Noun trait scarcity, which makes all Lil Nouns equally rare. As of this writing, Robo Nouns are made up of: backgrounds (1), bodies (1)accessories (140), heads (242),glasses (23).",
     },
     {
-        title: "Robo Noun Seeder Contract",
+        title: "Robo Nouns Seeder Contract",
         description:
-            "The Noun Seeder contract is used to determine Noun traits during the minting process. The seeder contract can be replaced to allow for future trait generation algorithm upgrades. Currently, Noun traits are determined using pseudo-random number generation:keccak256(abi.encodePacked(blockhash(block.number - 1), nounId)). Trait generation is not truly random. Traits can be predicted when minting a Noun on the pending block. Will work on possible improvement later",
+            "The Nouns Seeder contract is used to determine Noun traits during the minting process. The seeder contract can be replaced to allow for future trait generation algorithm upgrades. Currently, Noun traits are determined using pseudo-random number generation:keccak256(abi.encodePacked(blockhash(block.number - 1), nounId)). Trait generation is not truly random. Traits can be predicted when minting a Noun on the pending block. Will work on possible improvement later",
     },
 
     {
         title: "Conclusion",
         description:
-            "In conclusion, Nouns VRGDA is a that combines innovative concepts to create a unique and engaging experience. By incorporating pseudo-random block traits generation, the VRGDA pricing mechanism, and an on-chain pool of last 3 block unsold Nouns, our project offers a fresh and exciting approach for users. We believe that Nouns VRGDA will capture the imagination of the NFT community and pave the way for a new era of digital art and collectibles.",
+            "In conclusion, Robo Nouns is a that combines innovative concepts to create a unique and engaging experience. By incorporating pseudo-random block traits generation, the VRGDA pricing mechanism, and an on-chain pool of last 3 block unsold Nouns, our project offers a fresh and exciting approach for users. We believe that Robo Nouns will capture the imagination of the NFT community and pave the way for a new era of digital art and collectibles.",
     },
 ]
 
