@@ -4,7 +4,7 @@
   </a>
 </p>
 
-Robo Nouns is a project to test out a new minting mechanism for nouns using a Variable Rate Gradual Dutch Auction mechanism instead of english auctions. Robo Nouns' artwork is in the public domain. Robo Nouns are born and trustlessly auctioned via a Gradual Dutch Auction, forever. Settlement of one auction kicks off the next. Artwork is generative and stored directly on-chain (not IPFS). No explicit rules exist for attribute scarcity; all Nouns are equally rare.
+Robo Nouns is a project to test out a new minting mechanism for Nouns using a Variable Rate Gradual Dutch Auction mechanism instead of english auctions. Robo Nouns' artwork is in the public domain. Robo Nouns are born and trustlessly auctioned via a Gradual Dutch Auction, forever. Settlement of one auction kicks off the next. Artwork is generative and stored directly on-chain (not IPFS). No explicit rules exist for attribute scarcity; all Nouns are equally rare.
 
 
 ## The project introduces three new concepts:
@@ -13,7 +13,7 @@ Robo Nouns is a project to test out a new minting mechanism for nouns using a Va
 <table>
 <tr>
 <td>
-  At the core of Robo Nouns is the concept of on-chain generated NFTs with traits that change every block. This means that, approximately every ~12.1 seconds, a new NFT with distinct attributes will be created. Users can monitor the Nouns's traits as they evolve and purchase it when it matches their preferences. This approach ensures that NFTs are not only rare and valuable but also highly customizable (pseudo-randomly), catering to individual tastes and desires.
+  At the core of Robo Nouns is the concept of on-chain generated NFTs with traits that change every block. This means that, approximately every ~12.1 seconds, a new NFT with distinct attributes will be created. Users can monitor the Nouns' traits as they evolve and purchase it when it matches their preferences. This approach ensures that NFTs are not only rare and valuable but also highly customizable (pseudo-randomly), catering to individual tastes and desires.
 </td>
 </tr>
 </table>
@@ -43,3 +43,6 @@ Robo Nouns is a project to test out a new minting mechanism for nouns using a Va
 ## Contributors
 <a href="https://twitter.com/guille_aviles" target="_blank">@guille_aviles</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://twitter.com/zeroxvee" target="_blank">@zeroxvee</a>
 
+## Acknowledgements 
+
+Special thanks to <a href="https://twitter.com/0xWiz_" target="_blank">@0xWiz_</a> for introducing us to the <a href="https://nouns.wtf/" target="_blank">Nouns</a> community and supporting us throughout this project.
