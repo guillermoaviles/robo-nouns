@@ -15,7 +15,7 @@ export function AuctionProvider({ children }) {
     const addNounData = (newNoun) => {
         // Check if the new object has a different hash value from the existing ones
         const isDuplicate = nounNFTMeta
-            ? nounNFTMeta.some((noun) => noun.hash === newNoun.hash)
+            ? nounNFTMeta.some((noun) => noun?.hash === newNoun?.hash)
             : false
         if (!isDuplicate) {
             // Add the new object to the beginning of the array

@@ -34,6 +34,14 @@ const Footer = () => {
                 >
                     Forum
                 </a>
+                <a
+                    className="Link_link__DLONq"
+                    href="https://github.com/guillermoaviles/robo-nouns/tree/main/robo-nouns"
+                    target="_self"
+                    rel="noreferrer"
+                >
+                    GitHub
+                </a>
             </footer>
         </div>
     )

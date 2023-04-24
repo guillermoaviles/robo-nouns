@@ -5,7 +5,7 @@ import { AuctionProvider } from "../context/AuctionContext"
 
 export default function App({ Component, pageProps }) {
     return (
-        <ThirdwebProvider activeChain="goerli">
+        <ThirdwebProvider activeChain="mumbai">
             <AuctionProvider>
                 <Component {...pageProps} />
             </AuctionProvider>

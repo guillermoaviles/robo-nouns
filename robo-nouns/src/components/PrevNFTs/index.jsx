@@ -1,6 +1,5 @@
 import React from "react"
 import { useAuction } from "@/context/AuctionContext.jsx"
-import { ethers } from "ethers"
 import Image from "next/image"
 import BuyNow from "../BuyNow"
 

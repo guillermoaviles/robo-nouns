@@ -1,6 +1,4 @@
 import React from "react"
-import { useContract, useContractRead } from "@thirdweb-dev/react"
-import { utils } from "ethers"
 import { useAuction } from "@/context/AuctionContext.jsx"
 
 const PriceBlock: React.FC<{

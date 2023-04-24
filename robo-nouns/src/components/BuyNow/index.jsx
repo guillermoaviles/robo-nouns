@@ -1,13 +1,11 @@
 import {
-    useContract,
-    useContractWrite,
-    useContractRead,
+    useContract
 } from "@thirdweb-dev/react"
 import { useEffect, useState } from "react"
 const { ethers } = require("ethers")
 
 export default function BuyNow({ nft, currMintPrice, nftNo }) {
-    const [parentBlockHash, setParentBlockHash] = useState("");
+    const [parentBlockHash, setParentBlockNumber] = useState("");
     const [parentBlockHashMinusOne, setParentBlockHashMinusOne] = useState("");
     const [parentBlockHashMinusTwo, setParentBlockHashMinusTwo] = useState("");
     const [parentBlockHashMinusThree, setParentBlockHashMinusThree] = useState("");
@@ -29,12 +27,13 @@ export default function BuyNow({ nft, currMintPrice, nftNo }) {
     console.log('parentBlockHashMinusThree', parentBlockHashMinusThree);
     const expNounID = nft?.nounId;
     const provider = new ethers.providers.JsonRpcProvider(
-        "https://eth-goerli.g.alchemy.com/v2/BgA6XZL6TubsjQaFB0Yupu0yB6_oqDM8"
+        "https://polygon-mumbai.g.alchemy.com/v2/SYsE_zQSuhVCH3bio3ltnI_a8Ze_wN94"
     )
 
-    // lilnouns sandox Goerli contract address
+    
     const { contract } = useContract(
-        "0xaF71644feEAf6439015D57631f59f8e0E0F91C67"
+        // "0xaF71644feEAf6439015D57631f59f8e0E0F91C67"  // lilnouns sandox Goerli contract address
+        "0x073Fc7132FFb6f8FD1904B34F87943E46dF18139"
     )
 
     const call = async () => {
@@ -65,13 +64,13 @@ export default function BuyNow({ nft, currMintPrice, nftNo }) {
     useEffect(() => {
         const fetchParentBlocks = async () => {
             const parentBlock = await provider.getBlock("latest")
-            setParentBlockHash(ethers.utils.hexlify(parentBlock.hash))
-            const parentBlockMinusOne = await provider.getBlock(parseInt(`${parentBlock?.number - 1}`))
-            setParentBlockHashMinusOne(ethers.utils.hexlify(parentBlockMinusOne.hash))
-            const parentBlockMinusTwo = await provider.getBlock(parseInt(`${parentBlock?.number - 2}`))
-            setParentBlockHashMinusTwo(ethers.utils.hexlify(parentBlockMinusTwo.hash))
-            const parentBlockMinusThree = await provider.getBlock(parseInt(`${parentBlock?.number - 3}`))
-            setParentBlockHashMinusThree(ethers.utils.hexlify(parentBlockMinusThree.hash))
+            setParentBlockNumber(parseInt(parentBlock.number))
+            const parentBlockMinusOne = parentBlockHash - 1;
+            setParentBlockHashMinusOne(parentBlockMinusOne)
+            const parentBlockMinusTwo = parentBlockMinusOne - 1;
+            setParentBlockHashMinusTwo(parentBlockMinusTwo)
+            const parentBlockMinusThree = parentBlockMinusTwo - 1;
+            setParentBlockHashMinusThree(parentBlockMinusThree)
         }
     
         const intervalId = setInterval(async () => {

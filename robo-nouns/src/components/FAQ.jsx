@@ -57,13 +57,13 @@ export default function FAQ() {
                                 WTF is this?
                             </h1>
                             <span className="mt-4">
-                                <span className="font-medium">Robo Nouns</span>{" "}
+                                <span className="font-press text-nouns-lime">Robo Nouns</span>{" "}
                                 is a project to test out a new minting mechanism
                                 for Nouns using a Variable Rate Gradual Dutch
                                 Auction mechanism instead of english auctions.
                                 <br />
                                 <br />
-                                Introducing three concepts:
+                                <strong>Introducing three concepts:</strong>
                                 <li>Pseudo-random block traits generation</li>
                                 <li>
                                     Variable rate token issuance mechanism

@@ -5,7 +5,8 @@ import { useAuction } from "../../context/AuctionContext"
 
 export default function NounImg() {
     const { contract } = useContract(
-        "0xaF71644feEAf6439015D57631f59f8e0E0F91C67"
+        // "0xaF71644feEAf6439015D57631f59f8e0E0F91C67"  // old contract
+        "0x073Fc7132FFb6f8FD1904B34F87943E46dF18139"
     )
     const [lilNoun, setLilNoun] = useState("")
     const { addNounData, nounNFTMeta } = useAuction()
