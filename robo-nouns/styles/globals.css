@@ -349,13 +349,18 @@ a {
         height: 3rem;
         letter-spacing: normal;
         padding: 8px 70px;
-        transition: all 0.2s ease-in-out;
+        transition: all 0.1s ease-in-out;
         width: auto;
       }
 
-      .connectWallet:hover {
+      .BuyBtn:hover {
         color: #70e890;
-        transition: all 0.2s ease-in-out;
+        transition: all 0.1s ease-in-out;
+        scale: 1.05;
+      }
+
+      .connectWallet:hover {
+        transition: all 0.1s ease-in-out;
         scale: 1.05;
       }
       /* .btn {
