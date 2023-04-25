@@ -380,10 +380,6 @@ a {
     vertical-align: middle;
 } */
 
-      .input-group .btn {
-        position: relative;
-        z-index: 2;
-      }
 
       .accordion-button {
         align-items: center;

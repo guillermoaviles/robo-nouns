@@ -26,7 +26,9 @@ const PrevNFTs = () => {
                             <p className="pt-2 font-bold">
                                 {/* Price: {ethers.utils.formatEther(nft.price)} */}
                             </p>
-                            <BuyNow nft={nft} currMintPrice={currMintPrice} nftNo={index + 1}/>
+                            <div className="justify-center">
+                                <BuyNow nft={nft} currMintPrice={currMintPrice} nftNo={index + 1} />
+                            </div>
                         </div>
                     ))}
             </div>
