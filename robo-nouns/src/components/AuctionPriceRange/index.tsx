@@ -33,11 +33,14 @@ export default function AuctionPriceRange() {
     // const maxPrice = 0.1
     // const currFakePrice = 0.055
 
-    const maxPrice = 0.1
+    const maxPrice = 0.03
     const numPriceBlocks = 15
-    const currMintPricePercentage = parseFloat(currMintPrice) / maxPrice
+    const cMP = 0.015
+    // const currMintPricePercentage = parseFloat(currMintPrice) / maxPrice
+    const currMintPricePercentage = parseFloat(`${cMP}`) / maxPrice
 
     const activeIndex = Math.floor(currMintPricePercentage * numPriceBlocks)
+    console.log('activeIndex', activeIndex);
     const colorsClassNames = [
         "bg-[#FF638D]",
         "bg-[#FF638D]",
@@ -66,7 +69,7 @@ export default function AuctionPriceRange() {
                         {/* Ξ{currVRGDAPrice && utils.formatEther(currVRGDAPrice.toString())} */}
                         Ξ{targetMintPrice ?? ""}
                     </h4>
-                    <h4 className="text-sm -mb-2">Ξ{maxPrice ?? ""}</h4>
+                    <h4 className="text-sm -mb-2"></h4>
                 </div>
                 <div className="flex flex-row items-center justify-start space-x-[4px] mt-[12px]">
                     {colorsClassNames.map((color, index) => {

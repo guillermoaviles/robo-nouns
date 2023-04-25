@@ -29,7 +29,7 @@ const faq = [
             "Robo Nouns are stored directly on Goerli and do not utilize pointers to other networks such as IPFS. This is possible because Noun parts are compressed and stored on-chain using a custom run-length encoding (RLE), which is a form of lossless compression. The compressed parts are efficiently converted into a single base64 encoded SVG image on-chain. To accomplish this, each part is decoded into an intermediate format before being converted into a series of SVG rects using batched, on-chain string concatenation. Once the entire SVG has been generated, it is base64 encoded.",
     },
     {
-        title: "Robo Noun Traits",
+        title: "Robo Nouns' Traits",
         description:
             "Robo Nouns are generated randomly based on Goerli block hashes. There are no 'if' statements or other rules governing Lil Noun trait scarcity, which makes all Lil Nouns equally rare. As of this writing, Robo Nouns are made up of: backgrounds (1), bodies (1)accessories (140), heads (242),glasses (23).",
     },
