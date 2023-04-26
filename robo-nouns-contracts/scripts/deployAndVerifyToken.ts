@@ -52,7 +52,7 @@ async function main() {
             address: roboNounsToken.address,
             constructorArguments: roboNounsTokenConstructorArgs,
         })
-    }, 1000 * 45) // 45 secs
+    }, 1000 * 30) // 30 secs
 }
 
 main().catch((error) => {

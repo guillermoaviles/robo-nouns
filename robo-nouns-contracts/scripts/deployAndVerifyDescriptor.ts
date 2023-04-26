@@ -32,7 +32,7 @@ async function main() {
         await run("verify:verify", {
             address: roboNounsDescriptor.address,
         })
-    }, 1000 * 60) // 45 secs
+    }, 1000 * 30) // 30 secs
 }
 
 main().catch((error) => {

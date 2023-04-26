@@ -14,7 +14,7 @@ import { IProxyRegistry } from "contracts/external/opensea/IProxyRegistry.sol";
 
 contract RoboNounsToken is IRoboNounsToken, Ownable, ERC721 {
     // Owners contract address;
-    // address public ownersContract; removed for mumbai testing purposes
+    address public ownersContract;
 
     // The OG nouns DAO address
     // address public nounsDAO;
@@ -91,14 +91,14 @@ contract RoboNounsToken is IRoboNounsToken, Ownable, ERC721 {
     }
 
     constructor(
-        // address _ownersContract, // for mumbai testing purposes
         // address _nounsDAO, // for mumbai testing purposes
         // IProxyRegistry _proxyRegistry // for mumbai testing purposes
+        address _ownersContract, // for mumbai testing purposes
         address _minter,
         IRoboNounsDescriptor _descriptor,
         IRoboNounsSeeder _seeder
     ) ERC721("RoboNouns", "RoboNouns") {
-        // ownersContract = _ownersContract; // for mumbai testing purposes
+        ownersContract = _ownersContract;
         // nounsDAO = _nounsDAO; // for mumbai testing purposes
         // proxyRegistry = _proxyRegistry; // for mumbai testing purposes
         minter = _minter;
@@ -138,9 +138,9 @@ contract RoboNounsToken is IRoboNounsToken, Ownable, ERC721 {
      * @dev Call _mintTo with the to address(es).
      */
     function mint(uint256 blockNumber) public override onlyMinter returns (uint256) {
-        // if (_currentNounId <= 175300 && _currentNounId % 10 == 0) {
-        //     _mintTo(ownersContract, _currentNounId++, blockNumber);
-        // } // for mumbai testing purposes
+        if (_currentNounId <= 175300 && _currentNounId % 10 == 0) {
+            _mintTo(ownersContract, _currentNounId++, blockNumber);
+        } // for mumbai testing purposes
 
         // if (_currentNounId <= 175301 && _currentNounId % 10 == 1) {
         //     _mintTo(nounsDAO, _currentNounId++, blockNumber);
@@ -250,7 +250,8 @@ contract RoboNounsToken is IRoboNounsToken, Ownable, ERC721 {
      * @notice Mint a Noun with `nounId` to the provided `to` address.
      */
     function _mintTo(address to, uint256 nounId, uint256 blockNumber) internal returns (uint256) {
-        IRoboNounsSeeder.Seed memory seed = seeds[nounId] = seeder.generateSeed(nounId, descriptor, blockNumber);
+        IRoboNounsSeeder.Seed memory seed = seeder.generateSeed(nounId, descriptor, blockNumber);
+        seeds[nounId] = seed;
 
         _mint(owner(), to, nounId);
         emit NounCreated(nounId, seed);

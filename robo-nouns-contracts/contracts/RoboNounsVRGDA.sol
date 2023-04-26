@@ -26,6 +26,9 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, PausableUpgradeable, ReentrancyGuard
     /// @notice How often the VRGDA price will update to reflect VRGDA pricing rules
     uint256 public updateInterval = 15 minutes;
 
+    /// @notice the last block at which the last roboNoun was sold
+    uint256 public lastTokenBlock;
+
     /// @notice The minimum price accepted in an auction
     uint256 public reservePrice;
 
@@ -62,8 +65,6 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, PausableUpgradeable, ReentrancyGuard
         __ReentrancyGuard_init();
         __Ownable_init();
 
-        _pause();
-
         roboNounstoken = RoboNounsToken(_roboNounstokenAddress);
         oldAuctionHouseAddress = address(roboNounstoken.minter());
         startTime = _startTime;
@@ -75,13 +76,18 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, PausableUpgradeable, ReentrancyGuard
     }
 
     /// @notice Settle the auction
-    /// @param expectedBlockNumber The parent blockhash expected when
-    /// transaction executes
+    /// @param expectedBlockNumber The block number to specify the traits of the token
     function settleAuction(uint256 expectedBlockNumber) external payable override whenNotPaused nonReentrant {
         // will allow to mint token with traits generated from 4 last blocks,
         // block.number wouldn't work regardless, so not validated here
-        require(expectedBlockNumber >= block.number - 4, "Invalid block number");
-        uint256 _nextNounIdForCaller = nextNounIdForCaller();
+        require(
+            expectedBlockNumber >= block.number - 4 || expectedBlockNumber >= lastTokenBlock,
+            "Invalid block number"
+        );
+
+        // making it unable to get the a token with the traits for any previous token
+        lastTokenBlock = block.number;
+
         require(msg.value >= reservePrice, "Below reservePrice");
 
         // Validate the purchase request against the VRGDA rules.
@@ -90,7 +96,6 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, PausableUpgradeable, ReentrancyGuard
 
         // Call settleAuction on the roboNouns contract.
         uint256 mintedNounId = roboNounstoken.mint(expectedBlockNumber);
-        assert(mintedNounId == _nextNounIdForCaller);
 
         // Sends token to caller.
         roboNounstoken.transferFrom(address(this), msg.sender, mintedNounId);

@@ -2,7 +2,7 @@ import { loadFixture } from "@nomicfoundation/hardhat-network-helpers"
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers"
 import { expect, assert } from "chai"
 import { constants, BigNumber } from "ethers"
-import { ethers } from "hardhat"
+import { ethers, network } from "hardhat"
 
 // eslint-disable-next-line node/no-missing-import
 import type {
@@ -59,17 +59,33 @@ describe("RoboNounsVRGDA", () => {
         roboNounsSeeder = await roboNounsSeederFactory.deploy()
         roboNounsDescriptor = await roboNounsDescriptorFactory.deploy()
         roboNounsToken = await roboNounsTokenFactory.deploy(
+            owner.address,
             roboNounsVRGDA.address,
             roboNounsDescriptor.address,
             roboNounsSeeder.address
         )
-        roboNounsVRGDA.initialize(
+        await roboNounsDescriptor.addAccessory(
+            "0x0016161e090100010202000103070001030100020201000203050002031a00010304000703130007030e000103040007030100"
+        )
+        await roboNounsDescriptor.addBackground("70e790")
+        await roboNounsDescriptor.addBody(
+            "0x0014171f090e000e020e020e020e02020201000b02020201000b02020201000b02020201000b02020201000b02020201000b02020201000b02"
+        )
+        await roboNounsDescriptor.addColorToPalette("0", "807f7e")
+        await roboNounsDescriptor.addGlasses(
+            "0x000e1915050300087201000872030001720222040201720100017202220402017203000172022204020172010001720222040205720222040203720222040202720200017202220402017201000172022204020272020001720222040201720100017202220402017203000172022204020172010001720222040201720300087201000872"
+        )
+        await roboNounsDescriptor.addHead(
+            "0x000c1d190506000299010001990100019912000b9906940300019904000299040204990394010201940102019403000e9903940102019401020194019901000f99079401001099079401001099079411990794010010990794010010990194010202220102022202000f9907940100019901001199080001990200059901000299010002990b0001990200019904000199020001990700"
+        )
+        await roboNounsVRGDA.initialize(
             targetPrice,
             priceDecayPercent,
             perTimeUnit,
             startTime,
             roboNounsToken.address
         )
+        await roboNounsVRGDA.unpause()
     })
 
     // fixtures
@@ -83,39 +99,20 @@ describe("RoboNounsVRGDA", () => {
         expect(await roboNounsVRGDA.targetPrice()).to.equal(targetPrice)
     })
 
-    // it("the token symbol should be correct", async () => {
-    //     // assert
-    //     assert.equal(
-    //         await fooToken.symbol(),
-    //         "FOO",
-    //         "The token symbol must be valid."
-    //     )
-    // })
-
-    // it("the token decimal should be correct", async () => {
-    //     expect(await fooToken.decimals()).to.equal(BigNumber.from(1))
-    // })
-
-    // it("the token supply should be correct", async () => {
-    //     expect(await fooToken.totalSupply()).to.equal(10n ** 18n)
-    // })
-
-    // it("reverts when transferring tokens to the zero address", async () => {
-    //     // Conditions that trigger a require statement can be precisely tested
-    //     await expect(
-    //         fooToken.transfer(constants.AddressZero, constants.One)
-    //     ).to.be.revertedWith("ERC20: transfer to the zero address")
-    // })
-
-    // it("emits a Transfer event on successful transfers", async () => {
-    //     const from: SignerWithAddress = owner
-    //     const to: SignerWithAddress = addresses[0]
-    //     const value: BigNumber = constants.One
-
-    //     await expect(fooToken.transfer(to.address, value))
-    //         .to.emit(fooToken, "Transfer")
-    //         .withArgs(from.address, to.address, value)
-    // })
+    it("should settle the auction", async () => {
+        console.log(await roboNounsToken.minter())
+        const blockNumber = await ethers.provider.getBlockNumber()
+        console.log(blockNumber)
+        network.provider.send("evm_mine")
+        // assert
+        try {
+            await roboNounsVRGDA.settleAuction(blockNumber, {
+                value: ethers.utils.parseEther("1"),
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    })
 
     // it("token balance successfully changed", async () => {
     //     const from: SignerWithAddress = owner

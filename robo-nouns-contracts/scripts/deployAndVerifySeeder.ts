@@ -36,7 +36,7 @@ async function main() {
         await run("verify:verify", {
             address: roboNounsSeeder.address,
         })
-    }, 1000 * 45) // 45 sec
+    }, 1000 * 30) // 30 sec
 }
 
 main().catch((error) => {
