@@ -5,31 +5,30 @@ import { useEffect, useState } from "react"
 const { ethers } = require("ethers")
 
 export default function BuyNow({ nft, currMintPrice, nftNo }) {
-    const [parentBlockHash, setParentBlockNumber] = useState("");
-    const [parentBlockHashMinusOne, setParentBlockHashMinusOne] = useState("");
-    const [parentBlockHashMinusTwo, setParentBlockHashMinusTwo] = useState("");
-    const [parentBlockHashMinusThree, setParentBlockHashMinusThree] = useState("");
-    let prtBlockHash
+    const [parentBlockNumber, setParentBlockNumber] = useState("");
+    const [parentBlockNumberMinusOne, setParentBlockNumberMinusOne] = useState("");
+    const [parentBlockNumberMinusTwo, setParentBlockNumberMinusTwo] = useState("");
+    const [parentBlockNumberMinusThree, setParentBlockNumberMinusThree] = useState("");
+    let prtBlockNum
 
     if (nftNo === 0) {
-        prtBlockHash = parentBlockHash
+        prtBlockNum = parentBlockNumber
     } else if (nftNo === 1) {
-        prtBlockHash = parentBlockHashMinusOne
+        prtBlockNum = parentBlockNumberMinusOne
     } else if (nftNo === 2) {
-        prtBlockHash = parentBlockHashMinusTwo
+        prtBlockNum = parentBlockNumberMinusTwo
     } else if (nftNo === 3) {
-        prtBlockHash = parentBlockHashMinusThree
+        prtBlockNum = parentBlockNumberMinusThree
     }
     console.log('nft', nft)
-    console.log('parentBlockHash', parentBlockHash);
-    console.log('parentBlockHashMinusOne', parentBlockHashMinusOne);
-    console.log('parentBlockHashMinusTwo', parentBlockHashMinusTwo);
-    console.log('parentBlockHashMinusThree', parentBlockHashMinusThree);
+    console.log('parentBlockNumber', parentBlockNumber);
+    console.log('parentBlockNumberMinusOne', parentBlockNumberMinusOne);
+    console.log('parentBlockNumberMinusTwo', parentBlockNumberMinusTwo);
+    console.log('parentBlockNumberMinusThree', parentBlockNumberMinusThree);
     const expNounID = nft?.nounId;
     const provider = new ethers.providers.JsonRpcProvider(
         "https://polygon-mumbai.g.alchemy.com/v2/SYsE_zQSuhVCH3bio3ltnI_a8Ze_wN94"
     )
-
 
     const { contract } = useContract(
         // "0xaF71644feEAf6439015D57631f59f8e0E0F91C67"  // lilnouns sandox Goerli contract address
@@ -42,9 +41,9 @@ export default function BuyNow({ nft, currMintPrice, nftNo }) {
                 throw new Error("Contract is undefined")
             }
             console.log('expNounID', expNounID);
-            console.log('parentBlockHash', prtBlockHash);
+            console.log('parentBlockHash', prtBlockNum);
             const price = ethers.utils.parseEther("0.0001")
-            const args = [expNounID, prtBlockHash]
+            const args = [expNounID, prtBlockNum]
             const tx = await contract.call("settleAuction", args, {
                 value: price,
                 gasLimit: 1000000,
@@ -65,12 +64,12 @@ export default function BuyNow({ nft, currMintPrice, nftNo }) {
         const fetchParentBlocks = async () => {
             const parentBlock = await provider.getBlock("latest")
             setParentBlockNumber(parseInt(parentBlock.number))
-            const parentBlockMinusOne = parentBlockHash - 1;
-            setParentBlockHashMinusOne(parentBlockMinusOne)
+            const parentBlockMinusOne = parentBlockNumber - 1;
+            setParentBlockNumberMinusOne(parentBlockMinusOne)
             const parentBlockMinusTwo = parentBlockMinusOne - 1;
-            setParentBlockHashMinusTwo(parentBlockMinusTwo)
+            setParentBlockNumberMinusTwo(parentBlockMinusTwo)
             const parentBlockMinusThree = parentBlockMinusTwo - 1;
-            setParentBlockHashMinusThree(parentBlockMinusThree)
+            setParentBlockNumberMinusThree(parentBlockMinusThree)
         }
 
         const intervalId = setInterval(async () => {
@@ -80,7 +79,7 @@ export default function BuyNow({ nft, currMintPrice, nftNo }) {
         return () => {
             clearInterval(intervalId)
         }
-    }, [parentBlockHash])
+    }, [prtBlockNum])
 
     return (
         <div className="input-group">
