@@ -32,3 +32,45 @@ const TimeLeft = ({ updateInterval, onReset }) => {
 };
 
 export default TimeLeft
+
+// import React, { useState, useEffect } from 'react';
+
+// const TimeLeft = () => {
+//   const [timeLeft, setTimeLeft] = useState(0);
+
+//   useEffect(() => {
+//     const countDownDate = new Date(1682310323 * 1000 + 15 * 60 * 1000).getTime();
+
+//     const interval = setInterval(() => {
+//       const now = new Date().getTime();
+//       const distance = countDownDate - now;
+
+//       if (distance < 0) {
+//         clearInterval(interval);
+//         setTimeLeft(0);
+//       } else {
+//         setTimeLeft(distance);
+//       }
+//     }, 1000);
+
+//     return () => clearInterval(interval);
+//   }, []);
+
+//   const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+//   const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+//   return (
+//     <div>
+//       <h1>Countdown Timer</h1>
+//       {timeLeft > 0 ? (
+//         <h2>
+//           {minutes.toString().padStart(2, '0')}:{seconds.toString().padStart(2, '0')}
+//         </h2>
+//       ) : (
+//         <h2>Timer has ended!</h2>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default TimeLeft;
