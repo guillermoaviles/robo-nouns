@@ -37,7 +37,7 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, PausableUpgradeable, ReentrancyGuard
 
     /// @notice The address of the auction house contract to be replaced
     /// @dev Used to track which token ID to the VRGDA auction start at
-    address internal oldAuctionHouseAddress;
+    // address internal oldAuctionHouseAddress;
 
     /// @notice The Nouns ERC721 token contract
     RoboNounsToken public roboNounstoken;
@@ -66,7 +66,7 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, PausableUpgradeable, ReentrancyGuard
         __Ownable_init();
 
         roboNounstoken = RoboNounsToken(_roboNounstokenAddress);
-        oldAuctionHouseAddress = address(roboNounstoken.minter());
+        // oldAuctionHouseAddress = address(roboNounstoken.minter());
         startTime = _startTime;
         targetPrice = _targetPrice;
         decayConstant = wadLn(1e18 - _priceDecayPercent);

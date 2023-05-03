@@ -3,6 +3,8 @@ import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers"
 import { expect, assert } from "chai"
 import { constants, BigNumber } from "ethers"
 import { ethers, network } from "hardhat"
+import * as nounsData from "../assets/image-data.json"
+import * as testData from "../assets/big-noun-image-data.json"
 
 // eslint-disable-next-line node/no-missing-import
 import type {
@@ -37,6 +39,14 @@ describe("RoboNounsVRGDA", () => {
     let perTimeUnit: string = "24000000000000000000"
     let startTime: number = 1682392703
 
+    function chunkArray<T>(array: T[], chunkSize: number): T[][] {
+        const result: T[][] = []
+        for (let i = 0; i < array.length; i += chunkSize) {
+            result.push(array.slice(i, i + chunkSize))
+        }
+        return result
+    }
+
     // hooks
     before(async () => {
         ;[owner, ...addresses] = await ethers.getSigners()
@@ -64,20 +74,43 @@ describe("RoboNounsVRGDA", () => {
             roboNounsDescriptor.address,
             roboNounsSeeder.address
         )
-        await roboNounsDescriptor.addAccessory(
-            "0x0016161e090100010202000103070001030100020201000203050002031a00010304000703130007030e000103040007030100"
+        const chunkSize = 10
+
+        const accessoriesChunks = chunkArray(
+            testData.images.accessories.map((item) => item.data),
+            chunkSize
         )
-        await roboNounsDescriptor.addBackground("70e790")
-        await roboNounsDescriptor.addBody(
-            "0x0014171f090e000e020e020e020e02020201000b02020201000b02020201000b02020201000b02020201000b02020201000b02020201000b02"
+        for (const chunk of accessoriesChunks) {
+            await roboNounsDescriptor.addManyAccessories(chunk)
+        }
+
+        await roboNounsDescriptor.addManyBackgrounds(testData.bgcolors)
+
+        const bodiesChunks = chunkArray(
+            testData.images.bodies.map((item) => item.data),
+            chunkSize
         )
-        await roboNounsDescriptor.addColorToPalette("0", "807f7e")
-        await roboNounsDescriptor.addGlasses(
-            "0x000e1915050300087201000872030001720222040201720100017202220402017203000172022204020172010001720222040205720222040203720222040202720200017202220402017201000172022204020272020001720222040201720100017202220402017203000172022204020172010001720222040201720300087201000872"
+        for (const chunk of bodiesChunks) {
+            await roboNounsDescriptor.addManyBodies(chunk)
+        }
+
+        await roboNounsDescriptor.addManyColorsToPalette("0", testData.palette)
+
+        const glassesChunks = chunkArray(
+            testData.images.glasses.map((item) => item.data),
+            chunkSize
         )
-        await roboNounsDescriptor.addHead(
-            "0x000c1d190506000299010001990100019912000b9906940300019904000299040204990394010201940102019403000e9903940102019401020194019901000f99079401001099079401001099079411990794010010990794010010990194010202220102022202000f9907940100019901001199080001990200059901000299010002990b0001990200019904000199020001990700"
+        for (const chunk of glassesChunks) {
+            await roboNounsDescriptor.addManyGlasses(chunk)
+        }
+
+        const headsChunks = chunkArray(
+            testData.images.heads.map((item) => item.data),
+            chunkSize
         )
+        for (const chunk of headsChunks) {
+            await roboNounsDescriptor.addManyHeads(chunk)
+        }
         await roboNounsVRGDA.initialize(
             targetPrice,
             priceDecayPercent,
@@ -85,24 +118,27 @@ describe("RoboNounsVRGDA", () => {
             startTime,
             roboNounsToken.address
         )
-        await roboNounsVRGDA.unpause()
     })
 
     // fixtures
-    // async function transferFixture() {
-    //     return await fooToken.transfer(addresses[0].address, constants.Two)
-    // }
+    async function settleAuctionFixture() {
+        // return await roboNounsVRGDA.settleAuction(blockNumber, {
+        //     value: ethers.utils.parseEther("1"),
+        // })
+    }
 
     // tests
-    it("the token name should be correct", async () => {
-        // expect
+    it("initialized data should be correct", async () => {
         expect(await roboNounsVRGDA.targetPrice()).to.equal(targetPrice)
+        expect(await roboNounsVRGDA.perTimeUnit()).to.equal(perTimeUnit)
+        expect(await roboNounsVRGDA.startTime()).to.equal(startTime)
+        expect(await roboNounsVRGDA.roboNounstoken()).to.equal(
+            roboNounsToken.address
+        )
     })
 
-    it("should settle the auction", async () => {
-        console.log(await roboNounsToken.minter())
+    it("should settle the auction and transfers token", async () => {
         const blockNumber = await ethers.provider.getBlockNumber()
-        console.log(blockNumber)
         network.provider.send("evm_mine")
         // assert
         try {
@@ -112,9 +148,28 @@ describe("RoboNounsVRGDA", () => {
         } catch (error) {
             console.log(error)
         }
+
+        expect(await roboNounsToken.ownerOf(0)).to.equal(owner.address)
     })
 
-    // it("token balance successfully changed", async () => {
+    it("should properly fetchNextNoun and render data", async () => {
+        const blockNumber = await ethers.provider.getBlockNumber()
+        network.provider.send("evm_mine")
+        try {
+            await roboNounsVRGDA.settleAuction(blockNumber, {
+                value: ethers.utils.parseEther("1"),
+            })
+        } catch (error) {
+            console.log(error)
+        }
+        network.provider.send("evm_mine")
+
+        const { nounId, seed, svg, price, hash } =
+            await roboNounsVRGDA.fetchNextNoun()
+        console.log(nounId, seed, svg, price, hash)
+    })
+
+    // it("should properly mint next svg", async () => {
     //     const from: SignerWithAddress = owner
     //     const to: SignerWithAddress = addresses[0]
     //     const value: BigNumber = constants.Two
