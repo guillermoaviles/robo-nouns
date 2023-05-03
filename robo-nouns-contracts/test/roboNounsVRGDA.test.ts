@@ -16,15 +16,25 @@ import type {
     RoboNounsToken__factory,
     RoboNounsSeeder,
     RoboNounsSeeder__factory,
+    // INounsDescriptor,
 } from "../typechain-types"
 
 describe("RoboNounsVRGDA", () => {
+    function chunkArray<T>(array: T[], chunkSize: number): T[][] {
+        const result: T[][] = []
+        for (let i = 0; i < array.length; i += chunkSize) {
+            result.push(array.slice(i, i + chunkSize))
+        }
+        return result
+    }
+
     let roboNounsVRGDA: RoboNounsVRGDA
     let roboNounsVRGDAFactory: RoboNounsVRGDA__factory
 
     let roboNounsSeeder: RoboNounsSeeder
     let roboNounsSeederFactory: RoboNounsSeeder__factory
 
+    // let nounsDescriptor: INounsDescriptor
     let roboNounsDescriptor: RoboNounsDescriptor
     let roboNounsDescriptorFactory: RoboNounsDescriptor__factory
 
@@ -38,14 +48,6 @@ describe("RoboNounsVRGDA", () => {
     let priceDecayPercent: string = "310000000000000000"
     let perTimeUnit: string = "24000000000000000000"
     let startTime: number = 1682392703
-
-    function chunkArray<T>(array: T[], chunkSize: number): T[][] {
-        const result: T[][] = []
-        for (let i = 0; i < array.length; i += chunkSize) {
-            result.push(array.slice(i, i + chunkSize))
-        }
-        return result
-    }
 
     // hooks
     before(async () => {
@@ -62,42 +64,47 @@ describe("RoboNounsVRGDA", () => {
         roboNounsTokenFactory = (await ethers.getContractFactory(
             "RoboNounsToken"
         )) as RoboNounsToken__factory
-    })
+        let nounsDescriptor = await ethers.getContractAt(
+            "INounsDescriptor",
+            "0x0Cfdb3Ba1694c2bb2CFACB0339ad7b1Ae5932B63"
+        )
 
-    beforeEach(async () => {
         roboNounsVRGDA = await roboNounsVRGDAFactory.deploy()
         roboNounsSeeder = await roboNounsSeederFactory.deploy()
-        roboNounsDescriptor = await roboNounsDescriptorFactory.deploy()
+        roboNounsDescriptor = await roboNounsDescriptorFactory.deploy(
+            nounsDescriptor.address
+        )
         roboNounsToken = await roboNounsTokenFactory.deploy(
             owner.address,
             roboNounsVRGDA.address,
             roboNounsDescriptor.address,
+            nounsDescriptor.address,
             roboNounsSeeder.address
         )
         const chunkSize = 10
 
         const accessoriesChunks = chunkArray(
-            testData.images.accessories.map((item) => item.data),
+            nounsData.images.accessories.map((item) => item.data),
             chunkSize
         )
         for (const chunk of accessoriesChunks) {
             await roboNounsDescriptor.addManyAccessories(chunk)
         }
 
-        await roboNounsDescriptor.addManyBackgrounds(testData.bgcolors)
+        await roboNounsDescriptor.addManyBackgrounds(nounsData.bgcolors)
 
         const bodiesChunks = chunkArray(
-            testData.images.bodies.map((item) => item.data),
+            nounsData.images.bodies.map((item) => item.data),
             chunkSize
         )
         for (const chunk of bodiesChunks) {
             await roboNounsDescriptor.addManyBodies(chunk)
         }
 
-        await roboNounsDescriptor.addManyColorsToPalette("0", testData.palette)
+        await roboNounsDescriptor.addManyColorsToPalette("0", nounsData.palette)
 
         const glassesChunks = chunkArray(
-            testData.images.glasses.map((item) => item.data),
+            nounsData.images.glasses.map((item) => item.data),
             chunkSize
         )
         for (const chunk of glassesChunks) {
@@ -105,7 +112,7 @@ describe("RoboNounsVRGDA", () => {
         }
 
         const headsChunks = chunkArray(
-            testData.images.heads.map((item) => item.data),
+            nounsData.images.heads.map((item) => item.data),
             chunkSize
         )
         for (const chunk of headsChunks) {
@@ -119,6 +126,8 @@ describe("RoboNounsVRGDA", () => {
             roboNounsToken.address
         )
     })
+
+    beforeEach(async () => {})
 
     // fixtures
     async function settleAuctionFixture() {

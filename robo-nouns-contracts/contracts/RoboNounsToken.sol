@@ -5,6 +5,7 @@
 pragma solidity ^0.8.6;
 
 import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
+import { INounsDescriptor } from "contracts/interfaces/INounsDescriptor.sol";
 import { IRoboNounsDescriptor } from "contracts/interfaces/IRoboNounsDescriptor.sol";
 import { IRoboNounsSeeder } from "contracts/interfaces/IRoboNounsSeeder.sol";
 import { IRoboNounsToken } from "contracts/interfaces/IRoboNounsToken.sol";
@@ -21,6 +22,9 @@ contract RoboNounsToken is IRoboNounsToken, Ownable, ERC721 {
 
     // An address who has permissions to mint RoboNouns
     address public minter;
+
+    // the OG Nouns token URI descriptor
+    INounsDescriptor public nounsDescriptor;
 
     // The RoboNouns token URI descriptor
     IRoboNounsDescriptor public descriptor;
@@ -96,6 +100,7 @@ contract RoboNounsToken is IRoboNounsToken, Ownable, ERC721 {
         address _ownersContract, // for mumbai testing purposes
         address _minter,
         IRoboNounsDescriptor _descriptor,
+        INounsDescriptor _nounsDescriptor,
         IRoboNounsSeeder _seeder
     ) ERC721("RoboNouns", "RoboNouns") {
         ownersContract = _ownersContract;
@@ -103,6 +108,7 @@ contract RoboNounsToken is IRoboNounsToken, Ownable, ERC721 {
         // proxyRegistry = _proxyRegistry; // for mumbai testing purposes
         minter = _minter;
         descriptor = _descriptor;
+        nounsDescriptor = _nounsDescriptor;
         seeder = _seeder;
     }
 
@@ -250,7 +256,7 @@ contract RoboNounsToken is IRoboNounsToken, Ownable, ERC721 {
      * @notice Mint a Noun with `nounId` to the provided `to` address.
      */
     function _mintTo(address to, uint256 nounId, uint256 blockNumber) internal returns (uint256) {
-        IRoboNounsSeeder.Seed memory seed = seeder.generateSeed(nounId, descriptor, blockNumber);
+        IRoboNounsSeeder.Seed memory seed = seeder.generateSeed(nounId, descriptor, nounsDescriptor, blockNumber);
         seeds[nounId] = seed;
 
         _mint(owner(), to, nounId);

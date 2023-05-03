@@ -90,6 +90,9 @@ const config: HardhatUserConfig = {
     },
     networks: {
         hardhat: {
+            forking: {
+                url: process.env.MAINNET_RPC_URL || "",
+            },
             allowUnlimitedContractSize:
                 (process.env.ALLOW_UNLIMITED_CONTRACT_SIZE &&
                     "true" ===

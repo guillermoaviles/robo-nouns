@@ -5,6 +5,7 @@
 pragma solidity ^0.8.6;
 
 import { IRoboNounsDescriptor } from "contracts/interfaces/IRoboNounsDescriptor.sol";
+import { INounsDescriptor } from "contracts/interfaces/INounsDescriptor.sol";
 
 interface IRoboNounsSeeder {
     struct Seed {
@@ -18,6 +19,7 @@ interface IRoboNounsSeeder {
     function generateSeed(
         uint256 nounId,
         IRoboNounsDescriptor descriptor,
+        INounsDescriptor nounsDescriptor,
         uint256 blockNumber
     ) external view returns (Seed memory);
 }

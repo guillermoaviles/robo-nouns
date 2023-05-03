@@ -10,6 +10,7 @@
 pragma solidity ^0.8.6;
 
 import { IRoboNounsSeeder } from "./interfaces/IRoboNounsSeeder.sol";
+import { INounsDescriptor } from "./interfaces/INounsDescriptor.sol";
 import { IRoboNounsDescriptor } from "./interfaces/IRoboNounsDescriptor.sol";
 
 contract RoboNounsSeeder is IRoboNounsSeeder {
@@ -19,15 +20,20 @@ contract RoboNounsSeeder is IRoboNounsSeeder {
     function generateSeed(
         uint256 nounId,
         IRoboNounsDescriptor descriptor,
+        INounsDescriptor nounsDescriptor,
         uint256 blockNumber
     ) external view override returns (Seed memory) {
         uint256 pseudorandomness = uint256(keccak256(abi.encodePacked(blockhash(blockNumber), nounId)));
 
+        // taking count from both OG nouns and robonouns traits
+        uint256 nounsHeadCount = nounsDescriptor.headCount();
+        uint256 roboNounsHeadCount = descriptor.headCount();
+
+        uint256 headCount = nounsHeadCount + roboNounsHeadCount;
         uint256 backgroundCount = descriptor.backgroundCount();
         uint256 bodyCount = descriptor.bodyCount();
         uint256 accessoryCount = descriptor.accessoryCount();
-        uint256 headCount = descriptor.headCount();
-        uint256 glassesCount = descriptor.glassesCount();
+        uint256 glassesCount = nounsDescriptor.glassesCount();
 
         return
             Seed({

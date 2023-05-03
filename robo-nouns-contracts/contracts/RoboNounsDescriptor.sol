@@ -7,6 +7,7 @@ pragma solidity ^0.8.6;
 import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
 import { Strings } from "@openzeppelin/contracts/utils/Strings.sol";
 import { IRoboNounsDescriptor } from "contracts/interfaces/IRoboNounsDescriptor.sol";
+import { INounsDescriptor } from "contracts/interfaces/INounsDescriptor.sol";
 import { IRoboNounsSeeder } from "contracts/interfaces/IRoboNounsSeeder.sol";
 import { NFTDescriptor } from "contracts/lib/NFTDescriptor.sol";
 import { MultiPartRLEToSVG } from "contracts/lib/MultiPartRLEToSVG.sol";
@@ -26,6 +27,9 @@ contract RoboNounsDescriptor is IRoboNounsDescriptor, Ownable {
 
     // Base URI
     string public override baseURI;
+
+    // the OG Nouns token URI descriptor
+    INounsDescriptor public nounsDescriptor;
 
     // Noun Color Palettes (Index => Hex Colors)
     mapping(uint8 => string[]) public override palettes;
@@ -51,6 +55,10 @@ contract RoboNounsDescriptor is IRoboNounsDescriptor, Ownable {
     modifier whenPartsNotLocked() {
         require(!arePartsLocked, "Parts are locked");
         _;
+    }
+
+    constructor(INounsDescriptor _nounsDescriptor) {
+        nounsDescriptor = _nounsDescriptor;
     }
 
     /**
@@ -334,8 +342,16 @@ contract RoboNounsDescriptor is IRoboNounsDescriptor, Ownable {
         bytes[] memory _parts = new bytes[](4);
         _parts[0] = bodies[seed.body];
         _parts[1] = accessories[seed.accessory];
-        _parts[2] = heads[seed.head];
-        _parts[3] = glasses[seed.glasses];
+
+        // depending on the number use the roboNouns head or the OG nouns head
+        if (seed.head > heads.length - 1) {
+            _parts[2] = nounsDescriptor.heads(seed.head);
+        } else {
+            _parts[2] = heads[seed.head];
+        }
+
+        // using OG nouns glasses
+        _parts[3] = nounsDescriptor.glasses(seed.glasses);
         return _parts;
     }
 }

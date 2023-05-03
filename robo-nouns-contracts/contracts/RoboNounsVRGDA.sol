@@ -3,6 +3,7 @@ pragma solidity ^0.8.17;
 
 import { IRoboNounsSeeder } from "contracts/interfaces/IRoboNounsSeeder.sol";
 import { IRoboNounsDescriptor } from "contracts/interfaces/IRoboNounsDescriptor.sol";
+import { INounsDescriptor } from "contracts/interfaces/INounsDescriptor.sol";
 import { IRoboNounsVRGDA } from "contracts/interfaces/IRoboNounsVRGDA.sol";
 import { IWETH } from "contracts/interfaces/IWETH.sol";
 import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
@@ -187,7 +188,8 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, PausableUpgradeable, ReentrancyGuard
         // Generate the seed for the next noun.
         IRoboNounsSeeder seeder = IRoboNounsSeeder(roboNounstoken.seeder());
         IRoboNounsDescriptor descriptor = IRoboNounsDescriptor(roboNounstoken.descriptor());
-        seed = seeder.generateSeed(_nextNounIdForCaller, descriptor, block.number - 1);
+        INounsDescriptor nounsDescriptor = INounsDescriptor(roboNounstoken.nounsDescriptor());
+        seed = seeder.generateSeed(_nextNounIdForCaller, descriptor, nounsDescriptor, block.number - 1);
 
         // Generate the SVG from seed using the descriptor.
         svg = descriptor.generateSVGImage(seed);
