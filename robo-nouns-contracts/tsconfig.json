@@ -1,13 +1,16 @@
 {
-  "compilerOptions": {
-    "target": "es2021",
-    "module": "commonjs",
-    "strict": true,
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "outDir": "dist",
-    "declaration": true
-  },
-  "include": ["./scripts", "./test", "./typechain-types"],
-  "files": ["./hardhat.config.ts"]
+    "compilerOptions": {
+        "target": "es2021",
+        "module": "commonjs",
+        "strict": true,
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
+        "outDir": "dist",
+        "declaration": true,
+        "paths": {
+            "@/*": ["./src/*"]
+        }
+    },
+    "include": ["./scripts", "./test", "./typechain-types"],
+    "files": ["./hardhat.config.ts"]
 }

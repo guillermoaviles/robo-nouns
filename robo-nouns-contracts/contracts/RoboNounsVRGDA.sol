@@ -188,8 +188,9 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, PausableUpgradeable, ReentrancyGuard
         // Generate the seed for the next noun.
         IRoboNounsSeeder seeder = IRoboNounsSeeder(roboNounstoken.seeder());
         IRoboNounsDescriptor descriptor = IRoboNounsDescriptor(roboNounstoken.descriptor());
-        INounsDescriptor nounsDescriptor = INounsDescriptor(roboNounstoken.nounsDescriptor());
-        seed = seeder.generateSeed(_nextNounIdForCaller, descriptor, nounsDescriptor, block.number - 1);
+        // INounsDescriptor nounsDescriptor = INounsDescriptor(roboNounstoken.nounsDescriptor());
+        // seed = seeder.generateSeed(_nextNounIdForCaller, descriptor, nounsDescriptor, block.number - 1); // multi descriptor
+        seed = seeder.generateSeed(_nextNounIdForCaller, descriptor, block.number - 1);
 
         // Generate the SVG from seed using the descriptor.
         svg = descriptor.generateSVGImage(seed);

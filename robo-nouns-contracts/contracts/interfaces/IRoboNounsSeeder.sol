@@ -19,7 +19,7 @@ interface IRoboNounsSeeder {
     function generateSeed(
         uint256 nounId,
         IRoboNounsDescriptor descriptor,
-        INounsDescriptor nounsDescriptor,
+        // INounsDescriptor nounsDescriptor, // multi descriptor
         uint256 blockNumber
     ) external view returns (Seed memory);
 }

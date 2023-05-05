@@ -1,11 +1,8 @@
-import { promises as fs } from "fs"
-import path from "path"
 import { Contract, ContractFactory } from "ethers"
-import { ethers, tenderly, run } from "hardhat"
+import { ethers, tenderly, run, network } from "hardhat"
+import saveDeployment from "../utils/saveDeployment"
 
-const DESTINATION = path.join(__dirname, "../utils/addresses.json")
-
-async function main() {
+export default async function () {
     const contractName: string = "RoboNounsSeeder"
 
     const roboNounsSeederFactory: ContractFactory =
@@ -15,31 +12,17 @@ async function main() {
     await roboNounsSeeder.deployed()
     console.log(contractName + " deployed to:", roboNounsSeeder.address)
 
-    let contractAddresses
-    try {
-        const fileContent = await fs.readFile(DESTINATION, "utf8")
-        contractAddresses = JSON.parse(fileContent)
-    } catch (error) {
-        console.error("Error reading the JSON file:", error)
-        contractAddresses = {}
-    }
+    saveDeployment(
+        contractName,
+        roboNounsSeeder.address,
+        roboNounsSeeder.interface.format("json")
+    )
 
-    // This line will always add or update the contract information
-    contractAddresses[contractName] = {
-        address: roboNounsSeeder.address,
-        abi: roboNounsSeeder.interface.format("json"),
+    if (network.config.chainId !== 31337 && network.config.chainId !== 1337) {
+        await setTimeout(async () => {
+            await run("verify:verify", {
+                address: roboNounsSeeder.address,
+            })
+        }, 1000 * 30) // 30 sec
     }
-    await fs.writeFile(DESTINATION, JSON.stringify(contractAddresses))
-    console.log(contractName + "Saved to addresses.json")
-
-    await setTimeout(async () => {
-        await run("verify:verify", {
-            address: roboNounsSeeder.address,
-        })
-    }, 1000 * 30) // 30 sec
 }
-
-main().catch((error) => {
-    console.error(error)
-    process.exitCode = 1
-})

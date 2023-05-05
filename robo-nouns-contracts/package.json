@@ -13,7 +13,7 @@
     "finder": "hardhat finder",
     "size": "hardhat size-contracts",
     "prepend-spdx": "hardhat prepend-spdx-license",
-    "deploy": "deploy.sh",
+    "deploy": "chmod +x bin/deploy.sh && bin/deploy.sh",
     "deploy:all": "hardhat run scripts/deploy.ts --network",
     "deploy-verify:all": "hardhat run scripts/deployAndVerify.ts --network",
     "verify": "hardhat verify --network",

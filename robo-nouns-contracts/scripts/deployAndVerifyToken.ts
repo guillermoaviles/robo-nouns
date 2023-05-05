@@ -1,12 +1,9 @@
-import { promises as fs } from "fs"
-import path from "path"
 import { Contract, ContractFactory } from "ethers"
-import { ethers, tenderly, run } from "hardhat"
-// import addresses from "../utils/addresses.json"
+import { ethers, tenderly, run, network } from "hardhat"
+import saveDeployment from "../utils/saveDeployment"
 
-const DESTINATION = path.join(__dirname, "../utils/addresses.json")
-
-async function main() {
+export default async function () {
+    const [owner] = await ethers.getSigners()
     const roboNounsVRGDAAddress = "0xCae6421243E1aFead0A11A7c5a245Ac8D701a5fe"
     const roboNounsSeederAddress = "0x132BD12EF94803c16F74CfCa603E7459d0a1311f"
     const roboNounsDescriptorAddress =
@@ -16,6 +13,7 @@ async function main() {
     const roboNounsTokenConstructorArgs: Array<
         string | number | Array<string | number>
     > = [
+        owner.address,
         roboNounsVRGDAAddress,
         roboNounsSeederAddress,
         roboNounsDescriptorAddress,
@@ -30,32 +28,18 @@ async function main() {
     await roboNounsToken.deployed()
     console.log(contractName + " deployed to:", roboNounsToken.address)
 
-    let contractAddresses
-    try {
-        const fileContent = await fs.readFile(DESTINATION, "utf8")
-        contractAddresses = JSON.parse(fileContent)
-    } catch (error) {
-        console.error("Error reading the JSON file:", error)
-        contractAddresses = {}
-    }
+    saveDeployment(
+        contractName,
+        roboNounsToken.address,
+        roboNounsToken.interface.format("json")
+    )
 
-    // This line will always add or update the contract information
-    contractAddresses[contractName] = {
-        address: roboNounsToken.address,
-        abi: roboNounsToken.interface.format("json"),
+    if (network.config.chainId !== 31337 && network.config.chainId !== 1337) {
+        await setTimeout(async () => {
+            await run("verify:verify", {
+                address: roboNounsToken.address,
+                constructorArguments: roboNounsTokenConstructorArgs,
+            })
+        }, 1000 * 30) // 30 secs
     }
-    await fs.writeFile(DESTINATION, JSON.stringify(contractAddresses))
-    console.log(contractName + "Saved to addresses.json")
-
-    await setTimeout(async () => {
-        await run("verify:verify", {
-            address: roboNounsToken.address,
-            constructorArguments: roboNounsTokenConstructorArgs,
-        })
-    }, 1000 * 30) // 30 secs
 }
-
-main().catch((error) => {
-    console.error(error)
-    process.exitCode = 1
-})

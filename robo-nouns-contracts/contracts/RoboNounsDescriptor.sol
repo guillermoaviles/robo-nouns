@@ -29,7 +29,7 @@ contract RoboNounsDescriptor is IRoboNounsDescriptor, Ownable {
     string public override baseURI;
 
     // the OG Nouns token URI descriptor
-    INounsDescriptor public nounsDescriptor;
+    // INounsDescriptor public nounsDescriptor; // multi descriptor
 
     // Noun Color Palettes (Index => Hex Colors)
     mapping(uint8 => string[]) public override palettes;
@@ -57,9 +57,10 @@ contract RoboNounsDescriptor is IRoboNounsDescriptor, Ownable {
         _;
     }
 
-    constructor(INounsDescriptor _nounsDescriptor) {
-        nounsDescriptor = _nounsDescriptor;
-    }
+    // multi descriptor
+    // constructor(INounsDescriptor _nounsDescriptor) {
+    //     nounsDescriptor = _nounsDescriptor;
+    // }
 
     /**
      * @notice Get the number of available Noun `backgrounds`.
@@ -344,14 +345,17 @@ contract RoboNounsDescriptor is IRoboNounsDescriptor, Ownable {
         _parts[1] = accessories[seed.accessory];
 
         // depending on the number use the roboNouns head or the OG nouns head
-        if (seed.head > heads.length - 1) {
-            _parts[2] = nounsDescriptor.heads(seed.head);
-        } else {
-            _parts[2] = heads[seed.head];
-        }
+        // multi descriptor
+        // if (seed.head > heads.length - 1) {
+        //     _parts[2] = nounsDescriptor.heads(seed.head);
+        // } else {
+        //     _parts[2] = heads[seed.head];
+        // }
+        _parts[2] = heads[seed.head];
 
         // using OG nouns glasses
-        _parts[3] = nounsDescriptor.glasses(seed.glasses);
+        // _parts[3] = nounsDescriptor.glasses(seed.glasses); // multi descriptor
+        _parts[3] = glasses[seed.glasses];
         return _parts;
     }
 }

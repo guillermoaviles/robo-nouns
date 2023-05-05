@@ -99,6 +99,12 @@ const config: HardhatUserConfig = {
                         process.env.ALLOW_UNLIMITED_CONTRACT_SIZE.toLowerCase()) ||
                 false,
         },
+        localhost: {
+            forking: {
+                url: process.env.MAINNET_RPC_URL || "",
+            },
+            chainId: 31337,
+        },
         custom: {
             url: process.env.CUSTOM_NETWORK_URL || "",
             accounts: {
