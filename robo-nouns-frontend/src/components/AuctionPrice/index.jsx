@@ -8,7 +8,8 @@ export default function AuctionDetails() {
         useAuction()
 
     const { contract } = useContract(
-        "0xaF71644feEAf6439015D57631f59f8e0E0F91C67"
+        // "0xaF71644feEAf6439015D57631f59f8e0E0F91C67"  // old
+        "0xA75E74a5109Ed8221070142D15cEBfFe9642F489"
     )
     const { data: currentPrice, isLoading: loadingCurr } = useContractRead(
         contract,

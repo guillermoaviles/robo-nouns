@@ -27,12 +27,15 @@ export default function BuyNow({ nft, currMintPrice, nftNo }) {
     console.log('parentBlockNumberMinusThree', parentBlockNumberMinusThree);
     const expNounID = nft?.nounId;
     const provider = new ethers.providers.JsonRpcProvider(
-        "https://polygon-mumbai.g.alchemy.com/v2/SYsE_zQSuhVCH3bio3ltnI_a8Ze_wN94"
+        // "https://polygon-mumbai.g.alchemy.com/v2/SYsE_zQSuhVCH3bio3ltnI_a8Ze_wN94"  // Polygon Mumbai
+        "http://localhost:8545"
+
     )
 
     const { contract } = useContract(
         // "0xaF71644feEAf6439015D57631f59f8e0E0F91C67"  // lilnouns sandox Goerli contract address
-        "0x073Fc7132FFb6f8FD1904B34F87943E46dF18139"
+        // "0x073Fc7132FFb6f8FD1904B34F87943E46dF18139"  // old
+        "0xA75E74a5109Ed8221070142D15cEBfFe9642F489"
     )
 
     const call = async () => {
