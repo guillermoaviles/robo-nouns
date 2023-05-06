@@ -104,6 +104,10 @@ const config: HardhatUserConfig = {
                 url: process.env.MAINNET_RPC_URL || "",
             },
             chainId: 31337,
+            mining: {
+                auto: false,
+                interval: 12000,
+            },
         },
         custom: {
             url: process.env.CUSTOM_NETWORK_URL || "",
