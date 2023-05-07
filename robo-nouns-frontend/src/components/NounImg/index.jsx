@@ -15,7 +15,6 @@ export default function NounImg() {
     const { addNounData, nounNFTMeta } = useAuction()
     const contractAddress = '0xA75E74a5109Ed8221070142D15cEBfFe9642F489';
     const contractAbi = addresses.RoboNounsVRGDA.abi;
-    console.log('contractAbi', contractAbi);
 
     const provider = new ethers.providers.JsonRpcProvider(
         // "https://polygon-mumbai.g.alchemy.com/v2/SYsE_zQSuhVCH3bio3ltnI_a8Ze_wN94"  // Polygon Mumbai
