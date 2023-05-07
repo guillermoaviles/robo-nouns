@@ -2,6 +2,7 @@ import { Contract, ContractFactory } from "ethers"
 import { ethers, tenderly, run, network } from "hardhat"
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers"
 import saveDeployment from "../utils/saveDeployment"
+import { RoboNounsVRGDA__factory, RoboNounsVRGDA } from "../typechain-types"
 
 export default async function () {
     const contractName: string = "RoboNounsVRGDA"
@@ -9,9 +10,11 @@ export default async function () {
     let addresses: SignerWithAddress[]
     ;[owner, ...addresses] = await ethers.getSigners()
 
-    const roboNounsVRGDAFactory: ContractFactory =
-        await ethers.getContractFactory(contractName)
-    const roboNounsVRGDA: Contract = await roboNounsVRGDAFactory.deploy()
+    const roboNounsVRGDAFactory: RoboNounsVRGDA__factory =
+        (await ethers.getContractFactory(
+            contractName
+        )) as RoboNounsVRGDA__factory
+    const roboNounsVRGDA: RoboNounsVRGDA = await roboNounsVRGDAFactory.deploy()
 
     await roboNounsVRGDA.deployed()
     console.log(contractName + " deployed to:", roboNounsVRGDA.address)

@@ -1,15 +1,20 @@
 import { Contract, ContractFactory } from "ethers"
 import { ethers, tenderly, run, network } from "hardhat"
 import saveDeployment from "../utils/saveDeployment"
+import { RoboNounsSeeder, RoboNounsSeeder__factory } from "../typechain-types"
 
 export default async function () {
     const contractName: string = "RoboNounsSeeder"
 
-    const roboNounsSeederFactory: ContractFactory =
-        await ethers.getContractFactory(contractName)
-    const roboNounsSeeder: Contract = await roboNounsSeederFactory.deploy()
+    const roboNounsSeederFactory: RoboNounsSeeder__factory =
+        (await ethers.getContractFactory(
+            contractName
+        )) as RoboNounsSeeder__factory
+    const roboNounsSeeder: RoboNounsSeeder =
+        await roboNounsSeederFactory.deploy()
 
     await roboNounsSeeder.deployed()
+
     console.log(contractName + " deployed to:", roboNounsSeeder.address)
 
     saveDeployment(

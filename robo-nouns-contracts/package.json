@@ -5,7 +5,6 @@
   "name": "robo-nouns-contracts",
   "description": "RoboNouns VRGDA EVM Contracts",
   "scripts": {
-    "prepare": "husky install",
     "start": "hardhat node",
     "clean": "hardhat clean",
     "compile": "hardhat compile",
@@ -40,13 +39,7 @@
     "format:js": "prettier '**/{*,''}.js' --write; eslint '**/{*,''}.js' --fix;",
     "format:ts": "prettier '**/{*,''}.ts' --write; eslint '**/{*,''}.ts' --fix;",
     "format:sol": "prettier '**/*.sol' --write; solhint 'contracts/*.sol' --fix;",
-    "lint": "shellcheck bin/*; cspell lint --dot --gitignore '**/{*,''}{.,''}*'; prettier '**/{*,''}.{json,js,ts,sol}' --check; solhint 'contracts/*.sol'; eslint '**/{*,''}.{json,js,ts}';",
-    "hook:pre-push": "tsc --noEmit && shellcheck bin/* && cspell lint --dot --gitignore '**/{*,''}{.,''}*' && prettier '**/{*,''}.{json,js,ts,sol}' --check && solhint 'contracts/*.sol' && eslint '**/{*,''}.{json,js,ts}'"
-  },
-  "husky": {
-    "hooks": {
-      "pre-push": "yarn run hook:pre-push"
-    }
+    "lint": "shellcheck bin/*; cspell lint --dot --gitignore '**/{*,''}{.,''}*'; prettier '**/{*,''}.{json,js,ts,sol}' --check; solhint 'contracts/*.sol'; eslint '**/{*,''}.{json,js,ts}';"
   },
   "engines": {
     "node": ">=16.0.0"
@@ -92,7 +85,6 @@
     "hardhat-spdx-license-identifier": "^2.0.3",
     "hardhat-storage-layout": "^0.1.6",
     "hardhat-tracer": "1.1.0-rc.6",
-    "husky": "^8.0.1",
     "istanbul-badges-readme": "^1.8.2",
     "prettier": "^2.7.1",
     "prettier-plugin-solidity": "1.0.0-dev.23",

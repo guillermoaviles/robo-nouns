@@ -105,7 +105,7 @@ const config: HardhatUserConfig = {
             },
             chainId: 31337,
             mining: {
-                auto: false,
+                auto: true,
                 interval: 12000,
             },
         },

@@ -3,13 +3,19 @@ import { ethers, tenderly, run, network, config } from "hardhat"
 import { chunkArray } from "../utils/chunkArray"
 import saveDeployment from "../utils/saveDeployment"
 import * as nounsData from "../assets/big-noun-image-data.json"
+import {
+    RoboNounsDescriptor,
+    RoboNounsDescriptor__factory,
+} from "../typechain-types"
 
 export default async function () {
     const contractName: string = "RoboNounsDescriptor"
 
-    const roboNounsDescriptorFactory: ContractFactory =
-        await ethers.getContractFactory(contractName)
-    const roboNounsDescriptor: Contract =
+    const roboNounsDescriptorFactory: RoboNounsDescriptor__factory =
+        (await ethers.getContractFactory(
+            contractName
+        )) as RoboNounsDescriptor__factory
+    const roboNounsDescriptor: RoboNounsDescriptor =
         await roboNounsDescriptorFactory.deploy()
 
     await roboNounsDescriptor.deployed()

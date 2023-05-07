@@ -64,47 +64,48 @@ describe("RoboNounsVRGDA", () => {
         roboNounsTokenFactory = (await ethers.getContractFactory(
             "RoboNounsToken"
         )) as RoboNounsToken__factory
-        let nounsDescriptor = await ethers.getContractAt(
-            "INounsDescriptor",
-            "0x0Cfdb3Ba1694c2bb2CFACB0339ad7b1Ae5932B63"
-        )
+        // let nounsDescriptor = await ethers.getContractAt(
+        //     "INounsDescriptor",
+        //     "0x0Cfdb3Ba1694c2bb2CFACB0339ad7b1Ae5932B63"
+        // )
 
         roboNounsVRGDA = await roboNounsVRGDAFactory.deploy()
         roboNounsSeeder = await roboNounsSeederFactory.deploy()
-        roboNounsDescriptor = await roboNounsDescriptorFactory.deploy(
-            nounsDescriptor.address
-        )
+        roboNounsDescriptor = await roboNounsDescriptorFactory
+            .deploy
+            // nounsDescriptor.address
+            ()
         roboNounsToken = await roboNounsTokenFactory.deploy(
             owner.address,
             roboNounsVRGDA.address,
             roboNounsDescriptor.address,
-            nounsDescriptor.address,
+            // nounsDescriptor.address,
             roboNounsSeeder.address
         )
         const chunkSize = 10
 
         const accessoriesChunks = chunkArray(
-            nounsData.images.accessories.map((item) => item.data),
+            testData.images.accessories.map((item) => item.data),
             chunkSize
         )
         for (const chunk of accessoriesChunks) {
             await roboNounsDescriptor.addManyAccessories(chunk)
         }
 
-        await roboNounsDescriptor.addManyBackgrounds(nounsData.bgcolors)
+        await roboNounsDescriptor.addManyBackgrounds(testData.bgcolors)
 
         const bodiesChunks = chunkArray(
-            nounsData.images.bodies.map((item) => item.data),
+            testData.images.bodies.map((item) => item.data),
             chunkSize
         )
         for (const chunk of bodiesChunks) {
             await roboNounsDescriptor.addManyBodies(chunk)
         }
 
-        await roboNounsDescriptor.addManyColorsToPalette("0", nounsData.palette)
+        await roboNounsDescriptor.addManyColorsToPalette("0", testData.palette)
 
         const glassesChunks = chunkArray(
-            nounsData.images.glasses.map((item) => item.data),
+            testData.images.glasses.map((item) => item.data),
             chunkSize
         )
         for (const chunk of glassesChunks) {
@@ -112,7 +113,7 @@ describe("RoboNounsVRGDA", () => {
         }
 
         const headsChunks = chunkArray(
-            nounsData.images.heads.map((item) => item.data),
+            testData.images.heads.map((item) => item.data),
             chunkSize
         )
         for (const chunk of headsChunks) {
@@ -141,9 +142,10 @@ describe("RoboNounsVRGDA", () => {
         expect(await roboNounsVRGDA.targetPrice()).to.equal(targetPrice)
         expect(await roboNounsVRGDA.perTimeUnit()).to.equal(perTimeUnit)
         expect(await roboNounsVRGDA.startTime()).to.equal(startTime)
-        expect(await roboNounsVRGDA.roboNounstoken()).to.equal(
+        expect(await roboNounsVRGDA.roboNounsToken()).to.equal(
             roboNounsToken.address
         )
+        expect(await roboNounsVRGDA.owner()).to.equal(owner.address)
     })
 
     it("should settle the auction and transfers token", async () => {

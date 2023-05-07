@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.17;
 
+import "hardhat/console.sol";
 import { IRoboNounsSeeder } from "contracts/interfaces/IRoboNounsSeeder.sol";
 import { IRoboNounsDescriptor } from "contracts/interfaces/IRoboNounsDescriptor.sol";
 import { INounsDescriptor } from "contracts/interfaces/INounsDescriptor.sol";
@@ -41,7 +42,7 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, PausableUpgradeable, ReentrancyGuard
     // address internal oldAuctionHouseAddress;
 
     /// @notice The Nouns ERC721 token contract
-    RoboNounsToken public roboNounstoken;
+    RoboNounsToken public roboNounsToken;
 
     /// @notice Target price for a token, to be scaled according to sales pace.
     /// @dev Represented as an 18 decimal fixed point number.
@@ -60,13 +61,13 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, PausableUpgradeable, ReentrancyGuard
         int256 _priceDecayPercent,
         int256 _perTimeUnit,
         uint256 _startTime,
-        address _roboNounstokenAddress
+        address _roboNounsTokenAddress
     ) external initializer {
         __Pausable_init();
         __ReentrancyGuard_init();
         __Ownable_init();
 
-        roboNounstoken = RoboNounsToken(_roboNounstokenAddress);
+        roboNounsToken = RoboNounsToken(_roboNounsTokenAddress);
         // oldAuctionHouseAddress = address(roboNounstoken.minter());
         startTime = _startTime;
         targetPrice = _targetPrice;
@@ -96,10 +97,10 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, PausableUpgradeable, ReentrancyGuard
         require(msg.value >= price, "Insufficient funds");
 
         // Call settleAuction on the roboNouns contract.
-        uint256 mintedNounId = roboNounstoken.mint(expectedBlockNumber);
+        uint256 mintedNounId = roboNounsToken.mint(expectedBlockNumber);
 
         // Sends token to caller.
-        roboNounstoken.transferFrom(address(this), msg.sender, mintedNounId);
+        roboNounsToken.transferFrom(address(this), msg.sender, mintedNounId);
 
         // Sends the funds to the DAO. // removed for mumbai testing purposes
         // if (msg.value > 0) {
@@ -186,8 +187,10 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, PausableUpgradeable, ReentrancyGuard
     {
         uint256 _nextNounIdForCaller = nextNounIdForCaller();
         // Generate the seed for the next noun.
-        IRoboNounsSeeder seeder = IRoboNounsSeeder(roboNounstoken.seeder());
-        IRoboNounsDescriptor descriptor = IRoboNounsDescriptor(roboNounstoken.descriptor());
+        console.log(address(roboNounsToken.seeder()));
+        IRoboNounsSeeder seeder = IRoboNounsSeeder(roboNounsToken.seeder());
+        console.log(address(seeder));
+        IRoboNounsDescriptor descriptor = IRoboNounsDescriptor(roboNounsToken.descriptor());
         // INounsDescriptor nounsDescriptor = INounsDescriptor(roboNounstoken.nounsDescriptor());
         // seed = seeder.generateSeed(_nextNounIdForCaller, descriptor, nounsDescriptor, block.number - 1); // multi descriptor
         seed = seeder.generateSeed(_nextNounIdForCaller, descriptor, block.number - 1);
