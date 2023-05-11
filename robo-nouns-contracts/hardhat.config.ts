@@ -104,9 +104,10 @@ const config: HardhatUserConfig = {
                 url: process.env.MAINNET_RPC_URL || "",
             },
             chainId: 31337,
+            blockGasLimit: 12500000,
             mining: {
-                auto: true,
-                interval: 12000,
+                auto: false,
+                interval: 12000, // 12 sec
             },
         },
         custom: {
