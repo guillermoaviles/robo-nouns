@@ -11,6 +11,6 @@
             "@/*": ["./src/*"]
         }
     },
-    "include": ["./scripts", "./test", "./typechain-types"],
+    "include": ["./scripts", "./test", "./typechain"],
     "files": ["./hardhat.config.ts"]
 }

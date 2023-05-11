@@ -2,22 +2,9 @@
 
 /// @title Interface for NounsSeeder
 
-/*********************************
- * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
- * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
- * ░░░░░░█████████░░█████████░░░ *
- * ░░░░░░██░░░████░░██░░░████░░░ *
- * ░░██████░░░████████░░░████░░░ *
- * ░░██░░██░░░████░░██░░░████░░░ *
- * ░░██░░██░░░████░░██░░░████░░░ *
- * ░░░░░░█████████░░█████████░░░ *
- * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
- * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
- *********************************/
-
 pragma solidity ^0.8.6;
 
-import { INounsDescriptor } from "contracts/interfaces/INounsDescriptor.sol";
+import {INounsDescriptorMinimal} from "contracts/interfaces/INounsDescriptorMinimal.sol";
 
 interface INounsSeeder {
     struct Seed {
@@ -28,5 +15,10 @@ interface INounsSeeder {
         uint48 glasses;
     }
 
-    function generateSeed(uint256 nounId, INounsDescriptor descriptor) external view returns (Seed memory);
+    function generateSeed(
+        uint256 nounId,
+        INounsDescriptorMinimal descriptor,
+        INounsDescriptorMinimal nounsDescriptor,
+        uint256 blockNumber
+    ) external view returns (Seed memory);
 }

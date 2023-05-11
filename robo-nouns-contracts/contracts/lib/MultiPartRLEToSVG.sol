@@ -1,8 +1,10 @@
 // SPDX-License-Identifier: GPL-3.0
 
 /// @title A library used to convert multi-part RLE compressed images to SVG
+/// @dev Used in NFTDescriptor.sol. V2 uses SVGRenderer.sol.
 
-/*********************************
+/**
+ *
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  * ░░░░░░█████████░░█████████░░░ *
@@ -13,7 +15,8 @@
  * ░░░░░░█████████░░█████████░░░ *
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
- *********************************/
+ *
+ */
 
 pragma solidity ^0.8.6;
 
@@ -38,24 +41,26 @@ library MultiPartRLEToSVG {
     struct DecodedImage {
         uint8 paletteIndex;
         ContentBounds bounds;
-        uint256 width;
         Rect[] rects;
     }
 
     /**
      * @notice Given RLE image parts and color palettes, merge to generate a single SVG image.
      */
-    function generateSVG(
-        SVGParams memory params,
-        mapping(uint8 => string[]) storage palettes
-    ) internal view returns (string memory svg) {
+    function generateSVG(SVGParams memory params, mapping(uint8 => string[]) storage palettes)
+        internal
+        view
+        returns (string memory svg)
+    {
         // prettier-ignore
         return string(
             abi.encodePacked(
                 '<svg width="320" height="320" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">',
-                '<rect width="100%" height="100%" fill="#', params.background, '" />',
+                '<rect width="100%" height="100%" fill="#',
+                params.background,
+                '" />',
                 _generateSVGRects(params, palettes),
-                '</svg>'
+                "</svg>"
             )
         );
     }
@@ -70,11 +75,39 @@ library MultiPartRLEToSVG {
         returns (string memory svg)
     {
         string[33] memory lookup = [
-            '0', '10', '20', '30', '40', '50', '60', '70', 
-            '80', '90', '100', '110', '120', '130', '140', '150', 
-            '160', '170', '180', '190', '200', '210', '220', '230', 
-            '240', '250', '260', '270', '280', '290', '300', '310',
-            '320' 
+            "0",
+            "10",
+            "20",
+            "30",
+            "40",
+            "50",
+            "60",
+            "70",
+            "80",
+            "90",
+            "100",
+            "110",
+            "120",
+            "130",
+            "140",
+            "150",
+            "160",
+            "170",
+            "180",
+            "190",
+            "200",
+            "210",
+            "220",
+            "230",
+            "240",
+            "250",
+            "260",
+            "270",
+            "280",
+            "290",
+            "300",
+            "310",
+            "320"
         ];
         string memory rects;
         for (uint8 p = 0; p < params.parts.length; p++) {
@@ -89,9 +122,9 @@ library MultiPartRLEToSVG {
             for (uint256 i = 0; i < image.rects.length; i++) {
                 Rect memory rect = image.rects[i];
                 if (rect.colorIndex != 0) {
-                    buffer[cursor] = lookup[rect.length];          // width
-                    buffer[cursor + 1] = lookup[currentX];         // x
-                    buffer[cursor + 2] = lookup[currentY];         // y
+                    buffer[cursor] = lookup[rect.length]; // width
+                    buffer[cursor + 1] = lookup[currentX]; // x
+                    buffer[cursor + 2] = lookup[currentY]; // y
                     buffer[cursor + 3] = palette[rect.colorIndex]; // color
 
                     cursor += 4;
@@ -103,7 +136,7 @@ library MultiPartRLEToSVG {
                 }
 
                 currentX += rect.length;
-                if (currentX - image.bounds.left == image.width) {
+                if (currentX == image.bounds.right) {
                     currentX = image.bounds.left;
                     currentY++;
                 }
@@ -127,7 +160,15 @@ library MultiPartRLEToSVG {
             chunk = string(
                 abi.encodePacked(
                     chunk,
-                    '<rect width="', buffer[i], '" height="10" x="', buffer[i + 1], '" y="', buffer[i + 2], '" fill="#', buffer[i + 3], '" />'
+                    '<rect width="',
+                    buffer[i],
+                    '" height="10" x="',
+                    buffer[i + 1],
+                    '" y="',
+                    buffer[i + 2],
+                    '" fill="#',
+                    buffer[i + 3],
+                    '" />'
                 )
             );
         }
@@ -145,14 +186,13 @@ library MultiPartRLEToSVG {
             bottom: uint8(image[3]),
             left: uint8(image[4])
         });
-        uint256 width = bounds.right - bounds.left;
 
         uint256 cursor;
         Rect[] memory rects = new Rect[]((image.length - 5) / 2);
         for (uint256 i = 5; i < image.length; i += 2) {
-            rects[cursor] = Rect({ length: uint8(image[i]), colorIndex: uint8(image[i + 1]) });
+            rects[cursor] = Rect({length: uint8(image[i]), colorIndex: uint8(image[i + 1])});
             cursor++;
         }
-        return DecodedImage({ paletteIndex: paletteIndex, bounds: bounds, width: width, rects: rects });
+        return DecodedImage({paletteIndex: paletteIndex, bounds: bounds, rects: rects});
     }
 }
