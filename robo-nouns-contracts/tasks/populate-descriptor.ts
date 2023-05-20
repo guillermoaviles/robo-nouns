@@ -1,6 +1,11 @@
 import { task, types } from "hardhat/config"
 import ImageData from "../assets/image-data.json"
+import TestImageData from "../assets/image-data-robo.json"
 import { dataToDescriptorInput } from "./utils"
+import accessoriesData from "../assets/descriptor_v2/accessoriesPage.json"
+import bodiesData from "../assets/descriptor_v2/bodiesPage.json"
+import paletteData from "../assets/descriptor_v2/paletteAndBackgrounds.json"
+import * as deployments from "./utils/deployments.json"
 
 task(
     "populate-descriptor",
@@ -9,13 +14,13 @@ task(
     .addOptionalParam(
         "nftDescriptor",
         "The `NFTDescriptorV2` contract address",
-        "0xb04CB6c52E73CF3e2753776030CE85a36549c9C2",
+        deployments.NFTDescriptorV2.address,
         types.string
     )
     .addOptionalParam(
         "nounsDescriptor",
         "The `NounsDescriptorV2` contract address",
-        "0xa195ACcEB1945163160CD5703Ed43E4f78176a54",
+        deployments.NounsDescriptorV2.address,
         types.string
     )
     .setAction(
@@ -35,26 +40,38 @@ task(
 
             const descriptorContract = descriptorFactory.attach(nounsDescriptor)
 
-            const { bgcolors, palette, images } = ImageData
+            const { bgcolors, palette, images } = TestImageData
             const { accessories } = images
 
             const accessoriesPage = dataToDescriptorInput(
                 accessories.map(({ data }) => data)
             )
+            try {
+                await descriptorContract.addBackground(bgcolors[0])
+                await descriptorContract.setPalette(0, paletteData.paletteValue)
+                // await descriptorContract.setPalette(
+                //     0,
+                //     `0x000000${palette.join("")}`
+                // )
 
-            await descriptorContract.addManyBackgrounds(bgcolors)
-            await descriptorContract.setPalette(
-                0,
-                `0x000000${palette.join("")}`
-            )
+                await descriptorContract.addBodies(
+                    bodiesData.bodiesCompressed,
+                    bodiesData.bodiesLength,
+                    bodiesData.bodiesCount
+                )
 
-            await descriptorContract.addAccessories(
-                accessoriesPage.encodedCompressed,
-                accessoriesPage.originalLength,
-                accessoriesPage.itemCount,
-                options
-            )
+                await descriptorContract.addAccessories(
+                    accessoriesData.accessoriesCompressed,
+                    accessoriesData.accessoriesLength,
+                    accessoriesData.accessoriesCount,
+                    options
+                )
 
-            console.log("Descriptor populated with palettes and accessories.")
+                console.log(
+                    "Descriptor populated with palettes and accessories."
+                )
+            } catch (e) {
+                console.log(e)
+            }
         }
     )

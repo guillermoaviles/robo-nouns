@@ -1,6 +1,7 @@
 import { task, types } from "hardhat/config"
 import { Contract as EthersContract } from "ethers"
 import { ContractName } from "./types"
+import saveDeployedContract from "./utils/saveDeployment"
 
 interface Contract {
     args?: (string | number | (() => string | undefined))[]
@@ -102,6 +103,8 @@ task("deploy-local", "Deploy contracts to hardhat").setAction(
             console.log(
                 `${name} contract deployed to ${deployedContract.address}`
             )
+
+            await saveDeployedContract(name, deployedContract.address)
         }
 
         return contracts

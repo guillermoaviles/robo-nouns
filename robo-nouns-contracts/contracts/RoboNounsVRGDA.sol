@@ -2,15 +2,15 @@
 pragma solidity ^0.8.17;
 
 import "hardhat/console.sol";
-import {INounsSeeder} from "contracts/interfaces/INounsSeeder.sol";
-import {INounsDescriptorMinimal} from "contracts/interfaces/INounsDescriptorMinimal.sol";
-import {INounsDescriptorV2} from "contracts/interfaces/INounsDescriptorV2.sol";
-import {IRoboNounsVRGDA} from "contracts/interfaces/IRoboNounsVRGDA.sol";
-import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
-import {VRGDA} from "contracts/lib/VRGDA.sol";
-import {RoboNounsToken} from "contracts/RoboNounsToken.sol";
-import {toWadUnsafe, toDaysWadUnsafe, wadLn} from "solmate/src/utils/SignedWadMath.sol";
+import { INounsSeeder } from "contracts/interfaces/INounsSeeder.sol";
+import { INounsDescriptorMinimal } from "contracts/interfaces/INounsDescriptorMinimal.sol";
+import { INounsDescriptorV2 } from "contracts/interfaces/INounsDescriptorV2.sol";
+import { IRoboNounsVRGDA } from "contracts/interfaces/IRoboNounsVRGDA.sol";
+import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
+import { VRGDA } from "contracts/lib/VRGDA.sol";
+import { RoboNounsToken } from "contracts/RoboNounsToken.sol";
+import { toWadUnsafe, toDaysWadUnsafe, wadLn } from "solmate/src/utils/SignedWadMath.sol";
 
 contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
     address public constant nounsDAO = 0x0BC3807Ec262cB779b38D65b38158acC3bfedE10;
@@ -58,7 +58,8 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
     function buyNow(uint256 expectedBlockNumber) external payable {
         // will allow to mint token with traits generated from 4 last blocks (including current),
         require(
-            expectedBlockNumber >= block.number - 3 || expectedBlockNumber >= lastTokenBlock, "Invalid block number"
+            expectedBlockNumber >= block.number - 3 || expectedBlockNumber >= lastTokenBlock,
+            "Invalid block number"
         );
 
         // making it unable to get the a token with the traits for any previous token (pool is emptied when a noun is bought, this prevents buying duplicates)
@@ -137,12 +138,14 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
         INounsSeeder seeder = INounsSeeder(roboNounsToken.seeder());
 
         INounsDescriptorMinimal nounsDescriptor = roboNounsToken.nounsDescriptor();
+        INounsDescriptorMinimal roboDescriptor = roboNounsToken.roboDescriptor();
         INounsDescriptorV2 descriptor = INounsDescriptorV2(address(roboNounsToken.roboDescriptor()));
-        INounsDescriptorMinimal dAsMinimal = INounsDescriptorMinimal(address(descriptor));
+        // INounsDescriptorMinimal dAsMinimal = INounsDescriptorMinimal(address(descriptor));
 
-        seed = seeder.generateSeed(nextId, dAsMinimal, nounsDescriptor, block.number - 1);
-
-        console.log(seed.glasses, seed.head, seed.accessory, seed.background);
+        seed = seeder.generateSeed(nextId, roboDescriptor, nounsDescriptor, block.number - 1);
+        console.logString(" ");
+        console.logString("From VRGDA randomly picked glasses, head, acs, body:");
+        console.log(seed.glasses, seed.head, seed.accessory, seed.body);
 
         // Generate the SVG from seed using the descriptor.
         svg = descriptor.generateSVGImage(seed);
@@ -164,19 +167,20 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
     function getCurrentVRGDAPrice() public view returns (uint256) {
         uint256 nextId = roboNounsToken.currentNounId() + 1;
         uint256 absoluteTimeSinceStart = block.timestamp - startTime;
-        return VRGDA.getVRGDAPrice(
-            toDaysWadUnsafe(absoluteTimeSinceStart - (absoluteTimeSinceStart % updateInterval)),
-            targetPrice,
-            decayConstant,
-            // Theoretically calling toWadUnsafe with sold can silently overflow but under
-            // any reasonable circumstance it will never be large enough. We use sold + 1 as
-            // the VRGDA formula's n param represents the nth token and sold is the n-1th token.
-            VRGDA.getTargetSaleTimeLinear(toWadUnsafe(nextId), perTimeUnit)
-        );
+        return
+            VRGDA.getVRGDAPrice(
+                toDaysWadUnsafe(absoluteTimeSinceStart - (absoluteTimeSinceStart % updateInterval)),
+                targetPrice,
+                decayConstant,
+                // Theoretically calling toWadUnsafe with sold can silently overflow but under
+                // any reasonable circumstance it will never be large enough. We use sold + 1 as
+                // the VRGDA formula's n param represents the nth token and sold is the n-1th token.
+                VRGDA.getTargetSaleTimeLinear(toWadUnsafe(nextId), perTimeUnit)
+            );
     }
 
     function _sendETH() internal {
-        (bool sent,) = nounsDAO.call{value: msg.value}("");
+        (bool sent, ) = nounsDAO.call{ value: msg.value }("");
         require(sent, "failed to send eth");
     }
 }

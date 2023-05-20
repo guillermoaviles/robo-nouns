@@ -2,27 +2,22 @@ import { promises as fs } from "fs"
 import path from "path"
 import { ContractInterface } from "ethers"
 
-const DESTINATION = path.join(__dirname, "../utils/addresses.json")
+const DESTINATION = path.join(__dirname, "../utils/deployments.json")
 
-export default async function (
-    name: string,
-    address: string,
-    abi: ContractInterface
-) {
-    let contractAddresses
+export default async function (name: string, address: string) {
+    let deployments
     try {
         const fileContent = await fs.readFile(DESTINATION, "utf8")
-        contractAddresses = JSON.parse(fileContent)
+        deployments = JSON.parse(fileContent)
     } catch (error) {
         console.error("Error reading the JSON file:", error)
-        contractAddresses = {}
+        deployments = {}
     }
 
     // This line will always add or update the contract information
-    contractAddresses[name] = {
+    deployments[name] = {
         address: address,
-        abi: abi,
     }
-    await fs.writeFile(DESTINATION, JSON.stringify(contractAddresses))
+    await fs.writeFile(DESTINATION, JSON.stringify(deployments))
     console.log(name + "Saved to addresses.json")
 }

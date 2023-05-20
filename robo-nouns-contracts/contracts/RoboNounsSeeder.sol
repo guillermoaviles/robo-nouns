@@ -9,8 +9,9 @@
 
 pragma solidity ^0.8.6;
 
-import {INounsSeeder} from "contracts/interfaces/INounsSeeder.sol";
-import {INounsDescriptorMinimal} from "contracts/interfaces/INounsDescriptorMinimal.sol";
+import "hardhat/console.sol";
+import { INounsSeeder } from "contracts/interfaces/INounsSeeder.sol";
+import { INounsDescriptorMinimal } from "contracts/interfaces/INounsDescriptorMinimal.sol";
 
 contract RoboNounsSeeder is INounsSeeder {
     /**
@@ -25,19 +26,24 @@ contract RoboNounsSeeder is INounsSeeder {
         uint256 pseudorandomness = uint256(keccak256(abi.encodePacked(blockhash(blockNumber), nounId)));
 
         uint256 headCount = nounsDescriptor.headCount();
-        uint256 backgroundCount = nounsDescriptor.backgroundCount();
-        uint256 bodyCount = nounsDescriptor.bodyCount();
         uint256 glassesCount = nounsDescriptor.glassesCount();
 
         // get from robo nouns art
+        uint256 backgroundCount = roboDescriptor.backgroundCount();
+        uint256 bodyCount = roboDescriptor.bodyCount();
         uint256 accessoryCount = roboDescriptor.accessoryCount();
+        console.logString(" ");
+        console.logString("From Seeder counts bg, body, access, head, glasses:");
+        console.log(backgroundCount, bodyCount, accessoryCount);
+        console.log(headCount, glassesCount);
 
-        return Seed({
-            background: uint48(uint48(pseudorandomness) % backgroundCount),
-            body: uint48(uint48(pseudorandomness >> 48) % bodyCount),
-            accessory: uint48(uint48(pseudorandomness >> 96) % accessoryCount),
-            head: uint48(uint48(pseudorandomness >> 144) % headCount),
-            glasses: uint48(uint48(pseudorandomness >> 192) % glassesCount)
-        });
+        return
+            Seed({
+                background: uint48(uint48(pseudorandomness) % backgroundCount),
+                body: uint48(uint48(pseudorandomness >> 48) % bodyCount),
+                accessory: uint48(uint48(pseudorandomness >> 96) % accessoryCount),
+                head: uint48(uint48(pseudorandomness >> 144) % headCount),
+                glasses: uint48(uint48(pseudorandomness >> 192) % glassesCount)
+            });
     }
 }

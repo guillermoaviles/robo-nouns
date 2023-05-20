@@ -28,7 +28,7 @@ function getWallet(): Array<string> {
 // Go to https://hardhat.org/config/ to learn more
 const config: HardhatUserConfig = {
     solidity: {
-        version: process.env.SOLC_VERSION || "0.8.17",
+        version: "0.8.17",
         settings: {
             optimizer: {
                 enabled:
