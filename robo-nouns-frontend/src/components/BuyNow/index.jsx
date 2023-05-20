@@ -9,6 +9,7 @@ export default function BuyNow({ nft, currMintPrice, nftNo }) {
     const [parentBlockNumberMinusOne, setParentBlockNumberMinusOne] = useState("");
     const [parentBlockNumberMinusTwo, setParentBlockNumberMinusTwo] = useState("");
     const [parentBlockNumberMinusThree, setParentBlockNumberMinusThree] = useState("");
+    
     let prtBlockNum
 
     if (nftNo === 0) {
@@ -45,10 +46,10 @@ export default function BuyNow({ nft, currMintPrice, nftNo }) {
             }
             console.log('expNounID', expNounID);
             console.log('parentBlockHash', prtBlockNum);
-            const price = ethers.utils.parseEther("0.0001")
+            // const price = ethers.utils.parseEther("0.0001")
             const args = [expNounID, prtBlockNum]
             const tx = await contract.call("settleAuction", args, {
-                value: price,
+                value: currMintPrice,
                 gasLimit: 1000000,
             })
             console.info("settleAuction transaction sent:", tx.hash)

@@ -40,7 +40,7 @@ export default function AuctionDetails() {
                 Ξ
                 {currMintPrice > minMintPrice
                     ? Number(
-                          utils.formatEther(currVRGDAPrice.toString())
+                          utils.formatEther(currMintPrice.toString())
                       ).toFixed(3)
                     : minMintPrice}
             </h2>

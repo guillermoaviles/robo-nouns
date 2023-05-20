@@ -58,23 +58,6 @@ const Auction = () => {
                                         </div>
                                         <div className="flex mt-1 font-bold">
                                             <Timer updateInterval={900000} onReset={() => console.log("Timer reset")} />
-
-                                            {/* <div>
-                                                <span className="text-[#1C2228] text-3xl ">
-                                                    3
-                                                    <span className="text-2xl">
-                                                        m
-                                                    </span>
-                                                </span>
-                                            </div>
-                                            <div>
-                                                <span className="text-[#1C2228] text-3xl">
-                                                    29
-                                                    <span className="text-2xl">
-                                                        s
-                                                    </span>
-                                                </span>
-                                            </div> */}
                                         </div>
                                     </div>
                                 </div>
