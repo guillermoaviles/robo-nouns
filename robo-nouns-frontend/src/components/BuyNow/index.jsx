@@ -9,7 +9,7 @@ export default function BuyNow({ nft, currMintPrice, nftNo }) {
     const [parentBlockNumberMinusOne, setParentBlockNumberMinusOne] = useState("");
     const [parentBlockNumberMinusTwo, setParentBlockNumberMinusTwo] = useState("");
     const [parentBlockNumberMinusThree, setParentBlockNumberMinusThree] = useState("");
-    
+
     let prtBlockNum
 
     if (nftNo === 0) {
@@ -30,7 +30,6 @@ export default function BuyNow({ nft, currMintPrice, nftNo }) {
     const provider = new ethers.providers.JsonRpcProvider(
         // "https://polygon-mumbai.g.alchemy.com/v2/SYsE_zQSuhVCH3bio3ltnI_a8Ze_wN94"  // Polygon Mumbai
         "http://localhost:8545"
-
     )
 
     const { contract } = useContract(
@@ -44,9 +43,10 @@ export default function BuyNow({ nft, currMintPrice, nftNo }) {
             if (!contract) {
                 throw new Error("Contract is undefined")
             }
+            
             console.log('expNounID', expNounID);
             console.log('parentBlockHash', prtBlockNum);
-            // const price = ethers.utils.parseEther("0.0001")
+    
             const args = [expNounID, prtBlockNum]
             const tx = await contract.call("settleAuction", args, {
                 value: currMintPrice,
@@ -108,13 +108,6 @@ export default function BuyNow({ nft, currMintPrice, nftNo }) {
                     </g>
                 </a>
             </svg>
-            {/* <button
-                type="button"
-                className="BuyBtn btn-primary hover:text-nouns-lime hover:scale-105"
-                onClick={call}
-            >
-                Buy Now
-            </button> */}
         </div>
     )
 }

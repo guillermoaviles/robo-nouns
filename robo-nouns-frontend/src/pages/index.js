@@ -19,7 +19,6 @@ export default function Home() {
                 />
             </Head>
             <Navbar />
-            {/* <main className="App_wrapper__Mru9Z bg-gray-200"> */}
             <main className="App_wrapper bg-nouns-lime">
                 <Auction />
                 <PrevNFTs />
