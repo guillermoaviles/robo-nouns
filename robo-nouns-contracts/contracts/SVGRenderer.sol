@@ -19,7 +19,7 @@
 
 pragma solidity ^0.8.6;
 
-import {ISVGRenderer} from "contracts/interfaces/ISVGRenderer.sol";
+import { ISVGRenderer } from "contracts/interfaces/ISVGRenderer.sol";
 
 contract SVGRenderer is ISVGRenderer {
     bytes16 private constant _HEX_SYMBOLS = "0123456789abcdef";
@@ -74,14 +74,14 @@ contract SVGRenderer is ISVGRenderer {
         Part[] memory parts = new Part[](1);
         parts[0] = part;
 
-        return _generateSVGRects(SVGParams({parts: parts, background: ""}));
+        return _generateSVGRects(SVGParams({ parts: parts, background: "" }));
     }
 
     /**
      * @notice Given RLE image data and color palette pointers, merge to generate a partial SVG image.
      */
     function generateSVGParts(Part[] calldata parts) external pure override returns (string memory partialSVG) {
-        return _generateSVGRects(SVGParams({parts: parts, background: ""}));
+        return _generateSVGRects(SVGParams({ parts: parts, background: "" }));
     }
 
     /**
@@ -223,21 +223,21 @@ contract SVGRenderer is ISVGRenderer {
         uint256 cursor;
         Draw[] memory draws = new Draw[]((image.length - 5) / 2);
         for (uint256 i = 5; i < image.length; i += 2) {
-            draws[cursor] = Draw({length: uint8(image[i]), colorIndex: uint8(image[i + 1])});
+            draws[cursor] = Draw({ length: uint8(image[i]), colorIndex: uint8(image[i + 1]) });
             cursor++;
         }
-        return DecodedImage({bounds: bounds, draws: draws});
+        return DecodedImage({ bounds: bounds, draws: draws });
     }
 
     /**
      * @notice Get the target hex color code from the cache. Populate the cache if
      * the color code does not yet exist.
      */
-    function _getColor(bytes memory palette, uint256 index, string[] memory cache)
-        private
-        pure
-        returns (string memory)
-    {
+    function _getColor(
+        bytes memory palette,
+        uint256 index,
+        string[] memory cache
+    ) private pure returns (string memory) {
         if (bytes(cache[index]).length == 0) {
             uint256 i = index * _INDEX_TO_BYTES3_FACTOR;
             cache[index] = _toHexString(abi.encodePacked(palette[i], palette[i + 1], palette[i + 2]));

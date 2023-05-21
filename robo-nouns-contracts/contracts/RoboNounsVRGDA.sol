@@ -143,9 +143,6 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
         // INounsDescriptorMinimal dAsMinimal = INounsDescriptorMinimal(address(descriptor));
 
         seed = seeder.generateSeed(nextId, roboDescriptor, nounsDescriptor, block.number - 1);
-        console.logString(" ");
-        console.logString("From VRGDA randomly picked glasses, head, acs, body:");
-        console.log(seed.glasses, seed.head, seed.accessory, seed.body);
 
         // Generate the SVG from seed using the descriptor.
         svg = descriptor.generateSVGImage(seed);

@@ -78,9 +78,10 @@ const config: HardhatUserConfig = {
     },
     networks: {
         hardhat: {
-            forking: {
-                url: process.env.MAINNET_RPC_URL || "",
-            },
+            blockGasLimit: 15_000_000,
+            // forking: {
+            //     url: process.env.MAINNET_RPC_URL || "",
+            // },
             allowUnlimitedContractSize:
                 (process.env.ALLOW_UNLIMITED_CONTRACT_SIZE &&
                     "true" ===
@@ -88,14 +89,15 @@ const config: HardhatUserConfig = {
                 false,
         },
         localhost: {
-            forking: {
-                url: process.env.MAINNET_RPC_URL || "",
-            },
+            blockGasLimit: 15_000_000,
+            // forking: {
+            //     url: process.env.MAINNET_RPC_URL || "",
+            // },
             chainId: 31337,
-            mining: {
-                auto: true,
-                interval: 12000,
-            },
+            // mining: {
+            //     auto: true,
+            //     interval: 12000,
+            // },
         },
         custom: {
             url: process.env.CUSTOM_NETWORK_URL || "",
