@@ -5,6 +5,7 @@ import { constants, BigNumber } from "ethers"
 import { ethers, network } from "hardhat"
 import * as nounsData from "../assets/image-data.json"
 import * as testData from "../assets/big-noun-image-data.json"
+import * as roboData from "../assets/image-robo-data.json"
 
 // eslint-disable-next-line node/no-missing-import
 import type {
@@ -81,43 +82,32 @@ describe("RoboNounsVRGDA", () => {
             nounsDescriptor.address,
             roboNounsSeeder.address
         )
-        const chunkSize = 10
 
-        const accessoriesChunks = chunkArray(
-            nounsData.images.accessories.map((item) => item.data),
-            chunkSize
-        )
-        for (const chunk of accessoriesChunks) {
-            await roboNounsDescriptor.addManyAccessories(chunk)
+        const { bgcolors, palette, images } = roboData
+        const { bodies, accessories, heads, glasses } = images
+
+        // Chunk head and accessory population due to high gas usage
+        await roboNounsDescriptor.addManyBackgrounds(bgcolors)
+        await roboNounsDescriptor.addManyColorsToPalette(0, palette)
+        await roboNounsDescriptor.addManyBodies(bodies.map(({ data }) => data))
+
+        const accessoryChunk = chunkArray(accessories, 10)
+        for (const chunk of accessoryChunk) {
+            await roboNounsDescriptor.addManyAccessories(
+                chunk.map(({ data }) => data)
+            )
         }
 
-        await roboNounsDescriptor.addManyBackgrounds(nounsData.bgcolors)
-
-        const bodiesChunks = chunkArray(
-            nounsData.images.bodies.map((item) => item.data),
-            chunkSize
-        )
-        for (const chunk of bodiesChunks) {
-            await roboNounsDescriptor.addManyBodies(chunk)
+        const headChunk = chunkArray(heads, 10)
+        for (const chunk of headChunk) {
+            await roboNounsDescriptor.addManyHeads(
+                chunk.map(({ data }) => data)
+            )
         }
 
-        await roboNounsDescriptor.addManyColorsToPalette("0", nounsData.palette)
-
-        const glassesChunks = chunkArray(
-            nounsData.images.glasses.map((item) => item.data),
-            chunkSize
+        await roboNounsDescriptor.addManyGlasses(
+            glasses.map(({ data }) => data)
         )
-        for (const chunk of glassesChunks) {
-            await roboNounsDescriptor.addManyGlasses(chunk)
-        }
-
-        const headsChunks = chunkArray(
-            nounsData.images.heads.map((item) => item.data),
-            chunkSize
-        )
-        for (const chunk of headsChunks) {
-            await roboNounsDescriptor.addManyHeads(chunk)
-        }
         await roboNounsVRGDA.initialize(
             targetPrice,
             priceDecayPercent,

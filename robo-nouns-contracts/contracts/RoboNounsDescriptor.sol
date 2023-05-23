@@ -342,16 +342,18 @@ contract RoboNounsDescriptor is IRoboNounsDescriptor, Ownable {
         bytes[] memory _parts = new bytes[](4);
         _parts[0] = bodies[seed.body];
         _parts[1] = accessories[seed.accessory];
+        _parts[2] = heads[seed.head];
+        _parts[3] = glasses[seed.glasses];
 
         // depending on the number use the roboNouns head or the OG nouns head
-        if (seed.head > heads.length - 1) {
-            _parts[2] = nounsDescriptor.heads(seed.head);
-        } else {
-            _parts[2] = heads[seed.head];
-        }
+        // if (seed.head > heads.length - 1) {
+        //     _parts[2] = nounsDescriptor.heads(seed.head);
+        // } else {
+        //     _parts[2] = heads[seed.head];
+        // }
 
         // using OG nouns glasses
-        _parts[3] = nounsDescriptor.glasses(seed.glasses);
+        // _parts[3] = nounsDescriptor.glasses(seed.glasses);
         return _parts;
     }
 }
