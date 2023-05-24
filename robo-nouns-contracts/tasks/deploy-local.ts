@@ -10,15 +10,19 @@ interface Contract {
     waitForConfirmation?: boolean
 }
 
+async function delay(seconds: number) {
+    return new Promise((resolve) => setTimeout(resolve, 1000 * seconds))
+}
+
 task("deploy-local", "Deploy contracts to hardhat").setAction(
-    async (args, { ethers }) => {
+    async (args, { ethers, run }) => {
         const network = await ethers.provider.getNetwork()
-        if (network.chainId !== 31337) {
-            console.log(
-                `Invalid chain id. Expected 31337. Got: ${network.chainId}.`
-            )
-            return
-        }
+        // if (network.chainId !== 31337) {
+        //     console.log(
+        //         `Invalid chain id. Expected 31337. Got: ${network.chainId}.`
+        //     )
+        //     return
+        // }
 
         const NOUNS_ART_NONCE_OFFSET = 4
         const VRGDA_NONCE_OFFSET = 7
@@ -48,7 +52,7 @@ task("deploy-local", "Deploy contracts to hardhat").setAction(
             NounsDescriptorV2: {
                 args: [
                     expectedRoboNounsArtAddress,
-                    NOUNS_ART_MAINNET,
+                    // NOUNS_ART_MAINNET,
                     () => contracts.SVGRenderer.instance?.address,
                 ],
                 libraries: () => ({
@@ -68,7 +72,7 @@ task("deploy-local", "Deploy contracts to hardhat").setAction(
                 args: [
                     expectedVRGDAAddress,
                     () => contracts.NounsDescriptorV2.instance?.address,
-                    NOUNS_DESCRIPTOR_MAINNET,
+                    // NOUNS_DESCRIPTOR_MAINNET,
                     () => contracts.RoboNounsSeeder.instance?.address,
                 ],
             },
@@ -99,13 +103,30 @@ task("deploy-local", "Deploy contracts to hardhat").setAction(
             }
 
             contracts[name as ContractName].instance = deployedContract
-
             console.log(
-                `${name} contract deployed to ${deployedContract.address}`
+                `${name} contract saved and deployed to ${deployedContract.address}`
             )
 
-            await saveDeployedContract(name, deployedContract.address)
+            await saveDeployedContract(
+                network.name,
+                name,
+                deployedContract.address
+            )
+            // await delay(3)
         }
+
+        // if (network.name !== "localhost") {
+        //     console.log(
+        //         "Waiting 1 minute before verifying contracts on Etherscan"
+        //     )
+        //     await delay(30)
+
+        //     console.log("Verifying contracts on Etherscan...")
+        //     await run("verify-etherscan", {
+        //         contracts,
+        //     })
+        //     console.log("Verify complete.")
+        // }
 
         return contracts
     }

@@ -19,7 +19,6 @@
 
 pragma solidity ^0.8.6;
 
-import "hardhat/console.sol";
 import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
 import { Strings } from "@openzeppelin/contracts/utils/Strings.sol";
 import { INounsDescriptorV2 } from "contracts/interfaces/INounsDescriptorV2.sol";
@@ -41,7 +40,7 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
     INounsArt public art;
 
     /// @notice Nouns art contract
-    INounsArt public nounsArt;
+    // INounsArt public nounsArt;
 
     /// @notice The contract responsible for constructing SVGs
     ISVGRenderer public renderer;
@@ -63,9 +62,9 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
         _;
     }
 
-    constructor(INounsArt _art, INounsArt _nounsArt, ISVGRenderer _renderer) {
+    constructor(INounsArt _art, ISVGRenderer _renderer) {
         art = _art;
-        nounsArt = _nounsArt;
+        // nounsArt = _nounsArt;
         renderer = _renderer;
     }
 
@@ -470,12 +469,12 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
         return parts;
     }
 
-    /**
-     * @notice Get the color palette pointer for the passed part in the nouns art contract.
-     */
-    function _getNounsPalette(bytes memory part) private view returns (bytes memory) {
-        return nounsArt.palettes(uint8(part[0]));
-    }
+    // /**
+    //  * @notice Get the color palette pointer for the passed part in the nouns art contract.
+    //  */
+    // function _getNounsPalette(bytes memory part) private view returns (bytes memory) {
+    //     return nounsArt.palettes(uint8(part[0]));
+    // }
 
     /**
      * @notice Get the color palette pointer for the passed part.

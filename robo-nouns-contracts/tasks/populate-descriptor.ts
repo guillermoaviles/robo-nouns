@@ -3,10 +3,6 @@ import ImageData from "../assets/image-data_old.json"
 import RoboData from "../assets/image-data-robo.json"
 import NounsData from "../assets/image-data-nouns.json"
 import { dataToDescriptorInput } from "./utils"
-import accessoriesData from "../assets/descriptor_v2/accessoriesPage.json"
-import bodiesData from "../assets/descriptor_v2/bodiesPage.json"
-import headsData from "../assets/descriptor_v2/headsPage.json"
-import paletteData from "../assets/descriptor_v2/paletteAndBackgrounds.json"
 import * as deployments from "./utils/deployments.json"
 
 task(

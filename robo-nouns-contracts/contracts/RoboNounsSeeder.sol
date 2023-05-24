@@ -9,7 +9,6 @@
 
 pragma solidity ^0.8.6;
 
-import "hardhat/console.sol";
 import { INounsSeeder } from "contracts/interfaces/INounsSeeder.sol";
 import { INounsDescriptorMinimal } from "contracts/interfaces/INounsDescriptorMinimal.sol";
 
@@ -20,7 +19,7 @@ contract RoboNounsSeeder is INounsSeeder {
     function generateSeed(
         uint256 nounId,
         INounsDescriptorMinimal roboDescriptor,
-        INounsDescriptorMinimal nounsDescriptor,
+        // INounsDescriptorMinimal nounsDescriptor,
         uint256 blockNumber
     ) external view override returns (Seed memory) {
         uint256 pseudorandomness = uint256(keccak256(abi.encodePacked(blockhash(blockNumber), nounId)));

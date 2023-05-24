@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.17;
 
-import "hardhat/console.sol";
 import { INounsSeeder } from "contracts/interfaces/INounsSeeder.sol";
 import { INounsDescriptorMinimal } from "contracts/interfaces/INounsDescriptorMinimal.sol";
 import { INounsDescriptorV2 } from "contracts/interfaces/INounsDescriptorV2.sol";
@@ -58,7 +57,7 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
     function buyNow(uint256 expectedBlockNumber) external payable {
         // will allow to mint token with traits generated from 4 last blocks (including current),
         require(
-            expectedBlockNumber >= block.number - 3 || expectedBlockNumber >= lastTokenBlock,
+            expectedBlockNumber >= block.number - 4 || expectedBlockNumber >= lastTokenBlock,
             "Invalid block number"
         );
 
@@ -131,18 +130,15 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
         override
         returns (uint256 nounId, INounsSeeder.Seed memory seed, string memory svg, uint256 price, bytes32 hash)
     {
-        // TODO :-
-        // this fn should be updated to accept an arbitrary block number (especially since we will allow minting the past 3 blocks). you should be able to pass it in from the UI to get the correct noun rendered
-
         uint256 nextId = roboNounsToken.currentNounId() + 1;
         INounsSeeder seeder = INounsSeeder(roboNounsToken.seeder());
 
-        INounsDescriptorMinimal nounsDescriptor = roboNounsToken.nounsDescriptor();
+        // INounsDescriptorMinimal nounsDescriptor = roboNounsToken.nounsDescriptor();
         INounsDescriptorMinimal roboDescriptor = roboNounsToken.roboDescriptor();
         INounsDescriptorV2 descriptor = INounsDescriptorV2(address(roboNounsToken.roboDescriptor()));
         // INounsDescriptorMinimal dAsMinimal = INounsDescriptorMinimal(address(descriptor));
 
-        seed = seeder.generateSeed(nextId, roboDescriptor, nounsDescriptor, block.number - 1);
+        seed = seeder.generateSeed(nextId, roboDescriptor, block.number - 1);
 
         // Generate the SVG from seed using the descriptor.
         svg = descriptor.generateSVGImage(seed);
@@ -150,8 +146,6 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
         // Calculate price based on VRGDA rules.
         uint256 vrgdaPrice = getCurrentVRGDAPrice();
         price = vrgdaPrice > reservePrice ? vrgdaPrice : reservePrice;
-
-        // TODO :- update to ref passed in block number
 
         // Fetch the blockhash associated with this noun.
         hash = blockhash(block.number - 1);

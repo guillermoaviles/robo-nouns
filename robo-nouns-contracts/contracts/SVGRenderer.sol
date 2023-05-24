@@ -2,8 +2,7 @@
 
 /// @title A contract used to convert multi-part RLE compressed images to SVG
 
-/**
- *
+/*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  * ░░░░░░█████████░░█████████░░░ *
@@ -14,20 +13,18 @@
  * ░░░░░░█████████░░█████████░░░ *
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
- *
- */
+ *********************************/
 
 pragma solidity ^0.8.6;
 
-import { ISVGRenderer } from "contracts/interfaces/ISVGRenderer.sol";
+import { ISVGRenderer } from "./interfaces/ISVGRenderer.sol";
 
 contract SVGRenderer is ISVGRenderer {
     bytes16 private constant _HEX_SYMBOLS = "0123456789abcdef";
     uint256 private constant _INDEX_TO_BYTES3_FACTOR = 3;
 
     // prettier-ignore
-    string private constant _SVG_START_TAG =
-        '<svg width="320" height="320" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">';
+    string private constant _SVG_START_TAG = '<svg width="320" height="320" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">';
     string private constant _SVG_END_TAG = "</svg>";
 
     struct ContentBounds {
@@ -56,9 +53,7 @@ contract SVGRenderer is ISVGRenderer {
             return string(
                 abi.encodePacked(
                     _SVG_START_TAG,
-                    '<rect width="100%" height="100%" fill="#',
-                    params.background,
-                    '" />',
+                    '<rect width="100%" height="100%" fill="#', params.background, '" />',
                     _generateSVGRects(params),
                     _SVG_END_TAG
                 )
@@ -88,41 +83,17 @@ contract SVGRenderer is ISVGRenderer {
      * @notice Given RLE image parts and color palettes, generate SVG rects.
      */
     // prettier-ignore
-    function _generateSVGRects(SVGParams memory params) private pure returns (string memory svg) {
+    function _generateSVGRects(SVGParams memory params)
+        private
+        pure
+        returns (string memory svg)
+    {
         string[33] memory lookup = [
-            "0",
-            "10",
-            "20",
-            "30",
-            "40",
-            "50",
-            "60",
-            "70",
-            "80",
-            "90",
-            "100",
-            "110",
-            "120",
-            "130",
-            "140",
-            "150",
-            "160",
-            "170",
-            "180",
-            "190",
-            "200",
-            "210",
-            "220",
-            "230",
-            "240",
-            "250",
-            "260",
-            "270",
-            "280",
-            "290",
-            "300",
-            "310",
-            "320"
+            '0', '10', '20', '30', '40', '50', '60', '70', 
+            '80', '90', '100', '110', '120', '130', '140', '150', 
+            '160', '170', '180', '190', '200', '210', '220', '230', 
+            '240', '250', '260', '270', '280', '290', '300', '310',
+            '320'
         ];
         string memory rects;
         string[] memory cache;
@@ -143,9 +114,9 @@ contract SVGRenderer is ISVGRenderer {
                 uint8 length = _getRectLength(currentX, draw.length, image.bounds.right);
                 while (length > 0) {
                     if (draw.colorIndex != 0) {
-                        buffer[cursor] = lookup[length]; // width
-                        buffer[cursor + 1] = lookup[currentX]; // x
-                        buffer[cursor + 2] = lookup[currentY]; // y
+                        buffer[cursor] = lookup[length];                                 // width
+                        buffer[cursor + 1] = lookup[currentX];                           // x
+                        buffer[cursor + 2] = lookup[currentY];                           // y
                         buffer[cursor + 3] = _getColor(palette, draw.colorIndex, cache); // color
 
                         cursor += 4;
@@ -194,15 +165,7 @@ contract SVGRenderer is ISVGRenderer {
             chunk = string(
                 abi.encodePacked(
                     chunk,
-                    '<rect width="',
-                    buffer[i],
-                    '" height="10" x="',
-                    buffer[i + 1],
-                    '" y="',
-                    buffer[i + 2],
-                    '" fill="#',
-                    buffer[i + 3],
-                    '" />'
+                    '<rect width="', buffer[i], '" height="10" x="', buffer[i + 1], '" y="', buffer[i + 2], '" fill="#', buffer[i + 3], '" />'
                 )
             );
         }

@@ -9,16 +9,9 @@ task("fetch", "Calls fetchNextNoun on RoboNounsVRGDA")
         types.string
     )
     .setAction(async ({ vrgda }, { ethers, network }) => {
-        const options = {
-            gasLimit:
-                network.name === "hardhat" || "localhost"
-                    ? 15_000_000
-                    : undefined,
-        }
         const VRGDAFactory = await ethers.getContractFactory("RoboNounsVRGDA")
         const roboNounsVRGDA = VRGDAFactory.attach(vrgda)
 
-        const res = await roboNounsVRGDA.fetchNextNoun(options)
-        console.log(res)
+        const res = await roboNounsVRGDA.fetchNextNoun()
         console.log(JSON.stringify(res, null, 2))
     })
