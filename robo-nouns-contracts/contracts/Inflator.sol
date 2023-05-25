@@ -2,8 +2,7 @@
 
 /// @title A contract used to decompress data compressed using the Deflate algorithm.
 
-/**
- *
+/*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  * ░░░░░░█████████░░█████████░░░ *
@@ -14,13 +13,12 @@
  * ░░░░░░█████████░░█████████░░░ *
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
- *
- */
+ *********************************/
 
 pragma solidity ^0.8.6;
 
-import {IInflator} from "contracts/interfaces/IInflator.sol";
-import {Inflate} from "contracts/lib/Inflate.sol";
+import { IInflator } from "./interfaces/IInflator.sol";
+import { Inflate } from "./lib/Inflate.sol";
 
 contract Inflator is IInflator {
     /**

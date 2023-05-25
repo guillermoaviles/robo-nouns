@@ -255,11 +255,12 @@ library Inflate {
         }
     }
 
-    function _construct(Huffman memory h, uint256[] memory lengths, uint256 n, uint256 start)
-        private
-        pure
-        returns (ErrorCode)
-    {
+    function _construct(
+        Huffman memory h,
+        uint256[] memory lengths,
+        uint256 n,
+        uint256 start
+    ) private pure returns (ErrorCode) {
         unchecked {
             // Current symbol when stepping through lengths[]
             uint256 symbol;
@@ -396,8 +397,37 @@ library Inflate {
                 258
             ];
             // Extra bits for length codes 257..285
-            uint8[29] memory lext =
-                [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 0];
+            uint8[29] memory lext = [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1,
+                1,
+                1,
+                1,
+                2,
+                2,
+                2,
+                2,
+                3,
+                3,
+                3,
+                3,
+                4,
+                4,
+                4,
+                4,
+                5,
+                5,
+                5,
+                5,
+                0
+            ];
             // Offset base for distance codes 0..29
             uint16[30] memory dists = [
                 1,
@@ -432,8 +462,38 @@ library Inflate {
                 24577
             ];
             // Extra bits for distance codes 0..29
-            uint8[30] memory dext =
-                [0, 0, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 13];
+            uint8[30] memory dext = [
+                0,
+                0,
+                0,
+                0,
+                1,
+                1,
+                2,
+                2,
+                3,
+                3,
+                4,
+                4,
+                5,
+                5,
+                6,
+                6,
+                7,
+                7,
+                8,
+                8,
+                9,
+                9,
+                10,
+                10,
+                11,
+                11,
+                12,
+                12,
+                13,
+                13
+            ];
             // Error code
             ErrorCode err;
 
@@ -696,11 +756,10 @@ library Inflate {
             // Build huffman table for literal/length codes
             err = _construct(lencode, lengths, nlen, 0);
             if (
-                err != ErrorCode.ERR_NONE
-                    && (
-                        err == ErrorCode.ERR_NOT_TERMINATED || err == ErrorCode.ERR_OUTPUT_EXHAUSTED
-                            || nlen != lencode.counts[0] + lencode.counts[1]
-                    )
+                err != ErrorCode.ERR_NONE &&
+                (err == ErrorCode.ERR_NOT_TERMINATED ||
+                    err == ErrorCode.ERR_OUTPUT_EXHAUSTED ||
+                    nlen != lencode.counts[0] + lencode.counts[1])
             ) {
                 // Incomplete code ok only for single length 1 code
                 return (ErrorCode.ERR_INVALID_LITERAL_LENGTH_CODE_LENGTHS, lencode, distcode);
@@ -709,11 +768,10 @@ library Inflate {
             // Build huffman table for distance codes
             err = _construct(distcode, lengths, ndist, nlen);
             if (
-                err != ErrorCode.ERR_NONE
-                    && (
-                        err == ErrorCode.ERR_NOT_TERMINATED || err == ErrorCode.ERR_OUTPUT_EXHAUSTED
-                            || ndist != distcode.counts[0] + distcode.counts[1]
-                    )
+                err != ErrorCode.ERR_NONE &&
+                (err == ErrorCode.ERR_NOT_TERMINATED ||
+                    err == ErrorCode.ERR_OUTPUT_EXHAUSTED ||
+                    ndist != distcode.counts[0] + distcode.counts[1])
             ) {
                 // Incomplete code ok only for single length 1 code
                 return (ErrorCode.ERR_INVALID_DISTANCE_CODE_LENGTHS, lencode, distcode);

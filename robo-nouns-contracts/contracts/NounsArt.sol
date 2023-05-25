@@ -2,8 +2,7 @@
 
 /// @title The Nouns art storage contract
 
-/**
- *
+/*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  * ░░░░░░█████████░░█████████░░░ *
@@ -14,14 +13,13 @@
  * ░░░░░░█████████░░█████████░░░ *
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
- *
- */
+ *********************************/
 
 pragma solidity ^0.8.6;
 
-import {INounsArt} from "contracts/interfaces/INounsArt.sol";
-import {SSTORE2} from "contracts/lib/SSTORE2.sol";
-import {IInflator} from "contracts/interfaces/IInflator.sol";
+import { INounsArt } from "./interfaces/INounsArt.sol";
+import { SSTORE2 } from "./lib/SSTORE2.sol";
+import { IInflator } from "./interfaces/IInflator.sol";
 
 contract NounsArt is INounsArt {
     /// @notice Current Nouns Descriptor address
@@ -174,11 +172,11 @@ contract NounsArt is INounsArt {
      * @param imageCount the number of images in this batch; used when searching for images among batches.
      * @dev This function can only be called by the descriptor.
      */
-    function addBodies(bytes calldata encodedCompressed, uint80 decompressedLength, uint16 imageCount)
-        external
-        override
-        onlyDescriptor
-    {
+    function addBodies(
+        bytes calldata encodedCompressed,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external override onlyDescriptor {
         addPage(bodiesTrait, encodedCompressed, decompressedLength, imageCount);
 
         emit BodiesAdded(imageCount);
@@ -192,11 +190,11 @@ contract NounsArt is INounsArt {
      * @param imageCount the number of images in this batch; used when searching for images among batches.
      * @dev This function can only be called by the descriptor.
      */
-    function addAccessories(bytes calldata encodedCompressed, uint80 decompressedLength, uint16 imageCount)
-        external
-        override
-        onlyDescriptor
-    {
+    function addAccessories(
+        bytes calldata encodedCompressed,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external override onlyDescriptor {
         addPage(accessoriesTrait, encodedCompressed, decompressedLength, imageCount);
 
         emit AccessoriesAdded(imageCount);
@@ -210,11 +208,11 @@ contract NounsArt is INounsArt {
      * @param imageCount the number of images in this batch; used when searching for images among batches.
      * @dev This function can only be called by the descriptor.
      */
-    function addHeads(bytes calldata encodedCompressed, uint80 decompressedLength, uint16 imageCount)
-        external
-        override
-        onlyDescriptor
-    {
+    function addHeads(
+        bytes calldata encodedCompressed,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external override onlyDescriptor {
         addPage(headsTrait, encodedCompressed, decompressedLength, imageCount);
 
         emit HeadsAdded(imageCount);
@@ -228,11 +226,11 @@ contract NounsArt is INounsArt {
      * @param imageCount the number of images in this batch; used when searching for images among batches.
      * @dev This function can only be called by the descriptor.
      */
-    function addGlasses(bytes calldata encodedCompressed, uint80 decompressedLength, uint16 imageCount)
-        external
-        override
-        onlyDescriptor
-    {
+    function addGlasses(
+        bytes calldata encodedCompressed,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external override onlyDescriptor {
         addPage(glassesTrait, encodedCompressed, decompressedLength, imageCount);
 
         emit GlassesAdded(imageCount);
@@ -262,11 +260,11 @@ contract NounsArt is INounsArt {
      * @param imageCount the number of images in this batch; used when searching for images among batches.
      * @dev This function can only be called by the descriptor.
      */
-    function addBodiesFromPointer(address pointer, uint80 decompressedLength, uint16 imageCount)
-        external
-        override
-        onlyDescriptor
-    {
+    function addBodiesFromPointer(
+        address pointer,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external override onlyDescriptor {
         addPage(bodiesTrait, pointer, decompressedLength, imageCount);
 
         emit BodiesAdded(imageCount);
@@ -281,11 +279,11 @@ contract NounsArt is INounsArt {
      * @param imageCount the number of images in this batch; used when searching for images among batches.
      * @dev This function can only be called by the descriptor.
      */
-    function addAccessoriesFromPointer(address pointer, uint80 decompressedLength, uint16 imageCount)
-        external
-        override
-        onlyDescriptor
-    {
+    function addAccessoriesFromPointer(
+        address pointer,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external override onlyDescriptor {
         addPage(accessoriesTrait, pointer, decompressedLength, imageCount);
 
         emit AccessoriesAdded(imageCount);
@@ -300,11 +298,11 @@ contract NounsArt is INounsArt {
      * @param imageCount the number of images in this batch; used when searching for images among batches
      * @dev This function can only be called by the descriptor..
      */
-    function addHeadsFromPointer(address pointer, uint80 decompressedLength, uint16 imageCount)
-        external
-        override
-        onlyDescriptor
-    {
+    function addHeadsFromPointer(
+        address pointer,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external override onlyDescriptor {
         addPage(headsTrait, pointer, decompressedLength, imageCount);
 
         emit HeadsAdded(imageCount);
@@ -319,11 +317,11 @@ contract NounsArt is INounsArt {
      * @param imageCount the number of images in this batch; used when searching for images among batches.
      * @dev This function can only be called by the descriptor.
      */
-    function addGlassesFromPointer(address pointer, uint80 decompressedLength, uint16 imageCount)
-        external
-        override
-        onlyDescriptor
-    {
+    function addGlassesFromPointer(
+        address pointer,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external override onlyDescriptor {
         addPage(glassesTrait, pointer, decompressedLength, imageCount);
 
         emit GlassesAdded(imageCount);
@@ -400,7 +398,7 @@ contract NounsArt is INounsArt {
             revert BadImageCount();
         }
         trait.storagePages.push(
-            NounArtStoragePage({pointer: pointer, decompressedLength: decompressedLength, imageCount: imageCount})
+            NounArtStoragePage({ pointer: pointer, decompressedLength: decompressedLength, imageCount: imageCount })
         );
         trait.storedImagesCount += imageCount;
     }
@@ -419,11 +417,10 @@ contract NounsArt is INounsArt {
      * @return INounsArt.NounArtStoragePage the page containing the image at index
      * @return uint256 the index of the image in the page
      */
-    function getPage(INounsArt.NounArtStoragePage[] storage pages, uint256 index)
-        internal
-        view
-        returns (INounsArt.NounArtStoragePage storage, uint256)
-    {
+    function getPage(
+        INounsArt.NounArtStoragePage[] storage pages,
+        uint256 index
+    ) internal view returns (INounsArt.NounArtStoragePage storage, uint256) {
         uint256 len = pages.length;
         uint256 pageFirstImageIndex = 0;
         for (uint256 i = 0; i < len; i++) {

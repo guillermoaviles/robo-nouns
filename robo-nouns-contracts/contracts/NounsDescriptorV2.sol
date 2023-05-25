@@ -2,8 +2,7 @@
 
 /// @title The Nouns NFT descriptor
 
-/**
- *
+/*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  * ░░░░░░█████████░░█████████░░░ *
@@ -14,33 +13,28 @@
  * ░░░░░░█████████░░█████████░░░ *
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
- *
- */
+ *********************************/
 
 pragma solidity ^0.8.6;
 
 import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
 import { Strings } from "@openzeppelin/contracts/utils/Strings.sol";
-import { INounsDescriptorV2 } from "contracts/interfaces/INounsDescriptorV2.sol";
-import { INounsSeeder } from "contracts/interfaces/INounsSeeder.sol";
-import { NFTDescriptorV2 } from "contracts/lib/NFTDescriptorV2.sol";
-import { ISVGRenderer } from "contracts/interfaces/ISVGRenderer.sol";
-import { INounsArt } from "contracts/interfaces/INounsArt.sol";
-import { IInflator } from "contracts/interfaces/IInflator.sol";
+import { INounsDescriptorV2 } from "./interfaces/INounsDescriptorV2.sol";
+import { INounsSeeder } from "./interfaces/INounsSeeder.sol";
+import { NFTDescriptorV2 } from "./lib/NFTDescriptorV2.sol";
+import { ISVGRenderer } from "./interfaces/ISVGRenderer.sol";
+import { INounsArt } from "./interfaces/INounsArt.sol";
+import { IInflator } from "./interfaces/IInflator.sol";
 
 contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
     using Strings for uint256;
 
     // prettier-ignore
     // https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt
-    bytes32 constant COPYRIGHT_CC0_1_0_UNIVERSAL_LICENSE =
-        0xa2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499;
+    bytes32 constant COPYRIGHT_CC0_1_0_UNIVERSAL_LICENSE = 0xa2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499;
 
-    /// @notice The contract responsible for holding compressed RoboNouns art
+    /// @notice The contract responsible for holding compressed Noun art
     INounsArt public art;
-
-    /// @notice Nouns art contract
-    // INounsArt public nounsArt;
 
     /// @notice The contract responsible for constructing SVGs
     ISVGRenderer public renderer;
@@ -64,7 +58,6 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
 
     constructor(INounsArt _art, ISVGRenderer _renderer) {
         art = _art;
-        // nounsArt = _nounsArt;
         renderer = _renderer;
     }
 
@@ -417,8 +410,8 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
      */
     function dataURI(uint256 tokenId, INounsSeeder.Seed memory seed) public view override returns (string memory) {
         string memory nounId = tokenId.toString();
-        string memory name = string(abi.encodePacked("RoboNoun ", nounId));
-        string memory description = string(abi.encodePacked("RoboNoun ", nounId));
+        string memory name = string(abi.encodePacked("Noun ", nounId));
+        string memory description = string(abi.encodePacked("Noun ", nounId, " is a member of the Nouns DAO"));
 
         return genericDataURI(name, description, seed);
     }
@@ -452,10 +445,9 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
     }
 
     /**
-     * @notice Get all Noun parts + Robo Nouns accessory trait for the passed `seed`.
+     * @notice Get all Noun parts for the passed `seed`.
      */
     function getPartsForSeed(INounsSeeder.Seed memory seed) public view returns (ISVGRenderer.Part[] memory) {
-        // get from robonouns art
         bytes memory body = art.bodies(seed.body);
         bytes memory accessory = art.accessories(seed.accessory);
         bytes memory head = art.heads(seed.head);
@@ -468,13 +460,6 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
         parts[3] = ISVGRenderer.Part({ image: glasses_, palette: _getPalette(glasses_) });
         return parts;
     }
-
-    // /**
-    //  * @notice Get the color palette pointer for the passed part in the nouns art contract.
-    //  */
-    // function _getNounsPalette(bytes memory part) private view returns (bytes memory) {
-    //     return nounsArt.palettes(uint8(part[0]));
-    // }
 
     /**
      * @notice Get the color palette pointer for the passed part.
