@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuction } from "../../src/context/AuctionContext";
-import { ethers } from "ethers";
+import { ethers, utils } from "ethers";
 import { useContract, useContractRead } from "@thirdweb-dev/react";
 
 export function useNFTMetadata() {
@@ -19,9 +19,9 @@ export function useNFTMetadata() {
         const currentPrice = await contract?.call("getCurrentVRGDAPrice");
         const minPrice = await contract?.call("reservePrice");
         const targetPrice = await contract?.call("targetPrice");
-        const minMintPrice = ethers.utils.formatEther(minPrice);
-        const currMintPrice = ethers.utils.formatEther(currentPrice);
-        const targetMintPrice = ethers.utils.formatEther(targetPrice);
+        const minMintPrice = minPrice ? "" : ethers.utils.formatEther(minPrice);
+        const currMintPrice = currentPrice ? "" : ethers.utils.formatEther(currentPrice);
+        const targetMintPrice = targetPrice ? "" : ethers.utils.formatEther(targetPrice);
         setMinMintPrice(minMintPrice);
         setCurrMintPrice(currMintPrice);
         setTargetMintPrice(targetMintPrice);
