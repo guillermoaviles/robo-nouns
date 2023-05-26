@@ -31,7 +31,7 @@ export default function BuyNow({ nft, currMintPrice, nftNo }) {
     const { contract } = useContract(
         // "0xaF71644feEAf6439015D57631f59f8e0E0F91C67"  // lilnouns sandox Goerli contract address
         // "0x073Fc7132FFb6f8FD1904B34F87943E46dF18139"  // old
-        "0xA75E74a5109Ed8221070142D15cEBfFe9642F489"
+        "0x255414e3d2cf6D316776b5E1dD1e66925144232D"
     )
 
     const call = async () => {
