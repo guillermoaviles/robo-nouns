@@ -9,7 +9,6 @@
 
 pragma solidity ^0.8.6;
 
-import "hardhat/console.sol";
 import { INounsSeeder } from "contracts/interfaces/INounsSeeder.sol";
 import { INounsDescriptorMinimal } from "contracts/interfaces/INounsDescriptorMinimal.sol";
 
@@ -26,16 +25,12 @@ contract RoboNounsSeeder is INounsSeeder {
         uint256 pseudorandomness = uint256(keccak256(abi.encodePacked(blockhash(blockNumber), nounId)));
 
         uint256 headCount = nounsDescriptor.headCount();
-        uint256 glassesCount = nounsDescriptor.glassesCount();
 
         // get from robo nouns art
+        uint256 glassesCount = roboDescriptor.glassesCount();
         uint256 backgroundCount = roboDescriptor.backgroundCount();
         uint256 bodyCount = roboDescriptor.bodyCount();
         uint256 accessoryCount = roboDescriptor.accessoryCount();
-        console.logString(" ");
-        console.logString("From Seeder counts bg, body, access, head, glasses:");
-        console.log(backgroundCount, bodyCount, accessoryCount);
-        console.log(headCount, glassesCount);
 
         return
             Seed({

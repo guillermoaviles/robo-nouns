@@ -2,8 +2,7 @@
 
 /// @title Interface for NounsDescriptorV2
 
-/**
- *
+/*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  * ░░░░░░█████████░░█████████░░░ *
@@ -14,15 +13,14 @@
  * ░░░░░░█████████░░█████████░░░ *
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
- *
- */
+ *********************************/
 
 pragma solidity ^0.8.6;
 
-import {INounsSeeder} from "contracts/interfaces/INounsSeeder.sol";
-import {ISVGRenderer} from "contracts/interfaces/ISVGRenderer.sol";
-import {INounsArt} from "contracts/interfaces/INounsArt.sol";
-import {INounsDescriptorMinimal} from "contracts/interfaces/INounsDescriptorMinimal.sol";
+import { INounsSeeder } from "./INounsSeeder.sol";
+import { ISVGRenderer } from "./ISVGRenderer.sol";
+import { INounsArt } from "./INounsArt.sol";
+import { INounsDescriptorMinimal } from "./INounsDescriptorMinimal.sol";
 
 interface INounsDescriptorV2 is INounsDescriptorMinimal {
     event PartsLocked();
@@ -101,10 +99,11 @@ interface INounsDescriptorV2 is INounsDescriptorMinimal {
 
     function dataURI(uint256 tokenId, INounsSeeder.Seed memory seed) external view override returns (string memory);
 
-    function genericDataURI(string calldata name, string calldata description, INounsSeeder.Seed memory seed)
-        external
-        view
-        returns (string memory);
+    function genericDataURI(
+        string calldata name,
+        string calldata description,
+        INounsSeeder.Seed memory seed
+    ) external view returns (string memory);
 
     function generateSVGImage(INounsSeeder.Seed memory seed) external view returns (string memory);
 }

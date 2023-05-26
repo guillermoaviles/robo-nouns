@@ -10,21 +10,30 @@ interface Contract {
     waitForConfirmation?: boolean
 }
 
+async function delay(seconds: number) {
+    return new Promise((resolve) => setTimeout(resolve, 1000 * seconds))
+}
+
 task("deploy-local", "Deploy contracts to hardhat").setAction(
-    async (args, { ethers }) => {
+    async (args, { ethers, run }) => {
         const network = await ethers.provider.getNetwork()
-        if (network.chainId !== 31337) {
-            console.log(
-                `Invalid chain id. Expected 31337. Got: ${network.chainId}.`
-            )
-            return
-        }
+        // if (network.chainId !== 31337) {
+        //     console.log(
+        //         `Invalid chain id. Expected 31337. Got: ${network.chainId}.`
+        //     )
+        //     return
+        // }
 
         const NOUNS_ART_NONCE_OFFSET = 4
         const VRGDA_NONCE_OFFSET = 7
         const NOUNS_DESCRIPTOR_MAINNET =
             "0x6229c811d04501523c6058bfaac29c91bb586268"
         const NOUNS_ART_MAINNET = "0x48A7C62e2560d1336869D6550841222942768C49"
+
+        // Goerli
+        const NOUNS_ART_GOERLI = "0xf786148F2B31d12A9B0795EBF39c3a0330760da4"
+        const NOUNS_DESCRIPTOR_GOERLI =
+            "0xB6D0AF8C27930E13005Bf447d54be8235724a102"
 
         const [deployer] = await ethers.getSigners()
 
@@ -48,7 +57,7 @@ task("deploy-local", "Deploy contracts to hardhat").setAction(
             NounsDescriptorV2: {
                 args: [
                     expectedRoboNounsArtAddress,
-                    NOUNS_ART_MAINNET,
+                    NOUNS_ART_GOERLI,
                     () => contracts.SVGRenderer.instance?.address,
                 ],
                 libraries: () => ({
@@ -68,7 +77,7 @@ task("deploy-local", "Deploy contracts to hardhat").setAction(
                 args: [
                     expectedVRGDAAddress,
                     () => contracts.NounsDescriptorV2.instance?.address,
-                    NOUNS_DESCRIPTOR_MAINNET,
+                    NOUNS_DESCRIPTOR_GOERLI,
                     () => contracts.RoboNounsSeeder.instance?.address,
                 ],
             },
@@ -76,7 +85,7 @@ task("deploy-local", "Deploy contracts to hardhat").setAction(
                 args: [
                     "150000000000000000", // 0.15 ETH
                     "100000000000000000", // 10%
-                    "24000000000000000000", // 24 hours
+                    "24000000000000000000", // 24 nouns per time interval
                     () => contracts.RoboNounsToken.instance?.address,
                 ],
                 waitForConfirmation: true,
@@ -99,13 +108,30 @@ task("deploy-local", "Deploy contracts to hardhat").setAction(
             }
 
             contracts[name as ContractName].instance = deployedContract
-
             console.log(
-                `${name} contract deployed to ${deployedContract.address}`
+                `${name} contract saved and deployed to ${deployedContract.address}`
             )
 
-            await saveDeployedContract(name, deployedContract.address)
+            await saveDeployedContract(
+                network.name,
+                name,
+                deployedContract.address
+            )
+            // await delay(5)
         }
+
+        // if (network.name !== "localhost") {
+        //     console.log(
+        //         "Waiting 1 minute before verifying contracts on Etherscan"
+        //     )
+        //     await delay(30)
+
+        //     console.log("Verifying contracts on Etherscan...")
+        //     await run("verify-etherscan", {
+        //         contracts,
+        //     })
+        //     console.log("Verify complete.")
+        // }
 
         return contracts
     }

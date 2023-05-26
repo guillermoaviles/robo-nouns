@@ -31,7 +31,7 @@ library SSTORE2 {
             // 0x39    |  0x39               | CODECOPY     | 0 (codeSize - codeOffset)                                      //
             // 0xf3    |  0xf3               | RETURN       |                                                                //
             //---------------------------------------------------------------------------------------------------------------//
-            hex"600B5981380380925939F3", // Returns all code in the contract except for the first 11 (0B in hex) bytes.
+            hex"60_0B_59_81_38_03_80_92_59_39_F3", // Returns all code in the contract except for the first 11 (0B in hex) bytes.
             runtimeCode // The bytecode we want the contract to have after deployment. Capped at 1 byte less than the code size limit.
         );
 

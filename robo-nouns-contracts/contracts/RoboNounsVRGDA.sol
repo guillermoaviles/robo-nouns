@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.17;
 
-import "hardhat/console.sol";
 import { INounsSeeder } from "contracts/interfaces/INounsSeeder.sol";
 import { INounsDescriptorMinimal } from "contracts/interfaces/INounsDescriptorMinimal.sol";
 import { INounsDescriptorV2 } from "contracts/interfaces/INounsDescriptorV2.sol";
@@ -52,18 +51,15 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
         perTimeUnit = _perTimeUnit;
     }
 
-    // TODO :- update UI to use new fn signature (changed from settleAuction)
-
     /// @param expectedBlockNumber The block number to specify the traits of the token
     function buyNow(uint256 expectedBlockNumber) external payable {
-        // will allow to mint token with traits generated from 4 last blocks (including current),
+        // will allow to mint token with traits generated from 4 last blocks (starting from parent, because current has not hash yet),
         require(
-            expectedBlockNumber >= block.number - 3 || expectedBlockNumber >= lastTokenBlock,
+            expectedBlockNumber >= block.number - 4 || expectedBlockNumber >= lastTokenBlock,
             "Invalid block number"
         );
 
         // making it unable to get the a token with the traits for any previous token (pool is emptied when a noun is bought, this prevents buying duplicates)
-
         lastTokenBlock = block.number;
 
         require(msg.value >= reservePrice, "Below reservePrice");
@@ -83,8 +79,7 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
         // restart auction
         startTime = block.timestamp;
 
-        // TODO :- test nounsDAO treasury gets eth
-        _sendETH();
+        _sendETH(msg.value);
     }
 
     /// @notice Set the auction reserve price.
@@ -131,21 +126,14 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
         override
         returns (uint256 nounId, INounsSeeder.Seed memory seed, string memory svg, uint256 price, bytes32 hash)
     {
-        // TODO :-
-        // this fn should be updated to accept an arbitrary block number (especially since we will allow minting the past 3 blocks). you should be able to pass it in from the UI to get the correct noun rendered
-
         uint256 nextId = roboNounsToken.currentNounId() + 1;
         INounsSeeder seeder = INounsSeeder(roboNounsToken.seeder());
 
         INounsDescriptorMinimal nounsDescriptor = roboNounsToken.nounsDescriptor();
         INounsDescriptorMinimal roboDescriptor = roboNounsToken.roboDescriptor();
         INounsDescriptorV2 descriptor = INounsDescriptorV2(address(roboNounsToken.roboDescriptor()));
-        // INounsDescriptorMinimal dAsMinimal = INounsDescriptorMinimal(address(descriptor));
 
-        seed = seeder.generateSeed(nextId, roboDescriptor, nounsDescriptor, block.number - 1);
-        console.logString(" ");
-        console.logString("From VRGDA randomly picked glasses, head, acs, body:");
-        console.log(seed.glasses, seed.head, seed.accessory, seed.body);
+        seed = seeder.generateSeed(nextId, nounsDescriptor, roboDescriptor, block.number - 1);
 
         // Generate the SVG from seed using the descriptor.
         svg = descriptor.generateSVGImage(seed);
@@ -153,8 +141,6 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
         // Calculate price based on VRGDA rules.
         uint256 vrgdaPrice = getCurrentVRGDAPrice();
         price = vrgdaPrice > reservePrice ? vrgdaPrice : reservePrice;
-
-        // TODO :- update to ref passed in block number
 
         // Fetch the blockhash associated with this noun.
         hash = blockhash(block.number - 1);
@@ -179,8 +165,8 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
             );
     }
 
-    function _sendETH() internal {
-        (bool sent, ) = nounsDAO.call{ value: msg.value }("");
+    function _sendETH(uint256 _value) internal {
+        (bool sent, ) = nounsDAO.call{ value: _value }("");
         require(sent, "failed to send eth");
     }
 }

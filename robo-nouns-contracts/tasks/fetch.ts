@@ -1,10 +1,11 @@
 import { task, types } from "hardhat/config"
+import * as deployments from "./utils/deployments.json"
 
 task("fetch", "Calls fetchNextNoun on RoboNounsVRGDA")
     .addOptionalParam(
         "vrgda",
         "The `RoboNounsVRGDA` contract address",
-        "0x687bB6c57915aa2529EfC7D2a26668855e022fAE",
+        deployments.RoboNounsVRGDA.address,
         types.string
     )
     .setAction(async ({ vrgda }, { ethers, network }) => {
@@ -12,6 +13,5 @@ task("fetch", "Calls fetchNextNoun on RoboNounsVRGDA")
         const roboNounsVRGDA = VRGDAFactory.attach(vrgda)
 
         const res = await roboNounsVRGDA.fetchNextNoun()
-        console.log(res)
         console.log(JSON.stringify(res, null, 2))
     })

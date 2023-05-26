@@ -2,8 +2,7 @@
 
 /// @title Interface for Inflator
 
-/**
- *
+/*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  * ░░░░░░█████████░░█████████░░░ *
@@ -14,12 +13,11 @@
  * ░░░░░░█████████░░█████████░░░ *
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
- *
- */
+ *********************************/
 
 pragma solidity ^0.8.6;
 
-import {Inflate} from "contracts/lib/Inflate.sol";
+import { Inflate } from "../lib/Inflate.sol";
 
 interface IInflator {
     function puff(bytes memory source, uint256 destlen) external pure returns (Inflate.ErrorCode, bytes memory);

@@ -4,7 +4,7 @@
 
 pragma solidity ^0.8.6;
 
-import {INounsDescriptorMinimal} from "contracts/interfaces/INounsDescriptorMinimal.sol";
+import { INounsDescriptorMinimal } from "contracts/interfaces/INounsDescriptorMinimal.sol";
 
 interface INounsSeeder {
     struct Seed {

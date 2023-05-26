@@ -2,8 +2,7 @@
 
 /// @title Common interface for NounsDescriptor versions, as used by NounsToken and NounsSeeder.
 
-/**
- *
+/*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  * ░░░░░░█████████░░█████████░░░ *
@@ -14,12 +13,11 @@
  * ░░░░░░█████████░░█████████░░░ *
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
- *
- */
+ *********************************/
 
 pragma solidity ^0.8.6;
 
-import {INounsSeeder} from "./INounsSeeder.sol";
+import { INounsSeeder } from "./INounsSeeder.sol";
 
 interface INounsDescriptorMinimal {
     ///

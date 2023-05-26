@@ -2,8 +2,7 @@
 
 /// @title Interface for NounsArt
 
-/**
- *
+/*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  * ░░░░░░█████████░░█████████░░░ *
@@ -14,13 +13,12 @@
  * ░░░░░░█████████░░█████████░░░ *
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
- *
- */
+ *********************************/
 
 pragma solidity ^0.8.6;
 
-import {Inflate} from "contracts/lib/Inflate.sol";
-import {IInflator} from "contracts/interfaces/IInflator.sol";
+import { Inflate } from "../lib/Inflate.sol";
+import { IInflator } from "./IInflator.sol";
 
 interface INounsArt {
     error SenderIsNotDescriptor();
