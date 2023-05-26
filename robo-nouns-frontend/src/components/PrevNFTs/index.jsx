@@ -5,7 +5,7 @@ import BuyNow from "../BuyNow"
 
 const PrevNFTs = () => {
     const { nounNFTMeta, currMintPrice } = useAuction()
-    console.log('nounNFTMeta', nounNFTMeta)
+    
 
     console.log('nounNFTMeta, currMintPrice', nounNFTMeta, currMintPrice)
     return (

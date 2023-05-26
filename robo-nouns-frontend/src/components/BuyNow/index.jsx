@@ -21,15 +21,11 @@ export default function BuyNow({ nft, currMintPrice, nftNo }) {
     } else if (nftNo === 3) {
         prtBlockNum = parentBlockNumberMinusThree
     }
-    console.log('nft', nft)
-    console.log('parentBlockNumber', parentBlockNumber);
-    console.log('parentBlockNumberMinusOne', parentBlockNumberMinusOne);
-    console.log('parentBlockNumberMinusTwo', parentBlockNumberMinusTwo);
-    console.log('parentBlockNumberMinusThree', parentBlockNumberMinusThree);
+    
     const expNounID = nft?.nounId;
     const provider = new ethers.providers.JsonRpcProvider(
-        // "https://polygon-mumbai.g.alchemy.com/v2/SYsE_zQSuhVCH3bio3ltnI_a8Ze_wN94"  // Polygon Mumbai
-        "http://localhost:8545"
+        "https://polygon-mumbai.g.alchemy.com/v2/SYsE_zQSuhVCH3bio3ltnI_a8Ze_wN94"  // Polygon Mumbai
+        // "http://localhost:8545"
     )
 
     const { contract } = useContract(

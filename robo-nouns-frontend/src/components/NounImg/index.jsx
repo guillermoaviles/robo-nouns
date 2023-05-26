@@ -6,7 +6,6 @@ import { useNFTMetadata } from "../../pages/useNFTMetadata";
 export default function NounImg() {
     const { nounNFTMeta } = useAuction()
     const roboNoun = useNFTMetadata()
-    console.log('roboNoun', roboNoun);
     
     return (
         <div className="flex w-full lg:w-1/2">
