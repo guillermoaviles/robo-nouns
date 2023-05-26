@@ -21,7 +21,7 @@ const PriceBlock: React.FC<{
 export default function AuctionPriceRange() {
     const { minMintPrice, currMintPrice, targetMintPrice } = useAuction()
 
-    const maxPrice = 0.2
+    const maxPrice = targetMintPrice * 2
     const numPriceBlocks = 15
     const currMintPricePercentage = parseFloat(currMintPrice) / maxPrice
 
@@ -57,8 +57,8 @@ export default function AuctionPriceRange() {
                         {/* Ξ{minMintPrice ?? ""} */}
                     </h4>
                     <h4 className="text-sm -mb-2">
-                        Ξ 0.15
-                        {/* Ξ{targetMintPrice ?? ""} */}
+                        {/* Ξ 0.15 */}
+                        Ξ{targetMintPrice ?? ""}
                     </h4>
                     <h4 className="text-sm -mb-2">
                         Ξ{maxPrice}
