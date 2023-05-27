@@ -10,7 +10,7 @@ const faq = [
     {
         title: "Variable Rate Gradual Dutch Auctions",
         description:
-            "The Robo Nouns Variable Rate Gradual Dutch Auction mechanism is forked from Paradigm's implementation - https://www.paradigm.xyz/2022/08/vrgda.",
+            "The Robo Nouns Variable Rate Gradual Dutch Auction (VRGDA) mechanism is forked from Paradigm's implementation - https://www.paradigm.xyz/2022/08/vrgda. The VRGDA mechanism is a token issuance mechanism that allows the sale of tokens according to a custom schedule over time by dynamically adjusting prices based on the sales progress. When sales are ahead of schedule, prices increase, and when sales are behind schedule, prices decrease. VRGDA offers flexibility in issuing tokens while enabling users to buy them seamlessly at any time, providing customizable growth dynamics for communities and creating competitive game loops.",
     },
     {
         title: "Pseudo-random block traits generation",
@@ -31,18 +31,18 @@ const faq = [
     {
         title: "Robo Nouns' Traits",
         description:
-            "Robo Nouns are generated randomly based on Goerli block hashes. There are no 'if' statements or other rules governing Lil Noun trait scarcity, which makes all Lil Nouns equally rare. As of this writing, Robo Nouns are made up of: backgrounds (1), bodies (1)accessories (140), heads (242),glasses (23).",
+            "Robo Nouns are generated randomly based on Goerli block hashes. There are no 'if' statements or other rules governing Robo Noun trait scarcity, which makes all Robo Nouns equally rare. As of this writing, Robo Nouns are made up of: backgrounds (1), bodies (1), accessories (140), heads (242), glasses (23).",
     },
     {
         title: "Robo Nouns Seeder Contract",
         description:
-            "The Nouns Seeder contract is used to determine Noun traits during the minting process. The seeder contract can be replaced to allow for future trait generation algorithm upgrades. Currently, Noun traits are determined using pseudo-random number generation:keccak256(abi.encodePacked(blockhash(block.number - 1), nounId)). Trait generation is not truly random. Traits can be predicted when minting a Noun on the pending block. Will work on possible improvement later",
+            "The Nouns Seeder contract is used to determine Noun traits during the minting process. The seeder contract can be replaced to allow for future trait generation algorithm upgrades. Currently, Noun traits are determined using pseudo-random number generation: keccak256(abi.encodePacked(blockhash(block.number - 1), nounId)). Trait generation is not truly random. Traits can be predicted when minting a Noun on the pending block. We will work on possible improvements in the future.",
     },
 
     {
         title: "Conclusion",
         description:
-            "In conclusion, Robo Nouns is a that combines innovative concepts to create a unique and engaging experience. By incorporating pseudo-random block traits generation, the VRGDA pricing mechanism, and an on-chain pool of last 3 block unsold Nouns, our project offers a fresh and exciting approach for users. We believe that Robo Nouns will capture the imagination of the NFT community and pave the way for a new era of digital art and collectibles.",
+            "In conclusion, Robo Nouns is a project that combines innovative concepts to create a unique and engaging experience. By incorporating pseudo-random block traits generation, the VRGDA pricing mechanism, and an on-chain pool of last 3 block unsold Nouns, our project offers a fresh and exciting approach for users. We believe that Robo Nouns will capture the imagination of the NFT community and pave the way for a new era of digital art and collectibles.",
     },
 ]
 
