@@ -29,7 +29,6 @@ export default function AuctionPriceRange() {
     // const currMintPricePercentage = parseFloat(`${cMP}`) / maxPrice 
 
     const activeIndex = Math.floor(currMintPricePercentage * numPriceBlocks)
-    console.log('activeIndex', activeIndex);
     const colorsClassNames = [
         "bg-[#FF638D]",
         "bg-[#FF638D]",

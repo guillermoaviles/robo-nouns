@@ -25,7 +25,7 @@ export default function BuyNow({ nft, currMintPrice, nftNo }) {
 
 	const expNounID = nft?.nounId;
 	const provider = new ethers.providers.JsonRpcProvider(
-		"https://polygon-mumbai.g.alchemy.com/v2/SYsE_zQSuhVCH3bio3ltnI_a8Ze_wN94" // Polygon Mumbai
+		"https://polygon-mumbai.g.alchemy.com/v2/SYsE_zQSuhVCH3bio3ltnI_a8Ze_wN94" // Mumbai
 		// "http://localhost:8545"
 	);
 
@@ -41,7 +41,6 @@ export default function BuyNow({ nft, currMintPrice, nftNo }) {
 
 			const args = [prtBlockNum];
 			const currMintPriceBigNumber = ethers.utils.parseEther(currMintPrice);
-			console.log("currMintPriceBigNumber", currMintPriceBigNumber);
 			const tx = await contract.call("buyNow", args, {
 				value: currMintPriceBigNumber,
 				gasLimit: 1000000,

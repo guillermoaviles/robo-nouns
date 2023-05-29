@@ -6,8 +6,6 @@ import BuyNow from "../BuyNow"
 const PrevNFTs = () => {
     const { nounNFTMeta, currMintPrice } = useAuction()
     
-
-    console.log('nounNFTMeta, currMintPrice', nounNFTMeta, currMintPrice)
     return (
         <div className="w-full bg-dark-gray px-20">
             <h2 className="font-press text-center text-white text-2xl pt-4 md:pt-16">
@@ -23,9 +21,6 @@ const PrevNFTs = () => {
                                 width={212}
                                 height={200}
                             />
-                            <p className="pt-2 font-bold">
-                                {/* Price: {ethers.utils.formatEther(nft.price)} */}
-                            </p>
                             <div className="justify-center">
                                 <BuyNow nft={nft} currMintPrice={currMintPrice} nftNo={index + 1} />
                             </div>
