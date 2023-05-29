@@ -21,7 +21,7 @@ const PrevNFTs = () => {
                                 width={212}
                                 height={200}
                             />
-                            <div className="justify-center">
+                            <div className="justify-center mt-10">
                                 <BuyNow nft={nft} currMintPrice={currMintPrice} nftNo={index + 1} />
                             </div>
                         </div>
