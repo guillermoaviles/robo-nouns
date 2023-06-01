@@ -60,7 +60,7 @@ export default function FAQ() {
                                 <span className="font-press text-nouns-lime">RoboNouns</span>{" "}
                                 is a project to test out a new minting mechanism
                                 for Nouns using a Variable Rate Gradual Dutch
-                                Auction mechanism instead of english auctions.
+                                Auction mechanism instead of English auctions.
                                 <br />
                                 <br />
                                 <strong>Introducing three concepts:</strong>
