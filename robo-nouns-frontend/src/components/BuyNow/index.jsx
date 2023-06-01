@@ -81,7 +81,7 @@ export default function BuyNow({ nft, currMintPrice, nftNo }) {
 	return (
 		<div className="input-group">
 			<svg
-				className="overflow-visible mx-auto"
+				className="cursor-pointer overflow-visible mx-auto"
 				id="svg"
 				width="160"
 				height="60"

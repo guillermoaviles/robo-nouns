@@ -7,7 +7,7 @@ const PrevNFTs = () => {
     const { nounNFTMeta, currMintPrice } = useAuction()
     
     return (
-        <div className="w-full bg-dark-gray px-20">
+        <div className="w-full md:pt-0 pt-8 bg-dark-gray px-20">
             <h2 className="font-press text-center text-white text-2xl pt-4 md:pt-16">
                 Last 3 blocks:
             </h2>

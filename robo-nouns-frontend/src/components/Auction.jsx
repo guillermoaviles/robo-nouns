@@ -16,10 +16,10 @@ const Auction = () => {
 
 
     return (
-        <div className="container bg-white md:bg-nouns-lime mx-auto mt-2">
+        <div className="container md:bg-nouns-lime mx-auto mt-2 md:pb-0 pb-10">
             <div className="flex flex-wrap md:mx-0 -mt-0">
                 <NounImg />
-                <div className="flex w-full lg:w-1/2 items-center md:mx-auto pb-0 min-h-[520px]">
+                <div className="flex w-full lg:w-1/2 md:bg-nouns-lime items-center md:mx-auto pt-6 md:pt-0 pb-0 md:min-h-[520px]">
                     <div>
                         <div className="mb-2">
                             <div className="flex flex-col mb-0">
@@ -32,8 +32,8 @@ const Auction = () => {
                                 </div>
                                 <div className="w-full">
                                     <div className="font-press">
-                                        <h1 className="text-dark-gray text-4xl mt-2">
-                                            Robo Noun {nounNFTMeta && nounNFTMeta[0]?.nounId.toNumber()}
+                                        <h1 className="text-dark-gray text-2xl md:text-4xl mt-2">
+                                            RoboNoun {nounNFTMeta && nounNFTMeta[0]?.nounId.toNumber()}
                                         </h1>
                                     </div>
                                 </div>
@@ -48,10 +48,10 @@ const Auction = () => {
                                     </div>
                                 </div>
                                 <div className="w-full lg:w-1/2 pl-0">
-                                    <div className="cursor-pointer md:px-10 flex flex-row justify-between md:justify-normal md:block items-center">
-                                        <div className="mt-1 w-full">
-                                            <div className="flex items-center space-x-2">
-                                                <h4 className="text-dark-gray mb-0 text-lg font-bold">
+                                    <div className="md:px-10 flex flex-row justify-between md:justify-normal md:block items-center">
+                                        <div className=" w-full">
+                                            <div className="flex items-center">
+                                                <h4 className="text-dark-gray mb-0 md:mb-1 text-lg font-bold">
                                                     Price drops in
                                                 </h4>
                                             </div>

@@ -50,7 +50,7 @@ export default function AuctionPriceRange() {
     return (
         <>
             <div className="inline-block relative">
-                <div className="flex lg:justify-between justify-start lg:space-x-0 md:space-x-32 space-x-32 text-dark-gray">
+                <div className="flex lg:justify-between justify-between md:justify-start lg:space-x-0 md:space-x-32 space-x-32 text-dark-gray">
                     <h4 className="text-sm -mb-2">
                         Ξ 0.1
                         {/* Ξ{minMintPrice ?? ""} */}
