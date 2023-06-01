@@ -11,7 +11,7 @@ export default function Home() {
     return (
         <>
             <Head>
-                <title>Robo Nouns</title>
+                <title>RoboNouns</title>
                 <meta name="description" />
                 <meta
                     name="viewport"
