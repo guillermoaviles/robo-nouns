@@ -4,7 +4,7 @@
   </a>
 </p>
 
-<strong>Robo Nouns</strong> is a project to test out a new minting mechanism for Nouns using a Variable Rate Gradual Dutch Auction mechanism instead of english auctions. Robo Nouns' artwork is in the public domain. Robo Nouns are born and trustlessly auctioned via a Gradual Dutch Auction, forever. Settlement of one auction kicks off the next. Artwork is generative and stored directly on-chain (not IPFS). No explicit rules exist for attribute scarcity; all Nouns are equally rare.
+<strong>RoboNouns</strong> is a project to test out a new minting mechanism for Nouns using a Variable Rate Gradual Dutch Auction mechanism instead of English auctions. RoboNouns' artwork is in the public domain. RoboNouns are born and trustlessly auctioned via a Gradual Dutch Auction, forever. Settlement of one auction kicks off the next. Artwork is generative and stored directly on-chain (not IPFS). No explicit rules exist for attribute scarcity; all Nouns are equally rare.
 
 
 ## The project introduces three new concepts:
@@ -13,7 +13,7 @@
 <table>
 <tr>
 <td>
-  At the core of Robo Nouns is the concept of on-chain generated NFTs with traits that change every block. This means that, approximately every ~12.1 seconds, a new NFT with distinct attributes will be created. Users can monitor the Nouns' traits as they evolve and purchase it when it matches their preferences. This approach ensures that NFTs are not only rare and valuable but also highly customizable (pseudo-randomly), catering to individual tastes and desires.
+  At the core of RoboNouns is the concept of on-chain generated NFTs with traits that change every block. This means that, approximately every ~12.1 seconds, a new NFT with distinct attributes will be created. Users can monitor the Nouns' traits as they evolve and purchase it when it matches their preferences. This approach ensures that NFTs are not only rare and valuable but also highly customizable (pseudo-randomly), catering to individual tastes and desires.
 </td>
 </tr>
 </table>
@@ -22,7 +22,7 @@
 <table>
 <tr>
 <td>
-  The Robo Nouns Variable Rate Gradual Dutch Auction, forked from Paradigm's implementation - https://www.paradigm.xyz/2022/08/vrgda
+  The RoboNouns Variable Rate Gradual Dutch Auction (VRGDA) mechanism is forked from Paradigm's implementation - https://www.paradigm.xyz/2022/08/vrgda. The VRGDA mechanism is a token issuance mechanism that allows the sale of tokens according to a custom schedule over time by dynamically adjusting prices based on the sales progress. When sales are ahead of schedule, prices increase, and when sales are behind schedule, prices decrease. VRGDA offers flexibility in issuing tokens while enabling users to buy them seamlessly at any time, providing customizable growth dynamics for communities and creating competitive game loops.
 </td>
 </tr>
 </table>
@@ -31,7 +31,7 @@
 <table>
 <tr>
 <td>
-  Robo Nouns introduces an on-chain pool of last 3 block unsold Nouns, giving users a second chance to acquire NFTs they may have missed during the 12-second block generation period. The pool maintains a record of the three most recent unsold Nouns. When a new NFT is generated, it overwrites the oldest NFT in the pool, ensuring that users always have access to a diverse selection of previously generated NFTs.
+  RoboNouns introduces an on-chain pool of last 3 block unsold Nouns, giving users a second chance to acquire NFTs they may have missed during the 12-second block generation period. The pool maintains a record of the three most recent unsold Nouns. When a new NFT is generated, it overwrites the oldest NFT in the pool, ensuring that users always have access to a diverse selection of previously generated NFTs.
 </td>
 </tr>
 </table>
