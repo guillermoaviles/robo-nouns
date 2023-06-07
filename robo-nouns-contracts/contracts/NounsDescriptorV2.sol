@@ -33,9 +33,6 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
     // https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt
     bytes32 constant COPYRIGHT_CC0_1_0_UNIVERSAL_LICENSE = 0xa2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499;
 
-    /// @notice The contract responsible for holding compressed Noun art
-    INounsArt public nounsArt;
-
     /// @notice The contract responsible for holding compressed RoboNoun art
     INounsArt public art;
 
@@ -68,9 +65,8 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
      * @notice Set the Noun's art contract.
      * @dev Only callable by the owner when not locked.
      */
-    function setArt(INounsArt _art, INounsArt _nounsArt) external onlyOwner whenPartsNotLocked {
+    function setArt(INounsArt _art) external onlyOwner whenPartsNotLocked {
         art = _art;
-        nounsArt = _nounsArt;
 
         emit ArtUpdated(_art);
     }
@@ -454,13 +450,13 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
     function getPartsForSeed(INounsSeeder.Seed memory seed) public view returns (ISVGRenderer.Part[] memory) {
         bytes memory body = art.bodies(seed.body);
         bytes memory accessory = art.accessories(seed.accessory);
-        bytes memory head = nounsArt.heads(seed.head);
+        bytes memory head = art.heads(seed.head);
         bytes memory glasses_ = art.glasses(seed.glasses);
 
         ISVGRenderer.Part[] memory parts = new ISVGRenderer.Part[](4);
         parts[0] = ISVGRenderer.Part({ image: body, palette: _getPalette(body) });
         parts[1] = ISVGRenderer.Part({ image: accessory, palette: _getPalette(accessory) });
-        parts[2] = ISVGRenderer.Part({ image: head, palette: _getNounsPalette(head) });
+        parts[2] = ISVGRenderer.Part({ image: head, palette: _getPalette(head) });
         parts[3] = ISVGRenderer.Part({ image: glasses_, palette: _getPalette(glasses_) });
         return parts;
     }
@@ -470,9 +466,5 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
      */
     function _getPalette(bytes memory part) private view returns (bytes memory) {
         return art.palettes(uint8(part[0]));
-    }
-
-    function _getNounsPalette(bytes memory part) private view returns (bytes memory) {
-        return nounsArt.palettes(uint8(part[0]));
     }
 }

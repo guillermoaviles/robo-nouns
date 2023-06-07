@@ -1,4 +1,6 @@
 export * from "./deploy-local"
+export * from "./deploy-mumbai"
 export * from "./populate-descriptor"
 export * from "./fetch"
 export * from "./verify-etherscan"
+export * from "./set-vrgda-values"

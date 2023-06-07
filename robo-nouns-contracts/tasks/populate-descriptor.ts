@@ -5,6 +5,10 @@ import NounsData from "../assets/image-data-nouns.json"
 import { dataToDescriptorInput } from "./utils"
 import * as deployments from "./utils/deployments.json"
 
+async function delay(seconds: number) {
+    return new Promise((resolve) => setTimeout(resolve, 1000 * seconds))
+}
+
 task(
     "populate-descriptor",
     "Populates the Robo nouns descriptor with accessories"
@@ -59,10 +63,13 @@ task(
 
             try {
                 await descriptorContract.addManyBackgrounds(bgcolors)
+                await delay(5)
+
                 await descriptorContract.setPalette(
                     0,
                     `0x000000${palette.join("")}`
                 )
+                await delay(5)
 
                 await descriptorContract.addBodies(
                     bodiesPage.encodedCompressed,
@@ -70,18 +77,24 @@ task(
                     bodiesPage.itemCount,
                     options
                 )
+                await delay(5)
+
                 await descriptorContract.addHeads(
                     headsPage.encodedCompressed,
                     headsPage.originalLength,
                     headsPage.itemCount,
                     options
                 )
+                await delay(5)
+
                 await descriptorContract.addGlasses(
                     glassesPage.encodedCompressed,
                     glassesPage.originalLength,
                     glassesPage.itemCount,
                     options
                 )
+                await delay(5)
+
                 await descriptorContract.addAccessories(
                     accessoriesPage.encodedCompressed,
                     accessoriesPage.originalLength,

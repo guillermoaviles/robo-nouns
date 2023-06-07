@@ -1,9 +1,11 @@
 import { task, types } from "hardhat/config"
 import { Contract as EthersContract } from "ethers"
-import { ContractName } from "./types"
+import { ContractName, DeployedContract } from "./types"
 import saveDeployedContract from "./utils/saveDeployment"
 
 interface Contract {
+    name?: string
+    address?: string
     args?: (string | number | (() => string | undefined))[]
     instance?: EthersContract
     libraries?: () => Record<string, string>
@@ -14,33 +16,18 @@ async function delay(seconds: number) {
     return new Promise((resolve) => setTimeout(resolve, 1000 * seconds))
 }
 
-task("deploy-local", "Deploy contracts to hardhat").setAction(
+task("deploy-mumbai", "Deploy contracts to hardhat").setAction(
     async (args, { ethers, run }) => {
         const network = await ethers.provider.getNetwork()
-        // if (network.chainId !== 31337) {
-        //     console.log(
-        //         `Invalid chain id. Expected 31337. Got: ${network.chainId}.`
-        //     )
-        //     return
-        // }
+        const [deployer] = await ethers.getSigners()
 
+        const nonce = await deployer.getTransactionCount()
         const NOUNS_ART_NONCE_OFFSET = 4
         const VRGDA_NONCE_OFFSET = 7
-        const NOUNS_DESCRIPTOR_MAINNET =
-            "0x6229c811d04501523c6058bfaac29c91bb586268"
-        const NOUNS_ART_MAINNET = "0x48A7C62e2560d1336869D6550841222942768C49"
-
-        // Goerli
-        const NOUNS_ART_GOERLI = "0xf786148F2B31d12A9B0795EBF39c3a0330760da4"
-        const NOUNS_DESCRIPTOR_GOERLI =
-            "0xB6D0AF8C27930E13005Bf447d54be8235724a102"
-
-        const [deployer] = await ethers.getSigners()
 
         console.log("deploying to chain: ", network.chainId)
         console.log("deploying addr: ", deployer.address)
 
-        const nonce = await deployer.getTransactionCount()
         const expectedRoboNounsArtAddress = ethers.utils.getContractAddress({
             from: deployer.address,
             nonce: nonce + NOUNS_ART_NONCE_OFFSET,
@@ -52,12 +39,12 @@ task("deploy-local", "Deploy contracts to hardhat").setAction(
         })
 
         const contracts: Record<ContractName, Contract> = {
-            NFTDescriptorV2: {},
-            SVGRenderer: {},
+            NFTDescriptorV2: { name: "NFTDescriptorV2" },
+            SVGRenderer: { name: "SVGRenderer" },
             NounsDescriptorV2: {
+                name: "NounsDescriptorV2",
                 args: [
                     expectedRoboNounsArtAddress,
-                    NOUNS_ART_GOERLI,
                     () => contracts.SVGRenderer.instance?.address,
                 ],
                 libraries: () => ({
@@ -65,27 +52,31 @@ task("deploy-local", "Deploy contracts to hardhat").setAction(
                         ?.address as string,
                 }),
             },
-            Inflator: {},
+            Inflator: { name: "Inflator" },
             NounsArt: {
+                name: "NounsArt",
                 args: [
                     () => contracts.NounsDescriptorV2.instance?.address,
                     () => contracts.Inflator.instance?.address,
                 ],
             },
-            RoboNounsSeeder: {},
+            RoboNounsSeeder: { name: "RoboNounsSeeder" },
             RoboNounsToken: {
+                name: "RoboNounsToken",
                 args: [
                     expectedVRGDAAddress,
                     () => contracts.NounsDescriptorV2.instance?.address,
-                    NOUNS_DESCRIPTOR_GOERLI,
                     () => contracts.RoboNounsSeeder.instance?.address,
                 ],
             },
             RoboNounsVRGDA: {
+                name: "RoboNounsVRGDA",
                 args: [
-                    "150000000000000000", // 0.15 ETH
-                    "100000000000000000", // 10%
-                    "24000000000000000000", // 24 nouns per time interval
+                    "50000000000000000", // reservePrice = 0.05 ETH
+                    "150000000000000000", // targetPrice = 0.15 ETH
+                    "31000000000000000", // priceDecayPercent = 31%
+                    "1000000000000000000", // 1 nouns `perTimeUnit`
+                    "900", // updateInterval = 15 minutes
                     () => contracts.RoboNounsToken.instance?.address,
                 ],
                 waitForConfirmation: true,
@@ -103,13 +94,16 @@ task("deploy-local", "Deploy contracts to hardhat").setAction(
                 ) ?? [])
             )
 
+            contract.address = deployedContract.address
+
             if (contract.waitForConfirmation) {
                 await deployedContract.deployed()
             }
 
             contracts[name as ContractName].instance = deployedContract
+            contracts[name as ContractName].address = deployedContract.address
             console.log(
-                `${name} contract saved and deployed to ${deployedContract.address}`
+                `${name} deployment saved and deployed to ${deployedContract.address}`
             )
 
             await saveDeployedContract(
@@ -117,7 +111,7 @@ task("deploy-local", "Deploy contracts to hardhat").setAction(
                 name,
                 deployedContract.address
             )
-            // await delay(5)
+            await delay(5)
         }
 
         // if (network.name !== "localhost") {

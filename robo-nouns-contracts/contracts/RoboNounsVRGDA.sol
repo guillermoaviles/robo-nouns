@@ -18,7 +18,7 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
     uint256 public startTime;
 
     /// @notice How often the VRGDA price will update to reflect VRGDA pricing rules
-    uint256 public updateInterval = 15 minutes;
+    uint256 public updateInterval;
 
     /// @notice the last block at which the last roboNoun was sold
     uint256 public lastTokenBlock;
@@ -41,14 +41,23 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
     /// @dev Represented as an 18 decimal fixed point number.
     int256 public perTimeUnit;
 
-    constructor(int256 _targetPrice, int256 _priceDecayPercent, int256 _perTimeUnit, address _token) {
+    constructor(
+        uint256 _reservePrice,
+        int256 _targetPrice,
+        int256 _priceDecayPercent,
+        int256 _perTimeUnit,
+        uint256 _updateInterval,
+        address _token
+    ) {
         decayConstant = wadLn(1e18 - _priceDecayPercent);
         require(decayConstant < 0, "NON_NEGATIVE_DECAY_CONSTANT");
 
         roboNounsToken = RoboNounsToken(_token);
         startTime = block.timestamp;
+        reservePrice = _reservePrice;
         targetPrice = _targetPrice;
         perTimeUnit = _perTimeUnit;
+        updateInterval = _updateInterval;
     }
 
     /// @param expectedBlockNumber The block number to specify the traits of the token
@@ -76,44 +85,46 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
 
         emit AuctionSettled(mintedNounId, msg.sender, price);
 
-        // restart auction
-        startTime = block.timestamp;
-
         _sendETH(msg.value);
     }
 
+    // TODO: onlyOwner removed for mumbai
     /// @notice Set the auction reserve price.
     /// @dev Only callable by the owner.
-    function setReservePrice(uint256 _reservePrice) external onlyOwner {
+    function setReservePrice(uint256 _reservePrice) external {
         reservePrice = _reservePrice;
         emit AuctionReservePriceUpdated(_reservePrice);
     }
 
+    // TODO: onlyOwner removed for mumbai
     /// @notice Set the auction update interval.
     /// @dev Only callable by the owner.
-    function setUpdateInterval(uint256 _updateInterval) external onlyOwner {
+    function setUpdateInterval(uint256 _updateInterval) external {
         updateInterval = _updateInterval;
         emit AuctionUpdateIntervalUpdated(_updateInterval);
     }
 
+    // TODO: onlyOwner removed for mumbai
     /// @notice Set the auction target price.
     /// @dev Only callable by the owner.
-    function setTargetPrice(int256 _targetPrice) external onlyOwner {
+    function setTargetPrice(int256 _targetPrice) external {
         targetPrice = _targetPrice;
         emit AuctionTargetPriceUpdated(_targetPrice);
     }
 
+    // TODO: onlyOwner removed for mumbai
     /// @notice Set the auction price decay percent.
     /// @dev Only callable by the owner.
-    function setPriceDecayPercent(int256 _priceDecayPercent) external onlyOwner {
+    function setPriceDecayPercent(int256 _priceDecayPercent) external {
         decayConstant = wadLn(1e18 - _priceDecayPercent);
         require(decayConstant < 0, "NON_NEGATIVE_DECAY_CONSTANT");
         emit AuctionPriceDecayPercentUpdated(_priceDecayPercent);
     }
 
+    // TODO: onlyOwner removed for mumbai
     /// @notice Set the auction per time unit.
     /// @dev Only callable by the owner.
-    function setPerTimeUnit(int256 _perTimeUnit) external onlyOwner {
+    function setPerTimeUnit(int256 _perTimeUnit) external {
         perTimeUnit = _perTimeUnit;
         emit AuctionPerTimeUnitUpdated(_perTimeUnit);
     }
@@ -127,13 +138,12 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
         returns (uint256 nounId, INounsSeeder.Seed memory seed, string memory svg, uint256 price, bytes32 hash)
     {
         uint256 nextId = roboNounsToken.currentNounId() + 1;
-        INounsSeeder seeder = INounsSeeder(roboNounsToken.seeder());
 
-        INounsDescriptorMinimal nounsDescriptor = roboNounsToken.nounsDescriptor();
+        INounsSeeder seeder = INounsSeeder(roboNounsToken.seeder());
         INounsDescriptorMinimal roboDescriptor = roboNounsToken.roboDescriptor();
         INounsDescriptorV2 descriptor = INounsDescriptorV2(address(roboNounsToken.roboDescriptor()));
 
-        seed = seeder.generateSeed(nextId, nounsDescriptor, roboDescriptor, block.number - 1);
+        seed = seeder.generateSeed(nextId, roboDescriptor, block.number - 1);
 
         // Generate the SVG from seed using the descriptor.
         svg = descriptor.generateSVGImage(seed);
@@ -155,7 +165,7 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
         uint256 absoluteTimeSinceStart = block.timestamp - startTime;
         return
             VRGDA.getVRGDAPrice(
-                toDaysWadUnsafe(absoluteTimeSinceStart - (absoluteTimeSinceStart % updateInterval)),
+                toDaysWadUnsafe(absoluteTimeSinceStart / updateInterval),
                 targetPrice,
                 decayConstant,
                 // Theoretically calling toWadUnsafe with sold can silently overflow but under

@@ -18,7 +18,6 @@ interface INounsSeeder {
     function generateSeed(
         uint256 nounId,
         INounsDescriptorMinimal descriptor,
-        INounsDescriptorMinimal nounsDescriptor,
         uint256 blockNumber
     ) external view returns (Seed memory);
 }
