@@ -90,11 +90,10 @@ const config: HardhatUserConfig = {
         },
         localhost: {
             blockGasLimit: 15_000_000,
-            // forking: {
-            //     url: process.env.MAINNET_RPC_URL || "",
-            // },
+            forking: {
+                url: process.env.MAINNET_RPC_URL || "",
+            },
             chainId: 31337,
-            blockGasLimit: 12500000,
             mining: {
                 auto: false,
                 interval: 12000, // 12 sec

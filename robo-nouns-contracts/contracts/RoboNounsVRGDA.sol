@@ -41,14 +41,23 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
     /// @dev Represented as an 18 decimal fixed point number.
     int256 public perTimeUnit;
 
-    constructor(int256 _targetPrice, int256 _priceDecayPercent, int256 _perTimeUnit, address _token) {
-        decayConstant = wadLn(1e18 - _priceDecayPercent);
+    constructor(
+        uint256 _reservePrice,
+        int256 _targetPrice,
+        uint256 _priceDecayPercent,
+        uint256 _perTimeUnit,
+        uint256 _updateInterval,
+        address _token
+    ) {
+        decayConstant = wadLn(1e18 - (toDaysWadUnsafe(_priceDecayPercent) / 1e1));
         require(decayConstant < 0, "NON_NEGATIVE_DECAY_CONSTANT");
 
         roboNounsToken = RoboNounsToken(_token);
         startTime = block.timestamp;
+        reservePrice = _reservePrice;
         targetPrice = _targetPrice;
-        perTimeUnit = _perTimeUnit;
+        perTimeUnit = toDaysWadUnsafe(_perTimeUnit);
+        updateInterval = _updateInterval;
     }
 
     /// @param expectedBlockNumber The block number to specify the traits of the token
@@ -76,9 +85,6 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
 
         emit AuctionSettled(mintedNounId, msg.sender, price);
 
-        // restart auction
-        startTime = block.timestamp;
-
         _sendETH(msg.value);
     }
 
@@ -105,16 +111,16 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
 
     /// @notice Set the auction price decay percent.
     /// @dev Only callable by the owner.
-    function setPriceDecayPercent(int256 _priceDecayPercent) external onlyOwner {
-        decayConstant = wadLn(1e18 - _priceDecayPercent);
+    function setPriceDecayPercent(uint256 _priceDecayPercent) external {
+        decayConstant = wadLn(1e18 - (toDaysWadUnsafe(_priceDecayPercent) / 1e1));
         require(decayConstant < 0, "NON_NEGATIVE_DECAY_CONSTANT");
         emit AuctionPriceDecayPercentUpdated(_priceDecayPercent);
     }
 
     /// @notice Set the auction per time unit.
     /// @dev Only callable by the owner.
-    function setPerTimeUnit(int256 _perTimeUnit) external onlyOwner {
-        perTimeUnit = _perTimeUnit;
+    function setPerTimeUnit(uint256 _perTimeUnit) external {
+        perTimeUnit = toDaysWadUnsafe(_perTimeUnit);
         emit AuctionPerTimeUnitUpdated(_perTimeUnit);
     }
 

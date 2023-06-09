@@ -59,8 +59,9 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
         _;
     }
 
-    constructor(INounsArt _art, ISVGRenderer _renderer) {
+    constructor(INounsArt _art, INounsArt _nounsArt, ISVGRenderer _renderer) {
         art = _art;
+        nounsArt = _nounsArt;
         renderer = _renderer;
     }
 

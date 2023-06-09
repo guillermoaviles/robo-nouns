@@ -16,7 +16,7 @@ contract RoboNounsToken is IRoboNounsToken, Ownable, ERC721 {
     address public minter;
 
     // the OG Nouns token URI descriptor
-    // INounsDescriptorMinimal public nounsDescriptor;
+    INounsDescriptorMinimal public nounsDescriptor;
 
     // The RoboNouns token URI descriptor
     INounsDescriptorMinimal public roboDescriptor;
@@ -76,7 +76,7 @@ contract RoboNounsToken is IRoboNounsToken, Ownable, ERC721 {
         INounsDescriptorMinimal _roboDescriptor,
         INounsDescriptorMinimal _nounsDescriptor,
         INounsSeeder _seeder
-    ) ERC721("RoboNouns", "ROBO") {
+    ) ERC721("Robo Nouns", "ROBO") {
         minter = _minter;
         roboDescriptor = _roboDescriptor;
         nounsDescriptor = _nounsDescriptor;
