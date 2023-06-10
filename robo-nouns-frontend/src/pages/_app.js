@@ -1,14 +1,14 @@
 // import "@/styles/globals.css"
-import "../../styles/globals.css"
-import { ThirdwebProvider } from "@thirdweb-dev/react"
-import { AuctionProvider } from "../context/AuctionContext"
+import "../../styles/globals.css";
+import { ThirdwebProvider } from "@thirdweb-dev/react";
+import { AuctionProvider } from "../context/AuctionContext";
 
 export default function App({ Component, pageProps }) {
-    return (
-        <ThirdwebProvider activeChain="mumbai">
-            <AuctionProvider>
-                <Component {...pageProps} />
-            </AuctionProvider>
-        </ThirdwebProvider>
-    )
+	return (
+		<ThirdwebProvider activeChain="goerli">
+			<AuctionProvider>
+				<Component {...pageProps} />
+			</AuctionProvider>
+		</ThirdwebProvider>
+	);
 }

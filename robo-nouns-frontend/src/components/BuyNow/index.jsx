@@ -25,12 +25,12 @@ export default function BuyNow({ nft, currMintPrice, nftNo }) {
 
 	const expNounID = nft?.nounId;
 	const provider = new ethers.providers.JsonRpcProvider(
-		"https://polygon-mumbai.g.alchemy.com/v2/SYsE_zQSuhVCH3bio3ltnI_a8Ze_wN94" // Mumbai
+		"https://eth-goerli.g.alchemy.com/v2/BgA6XZL6TubsjQaFB0Yupu0yB6_oqDM8" // Mumbai
 		// "http://localhost:8545"
 	);
 
 	const { contract } = useContract(
-		"0x255414e3d2cf6D316776b5E1dD1e66925144232D"
+		"0x402CF8456F05D111ABEe84F4209334Ba37729479"
 	);
 
 	const call = async () => {
