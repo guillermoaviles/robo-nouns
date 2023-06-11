@@ -80,8 +80,8 @@ task("deploy-goerli", "Deploy contracts to goerli").setAction(
                     ethers.utils.parseEther("0.05"), // reservePrice = 0.05 ETH = "50000000000000000"
                     ethers.utils.parseEther("0.15"), // targetPrice = 0.15 ETH = "150000000000000000"
                     "31", // priceDecayPercent = 31%
-                    "96", // perTimeUnit = 96 nouns per day or 1 nouns per updateInterval (15 minutes)
-                    "900", // updateInterval = 15 minutes
+                    "96", // perTimeUnit = 96 Nouns per day or 1 Noun per 15 minutes
+                    "300", // updateInterval = 5 minutes (time to recalculate VRGDA price)
                     () => contracts.RoboNounsToken.instance?.address,
                 ],
                 waitForConfirmation: true,
