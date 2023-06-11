@@ -18,7 +18,7 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
     uint256 public startTime;
 
     /// @notice How often the VRGDA price will update to reflect VRGDA pricing rules
-    uint256 public updateInterval = 15 minutes;
+    uint256 public updateInterval;
 
     /// @notice the last block at which the last roboNoun was sold
     uint256 public lastTokenBlock;
@@ -88,27 +88,31 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
         _sendETH(msg.value);
     }
 
+    // TODO: onlyOwner removed for mumbai
     /// @notice Set the auction reserve price.
     /// @dev Only callable by the owner.
-    function setReservePrice(uint256 _reservePrice) external onlyOwner {
+    function setReservePrice(uint256 _reservePrice) external {
         reservePrice = _reservePrice;
         emit AuctionReservePriceUpdated(_reservePrice);
     }
 
+    // TODO: onlyOwner removed for mumbai
     /// @notice Set the auction update interval.
     /// @dev Only callable by the owner.
-    function setUpdateInterval(uint256 _updateInterval) external onlyOwner {
+    function setUpdateInterval(uint256 _updateInterval) external {
         updateInterval = _updateInterval;
         emit AuctionUpdateIntervalUpdated(_updateInterval);
     }
 
+    // TODO: onlyOwner removed for mumbai
     /// @notice Set the auction target price.
     /// @dev Only callable by the owner.
-    function setTargetPrice(int256 _targetPrice) external onlyOwner {
+    function setTargetPrice(int256 _targetPrice) external {
         targetPrice = _targetPrice;
-        emit AuctionTargetPriceUpdated(_targetPrice);
+        emit AuctionTargetPriceUpdated(targetPrice);
     }
 
+    // TODO: onlyOwner removed for mumbai
     /// @notice Set the auction price decay percent.
     /// @dev Only callable by the owner.
     function setPriceDecayPercent(uint256 _priceDecayPercent) external {
@@ -117,6 +121,7 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
         emit AuctionPriceDecayPercentUpdated(_priceDecayPercent);
     }
 
+    // TODO: onlyOwner removed for mumbai
     /// @notice Set the auction per time unit.
     /// @dev Only callable by the owner.
     function setPerTimeUnit(uint256 _perTimeUnit) external {
@@ -133,13 +138,12 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
         returns (uint256 nounId, INounsSeeder.Seed memory seed, string memory svg, uint256 price, bytes32 hash)
     {
         uint256 nextId = roboNounsToken.currentNounId() + 1;
-        INounsSeeder seeder = INounsSeeder(roboNounsToken.seeder());
 
-        INounsDescriptorMinimal nounsDescriptor = roboNounsToken.nounsDescriptor();
+        INounsSeeder seeder = INounsSeeder(roboNounsToken.seeder());
         INounsDescriptorMinimal roboDescriptor = roboNounsToken.roboDescriptor();
         INounsDescriptorV2 descriptor = INounsDescriptorV2(address(roboNounsToken.roboDescriptor()));
 
-        seed = seeder.generateSeed(nextId, nounsDescriptor, roboDescriptor, block.number - 1);
+        seed = seeder.generateSeed(nextId, roboDescriptor, block.number - 1);
 
         // Generate the SVG from seed using the descriptor.
         svg = descriptor.generateSVGImage(seed);

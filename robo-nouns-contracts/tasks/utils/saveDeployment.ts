@@ -14,9 +14,7 @@ export default async function (chain: number, name: string, address: string) {
     }
 
     // This line will always add or update the contract information
-    deployments[name] = {
-        chain: chain,
-        address: address,
-    }
+    deployments[name] = address
+
     await fs.writeFile(DESTINATION, JSON.stringify(deployments))
 }

@@ -5,7 +5,7 @@ task("fetch", "Calls fetchNextNoun on RoboNounsVRGDA")
     .addOptionalParam(
         "vrgda",
         "The `RoboNounsVRGDA` contract address",
-        deployments.RoboNounsVRGDA.address,
+        deployments.RoboNounsVRGDA,
         types.string
     )
     .setAction(async ({ vrgda }, { ethers, network }) => {

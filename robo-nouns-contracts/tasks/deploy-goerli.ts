@@ -24,9 +24,9 @@ task("deploy-goerli", "Deploy contracts to goerli").setAction(
         const nonce = await deployer.getTransactionCount()
         const NOUNS_ART_NONCE_OFFSET = 4
         const VRGDA_NONCE_OFFSET = 7
-        const NOUNS_ART_GOERLI = "0xf786148F2B31d12A9B0795EBF39c3a0330760da4"
-        const NOUNS_DESCRIPTOR_GOERLI =
-            "0xB6D0AF8C27930E13005Bf447d54be8235724a102"
+        // const NOUNS_ART_GOERLI = "0xf786148F2B31d12A9B0795EBF39c3a0330760da4"
+        // const NOUNS_DESCRIPTOR_GOERLI =
+        //     "0xB6D0AF8C27930E13005Bf447d54be8235724a102"
 
         console.log("deploying to chain: ", network.chainId)
         console.log("deploying addr: ", deployer.address)
@@ -48,7 +48,7 @@ task("deploy-goerli", "Deploy contracts to goerli").setAction(
                 name: "NounsDescriptorV2",
                 args: [
                     expectedRoboNounsArtAddress,
-                    NOUNS_ART_GOERLI,
+                    // NOUNS_ART_GOERLI,
                     () => contracts.SVGRenderer.instance?.address,
                 ],
                 libraries: () => ({
@@ -70,7 +70,7 @@ task("deploy-goerli", "Deploy contracts to goerli").setAction(
                 args: [
                     expectedVRGDAAddress,
                     () => contracts.NounsDescriptorV2.instance?.address,
-                    NOUNS_DESCRIPTOR_GOERLI,
+                    // NOUNS_DESCRIPTOR_GOERLI,
                     () => contracts.RoboNounsSeeder.instance?.address,
                 ],
             },
@@ -116,7 +116,7 @@ task("deploy-goerli", "Deploy contracts to goerli").setAction(
                 name,
                 deployedContract.address
             )
-            // await delay(5)
+            await delay(5)
         }
 
         // if (network.name !== "localhost") {
