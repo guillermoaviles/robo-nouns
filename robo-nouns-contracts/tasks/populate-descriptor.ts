@@ -2,6 +2,7 @@ import { task, types } from "hardhat/config"
 import ImageData from "../assets/image-data_old.json"
 import RoboData from "../assets/image-data-robo.json"
 import NounsData from "../assets/image-data-nouns.json"
+import RoboDataNoHeads from "../assets/image-data-robo-no-heads.json"
 import { dataToDescriptorInput } from "./utils"
 import * as deployments from "./utils/deployments.json"
 
@@ -31,7 +32,7 @@ task(
                 gasLimit:
                     network.name === "hardhat" || "localhost"
                         ? 15_000_000
-                        : undefined,
+                        : 1_000_000,
             }
 
             const descriptorFactory = await ethers.getContractFactory(
@@ -61,24 +62,15 @@ task(
                 accessories.map(({ data }) => data)
             )
 
-            const traits = [
-                "addManyBackgrounds",
-                "setPalette",
-                "addBodies",
-                "addHeads",
-                "addGlasses",
-                "addAccessories",
-            ]
-
             try {
                 await descriptorContract.addManyBackgrounds(bgcolors)
-                await delay(5)
+                await delay(2)
 
                 await descriptorContract.setPalette(
                     0,
                     `0x000000${palette.join("")}`
                 )
-                await delay(5)
+                await delay(2)
 
                 await descriptorContract.addBodies(
                     bodiesPage.encodedCompressed,
@@ -86,7 +78,7 @@ task(
                     bodiesPage.itemCount,
                     options
                 )
-                await delay(5)
+                await delay(2)
 
                 await descriptorContract.addHeads(
                     headsPage.encodedCompressed,
@@ -94,7 +86,7 @@ task(
                     headsPage.itemCount,
                     options
                 )
-                await delay(5)
+                await delay(2)
 
                 await descriptorContract.addGlasses(
                     glassesPage.encodedCompressed,
@@ -102,7 +94,7 @@ task(
                     glassesPage.itemCount,
                     options
                 )
-                await delay(5)
+                await delay(2)
 
                 await descriptorContract.addAccessories(
                     accessoriesPage.encodedCompressed,

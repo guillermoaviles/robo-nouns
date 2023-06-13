@@ -44,19 +44,19 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
     constructor(
         uint256 _reservePrice,
         int256 _targetPrice,
-        uint256 _priceDecayPercent,
-        uint256 _perTimeUnit,
+        int256 _priceDecayPercent,
+        int256 _perTimeUnit,
         uint256 _updateInterval,
         address _token
     ) {
-        decayConstant = wadLn(1e18 - (toDaysWadUnsafe(_priceDecayPercent) / 1e1));
+        decayConstant = wadLn(1e18 - _priceDecayPercent);
         require(decayConstant < 0, "NON_NEGATIVE_DECAY_CONSTANT");
 
         roboNounsToken = RoboNounsToken(_token);
         startTime = block.timestamp;
         reservePrice = _reservePrice;
         targetPrice = _targetPrice;
-        perTimeUnit = toDaysWadUnsafe(_perTimeUnit);
+        perTimeUnit = _perTimeUnit;
         updateInterval = _updateInterval;
     }
 
@@ -88,44 +88,39 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
         _sendETH(msg.value);
     }
 
-    // TODO: onlyOwner removed for mumbai
     /// @notice Set the auction reserve price.
     /// @dev Only callable by the owner.
-    function setReservePrice(uint256 _reservePrice) external {
+    function setReservePrice(uint256 _reservePrice) external onlyOwner {
         reservePrice = _reservePrice;
         emit AuctionReservePriceUpdated(_reservePrice);
     }
 
-    // TODO: onlyOwner removed for mumbai
     /// @notice Set the auction update interval.
     /// @dev Only callable by the owner.
-    function setUpdateInterval(uint256 _updateInterval) external {
+    function setUpdateInterval(uint256 _updateInterval) external onlyOwner {
         updateInterval = _updateInterval;
         emit AuctionUpdateIntervalUpdated(_updateInterval);
     }
 
-    // TODO: onlyOwner removed for mumbai
     /// @notice Set the auction target price.
     /// @dev Only callable by the owner.
-    function setTargetPrice(int256 _targetPrice) external {
+    function setTargetPrice(int256 _targetPrice) external onlyOwner {
         targetPrice = _targetPrice;
-        emit AuctionTargetPriceUpdated(targetPrice);
+        emit AuctionTargetPriceUpdated(_targetPrice);
     }
 
-    // TODO: onlyOwner removed for mumbai
     /// @notice Set the auction price decay percent.
     /// @dev Only callable by the owner.
-    function setPriceDecayPercent(uint256 _priceDecayPercent) external {
-        decayConstant = wadLn(1e18 - (toDaysWadUnsafe(_priceDecayPercent) / 1e1));
+    function setPriceDecayPercent(int256 _priceDecayPercent) external onlyOwner {
+        decayConstant = wadLn(1e18 - _priceDecayPercent);
         require(decayConstant < 0, "NON_NEGATIVE_DECAY_CONSTANT");
         emit AuctionPriceDecayPercentUpdated(_priceDecayPercent);
     }
 
-    // TODO: onlyOwner removed for mumbai
     /// @notice Set the auction per time unit.
     /// @dev Only callable by the owner.
-    function setPerTimeUnit(uint256 _perTimeUnit) external {
-        perTimeUnit = toDaysWadUnsafe(_perTimeUnit);
+    function setPerTimeUnit(uint256 _perTimeUnit) external onlyOwner {
+        perTimeUnit = toWadUnsafe(_perTimeUnit);
         emit AuctionPerTimeUnitUpdated(_perTimeUnit);
     }
 
@@ -135,10 +130,9 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
         external
         view
         override
-        returns (uint256 nounId, INounsSeeder.Seed memory seed, string memory svg, uint256 price, bytes32 hash)
+        returns (uint256 nounId, INounsSeeder.Seed memory seed, string memory svg, uint256 price, uint256 blockNumber)
     {
         uint256 nextId = roboNounsToken.currentNounId() + 1;
-
         INounsSeeder seeder = INounsSeeder(roboNounsToken.seeder());
         INounsDescriptorMinimal roboDescriptor = roboNounsToken.roboDescriptor();
         INounsDescriptorV2 descriptor = INounsDescriptorV2(address(roboNounsToken.roboDescriptor()));
@@ -152,10 +146,7 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
         uint256 vrgdaPrice = getCurrentVRGDAPrice();
         price = vrgdaPrice > reservePrice ? vrgdaPrice : reservePrice;
 
-        // Fetch the blockhash associated with this noun.
-        hash = blockhash(block.number - 1);
-
-        return (nextId, seed, svg, price, hash);
+        return (nextId, seed, svg, price, block.number - 1);
     }
 
     /// @notice Get the current price according to the VRGDA rules.

@@ -72,7 +72,7 @@ contract RoboNounsToken is IRoboNounsToken, Ownable, ERC721 {
         address _minter,
         INounsDescriptorMinimal _roboDescriptor,
         INounsSeeder _seeder
-    ) ERC721("RoboNouns", "ROBO") {
+    ) ERC721("Robo Nouns", "ROBO") {
         minter = _minter;
         roboDescriptor = _roboDescriptor;
         seeder = _seeder;

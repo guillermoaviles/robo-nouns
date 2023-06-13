@@ -23,11 +23,11 @@ contract RoboNounsSeeder is INounsSeeder {
     ) external view override returns (Seed memory) {
         uint256 pseudorandomness = uint256(keccak256(abi.encodePacked(blockhash(blockNumber), nounId)));
 
-        uint256 headCount = roboDescriptor.headCount();
-        uint256 glassesCount = roboDescriptor.glassesCount();
         uint256 backgroundCount = roboDescriptor.backgroundCount();
         uint256 bodyCount = roboDescriptor.bodyCount();
         uint256 accessoryCount = roboDescriptor.accessoryCount();
+        uint256 glassesCount = roboDescriptor.glassesCount();
+        uint256 headCount = roboDescriptor.headCount();
 
         return
             Seed({
