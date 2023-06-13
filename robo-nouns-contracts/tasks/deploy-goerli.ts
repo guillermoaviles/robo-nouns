@@ -24,9 +24,13 @@ task("deploy-goerli", "Deploy contracts to goerli").setAction(
         const nonce = await deployer.getTransactionCount()
         const NOUNS_ART_NONCE_OFFSET = 4
         const VRGDA_NONCE_OFFSET = 7
+        // const NOUNS_DESCRIPTOR_MAINNET =
+        //     "0x6229c811d04501523c6058bfaac29c91bb586268"
+        // const NOUNS_ART_MAINNET = "0x48A7C62e2560d1336869D6550841222942768C49"
         // const NOUNS_ART_GOERLI = "0xf786148F2B31d12A9B0795EBF39c3a0330760da4"
         // const NOUNS_DESCRIPTOR_GOERLI =
         //     "0xB6D0AF8C27930E13005Bf447d54be8235724a102"
+        // const NOUNS_INFLATOR = "0xa2acee85Cd81c42BcAa1FeFA8eD2516b68872Dbe"
 
         console.log("deploying to chain: ", network.chainId)
         console.log("deploying addr: ", deployer.address)
@@ -48,7 +52,6 @@ task("deploy-goerli", "Deploy contracts to goerli").setAction(
                 name: "NounsDescriptorV2",
                 args: [
                     expectedRoboNounsArtAddress,
-                    // NOUNS_ART_GOERLI,
                     () => contracts.SVGRenderer.instance?.address,
                 ],
                 libraries: () => ({
@@ -70,18 +73,17 @@ task("deploy-goerli", "Deploy contracts to goerli").setAction(
                 args: [
                     expectedVRGDAAddress,
                     () => contracts.NounsDescriptorV2.instance?.address,
-                    // NOUNS_DESCRIPTOR_GOERLI,
                     () => contracts.RoboNounsSeeder.instance?.address,
                 ],
             },
             RoboNounsVRGDA: {
                 name: "RoboNounsVRGDA",
                 args: [
-                    ethers.utils.parseEther("0.05"), // reservePrice = 0.05 ETH = "50000000000000000"
-                    ethers.utils.parseEther("0.15"), // targetPrice = 0.15 ETH = "150000000000000000"
-                    "31", // priceDecayPercent = 31%
-                    "96", // perTimeUnit = 96 nouns per day or 1 nouns per updateInterval (15 minutes)
-                    "900", // updateInterval = 15 minutes
+                    ethers.utils.parseEther("0.01"), // reservePrice = 0.01 ETH = "10000000000000000"
+                    ethers.utils.parseEther("0.05"), //  targetPrice = 0.15 ETH = "50000000000000000"
+                    "31" + "0000000000000000", // priceDecayPercent = 31% or 0.31 * 1e18 = "310000000000000000"
+                    "96" + "000000000000000000", // perTimeUnit = 96 nouns per day or 96 * 1e18 = "96000000000000000000"
+                    "300", // updateInterval = 5 minutes
                     () => contracts.RoboNounsToken.instance?.address,
                 ],
                 waitForConfirmation: true,
@@ -116,7 +118,7 @@ task("deploy-goerli", "Deploy contracts to goerli").setAction(
                 name,
                 deployedContract.address
             )
-            await delay(5)
+            await delay(3)
         }
 
         // if (network.name !== "localhost") {

@@ -2,7 +2,7 @@ import { useContract, useContractRead } from "@thirdweb-dev/react";
 
 export default function NounID() {
 	const { contract } = useContract(
-		"0x402CF8456F05D111ABEe84F4209334Ba37729479"
+		"0x87f9088D7341cDbd28B0Cda390B31C3c5FD9412F"
 	);
 	const { data: nextNoun } = useContractRead(contract, "fetchNextNoun");
 

@@ -8,7 +8,7 @@ interface IRoboNounsVRGDA {
     event AuctionReservePriceUpdated(uint256 reservePrice);
     event AuctionUpdateIntervalUpdated(uint256 updateInterval);
     event AuctionTargetPriceUpdated(int256 targetPrice);
-    event AuctionPriceDecayPercentUpdated(uint256 priceDecayPercent);
+    event AuctionPriceDecayPercentUpdated(int256 priceDecayPercent);
     event AuctionPerTimeUnitUpdated(uint256 perTimeUnit);
 
     function buyNow(uint256 expectedBlockNumber) external payable;
@@ -16,7 +16,7 @@ interface IRoboNounsVRGDA {
     function fetchNextNoun()
         external
         view
-        returns (uint256 nounId, INounsSeeder.Seed memory seed, string memory svg, uint256 price, bytes32 hash);
+        returns (uint256 nounId, INounsSeeder.Seed memory seed, string memory svg, uint256 price, uint256 blockNumber);
 
     function setReservePrice(uint256 reservePrice) external;
 }
