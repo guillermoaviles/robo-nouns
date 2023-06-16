@@ -12,13 +12,16 @@ import { RoboNounsToken } from "contracts/RoboNounsToken.sol";
 import { toWadUnsafe, toDaysWadUnsafe, wadLn } from "solmate/src/utils/SignedWadMath.sol";
 
 contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
-    address public constant nounsDAO = 0x0BC3807Ec262cB779b38D65b38158acC3bfedE10;
+    address public constant nounsDAO = 0xA7F1653E99CdE8f76839C70c64122456AFA5Cf6E;
 
     /// @notice Time of sale of the first RoboNoun, used to calculate VRGDA price
     uint256 public startTime;
 
     /// @notice How often the VRGDA price will update to reflect VRGDA pricing rules
-    uint256 public updateInterval;
+    uint256 public priceDecayInterval;
+
+    /// @notice Time interval that serves as the basis for the target sale time
+    uint256 public targetSaleInterval;
 
     /// @notice the last block at which the last roboNoun was sold
     uint256 public lastTokenBlock;
@@ -46,7 +49,8 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
         int256 _targetPrice,
         int256 _priceDecayPercent,
         int256 _perTimeUnit,
-        uint256 _updateInterval,
+        uint256 _priceDecayInterval,
+        uint256 _targetSaleInterval,
         address _token
     ) {
         decayConstant = wadLn(1e18 - _priceDecayPercent);
@@ -57,7 +61,8 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
         reservePrice = _reservePrice;
         targetPrice = _targetPrice;
         perTimeUnit = _perTimeUnit;
-        updateInterval = _updateInterval;
+        priceDecayInterval = _priceDecayInterval;
+        targetSaleInterval = _targetSaleInterval;
     }
 
     /// @param expectedBlockNumber The block number to specify the traits of the token
@@ -97,9 +102,9 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
 
     /// @notice Set the auction update interval.
     /// @dev Only callable by the owner.
-    function setUpdateInterval(uint256 _updateInterval) external onlyOwner {
-        updateInterval = _updateInterval;
-        emit AuctionUpdateIntervalUpdated(_updateInterval);
+    function setUpdateInterval(uint256 _priceDecayInterval) external onlyOwner {
+        priceDecayInterval = _priceDecayInterval;
+        emit AuctionPriceDecayIntervalUpdated(_priceDecayInterval);
     }
 
     /// @notice Set the auction target price.
@@ -152,11 +157,14 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
     /// @notice Get the current price according to the VRGDA rules.
     /// @return price The current price in Wei
     function getCurrentVRGDAPrice() public view returns (uint256) {
-        uint256 nextId = roboNounsToken.currentNounId() + 1;
+        uint256 nextId = roboNounsToken.currentNounId();
         uint256 absoluteTimeSinceStart = block.timestamp - startTime;
         return
             VRGDA.getVRGDAPrice(
-                toDaysWadUnsafe(absoluteTimeSinceStart - (absoluteTimeSinceStart % updateInterval)),
+                toTimeIntervalWadUnsafe(
+                    (absoluteTimeSinceStart - (absoluteTimeSinceStart % priceDecayInterval)),
+                    targetSaleInterval
+                ),
                 targetPrice,
                 decayConstant,
                 // Theoretically calling toWadUnsafe with sold can silently overflow but under
@@ -164,6 +172,14 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
                 // the VRGDA formula's n param represents the nth token and sold is the n-1th token.
                 VRGDA.getTargetSaleTimeLinear(toWadUnsafe(nextId), perTimeUnit)
             );
+    }
+
+    function toTimeIntervalWadUnsafe(uint256 timeSince, uint256 intervalTarget) public pure returns (int256 r) {
+        /// @solidity memory-safe-assembly
+        assembly {
+            // Multiply <timeSince> by 1e18 and then divide it by <intervalTarget>.
+            r := div(mul(timeSince, 1000000000000000000), intervalTarget)
+        }
     }
 
     function _sendETH(uint256 _value) internal {

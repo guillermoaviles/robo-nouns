@@ -6,7 +6,7 @@ import { INounsSeeder } from "contracts/interfaces/INounsSeeder.sol";
 interface IRoboNounsVRGDA {
     event AuctionSettled(uint256 indexed nounId, address winner, uint256 amount);
     event AuctionReservePriceUpdated(uint256 reservePrice);
-    event AuctionUpdateIntervalUpdated(uint256 updateInterval);
+    event AuctionPriceDecayIntervalUpdated(uint256 priceDecayInterval);
     event AuctionTargetPriceUpdated(int256 targetPrice);
     event AuctionPriceDecayPercentUpdated(int256 priceDecayPercent);
     event AuctionPerTimeUnitUpdated(uint256 perTimeUnit);
