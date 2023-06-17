@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useContract } from "@thirdweb-dev/react";
 import { ethers } from "ethers";
+import vrgdaAbi from "../utils/vrgdaAbi.json"
 
 const AuctionContext = createContext();
 
@@ -14,13 +15,28 @@ export function AuctionProvider({ children }) {
   const [currMintPrice, setCurrMintPrice] = useState("");
   const [targetPrice, setTargetPrice] = useState("");
 
-  const { contract } = useContract(
-    "0xC78A732E2f0f48B32aE26EFD2d39c6c9328ccDb5"
+  //   const { contract } = useContract(
+  //     "0xC78A732E2f0f48B32aE26EFD2d39c6c9328ccDb5"
+  //   );
+
+  const providerUrl =
+    "https://eth-goerli.g.alchemy.com/v2/8kIFZ8iBRuBDAQqIH73BfPB8ESBwbIUt";
+  const provider = new ethers.providers.JsonRpcProvider(providerUrl);
+
+  const auctionContractAddress = "0xC78A732E2f0f48B32aE26EFD2d39c6c9328ccDb5";
+
+  const auctionContractABI = vrgdaAbi.abi;
+
+  const contract = new ethers.Contract(
+    auctionContractAddress,
+    auctionContractABI,
+    provider
   );
 
   const fetchNFTMetadata = async () => {
     try {
-      const nounMeta = await contract?.call("fetchNextNoun");
+      //   const nounMeta = await contract?.call("fetchNextNoun");
+      const nounMeta = await contract.fetchNextNoun();
       addNounData(nounMeta);
 
       // setReservePrice
@@ -29,7 +45,9 @@ export function AuctionProvider({ children }) {
 
       // setCurrMintPrice
       const currVRGDAPrice = await contract?.call("getCurrentVRGDAPrice");
-      const currentVRGDAPrice = currVRGDAPrice ? ethers.utils.formatEther(currVRGDAPrice) : "";
+      const currentVRGDAPrice = currVRGDAPrice
+        ? ethers.utils.formatEther(currVRGDAPrice)
+        : "";
 
       if (currentVRGDAPrice < reservePrice) {
         setCurrMintPrice(reservePrice);
