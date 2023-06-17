@@ -2,6 +2,7 @@ import React from "react"
 import { useAuction } from "@/context/AuctionContext.jsx"
 import Image from "next/image"
 import BuyNow from "../BuyNow"
+import loadingNoun from "../../assets/loading-skull-noun.gif"
 
 const PrevNFTs = () => {
     const { nounNFTMeta, currMintPrice } = useAuction()
@@ -16,7 +17,7 @@ const PrevNFTs = () => {
                     nounNFTMeta.slice(-3).map((nft, index) => (
                         <div key={index} className="py-6">
                             <Image
-                                src={`data:image/svg+xml;base64,${nft?.svg}`}
+                                src={nft?.svg ? `data:image/svg+xml;base64,${nft?.svg}` : loadingNoun}
                                 alt={`NFT ${index}`}
                                 width={212}
                                 height={200}

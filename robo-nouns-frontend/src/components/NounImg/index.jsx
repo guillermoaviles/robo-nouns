@@ -1,5 +1,6 @@
 import Image from "next/image"
 import { useAuction } from "../../context/AuctionContext"
+import loadingNoun from "../../assets/loading-skull-noun.gif"
 
 export default function NounImg() {
     const { nounNFTMeta } = useAuction()
@@ -9,7 +10,7 @@ export default function NounImg() {
             <div className="w-full relative">
                 <div className="md:h-0 w-full">
                     <Image
-                        src={`data:image/svg+xml;base64,${nounNFTMeta[0]?.svg}`}
+                        src={nounNFTMeta[0]?.svg ? `data:image/svg+xml;base64,${nounNFTMeta[0]?.svg}` : loadingNoun}
                         alt="Noun Image"
                         className="md:absolute top-0 left-0 w-full md:h-full"
                         width={300}
