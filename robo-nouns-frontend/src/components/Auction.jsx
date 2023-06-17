@@ -1,6 +1,4 @@
 import React from "react"
-import Head from "next/head"
-import Image from "next/image"
 import moment from "moment"
 import AuctionPrice from "./AuctionPrice"
 import AuctionPriceRange from "./AuctionPriceRange"
@@ -8,7 +6,6 @@ import BuyNow from "./BuyNow"
 import Timer from "./Timer"
 import NounImg from "./NounImg"
 import { useAuction } from "@/context/AuctionContext.jsx"
-import { ethers } from "ethers"
 
 
 const Auction = () => {
@@ -33,7 +30,7 @@ const Auction = () => {
                                 <div className="w-full">
                                     <div className="font-press">
                                         <h1 className="text-dark-gray text-2xl md:text-4xl mt-2">
-                                            RoboNoun {nounNFTMeta && nounNFTMeta[0]?.nounId.toNumber()}
+                                            Robo Noun {nounNFTMeta && nounNFTMeta[0]?.nounId.toNumber()}
                                         </h1>
                                     </div>
                                 </div>

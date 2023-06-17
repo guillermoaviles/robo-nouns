@@ -19,16 +19,13 @@ const PriceBlock: React.FC<{
 }
 
 export default function AuctionPriceRange() {
-    const { minMintPrice, currMintPrice, targetMintPrice } = useAuction()
+    const { reservePrice, currMintPrice, targetPrice } = useAuction()
 
-    const maxPrice = targetMintPrice * 2
+    const maxPrice = targetPrice * 2
     const numPriceBlocks = 15
     const currMintPricePercentage = parseFloat(currMintPrice) / maxPrice
-
-    // const cMP = 0.015   // to test if graph price tracker works
-    // const currMintPricePercentage = parseFloat(`${cMP}`) / maxPrice 
-
     const activeIndex = Math.floor(currMintPricePercentage * numPriceBlocks)
+
     const colorsClassNames = [
         "bg-[#FF638D]",
         "bg-[#FF638D]",
@@ -50,14 +47,14 @@ export default function AuctionPriceRange() {
     return (
         <>
             <div className="inline-block relative">
-                <div className="flex lg:justify-between justify-between md:justify-start lg:space-x-0 md:space-x-32 space-x-32 text-dark-gray">
+                <div className="flex lg:justify-between justify-start lg:space-x-0 md:space-x-32 space-x-32 text-dark-gray">
                     <h4 className="text-sm -mb-2">
-                        Ξ 0.1
-                        {/* Ξ{minMintPrice ?? ""} */}
+                        {/* Ξ 0.1 */}
+                        Ξ{reservePrice ?? ""}
                     </h4>
                     <h4 className="text-sm -mb-2">
                         {/* Ξ 0.15 */}
-                        Ξ{targetMintPrice ?? ""}
+                        Ξ{targetPrice ?? ""}
                     </h4>
                     <h4 className="text-sm -mb-2">
                         Ξ{maxPrice}

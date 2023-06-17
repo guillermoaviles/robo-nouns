@@ -3,13 +3,14 @@ import { useState, useEffect } from "react";
 function CountdownTimer() {
   const [timeLeft, setTimeLeft] = useState(0);
 
-  const globalStartTime = 1686419172
+  const globalStartTime = 1686788976;
 
   useEffect(() => {
     const intervalId = setInterval(() => {
       const currentTime = new Date().getTime();
       const elapsedTime = Math.floor((currentTime - globalStartTime) / 1000);
-      const timeLeftOnTimer = 300 - (elapsedTime % 300);
+      const adjustedElapsedTime = elapsedTime + 210; 
+      const timeLeftOnTimer = 300 - (adjustedElapsedTime % 300);
       setTimeLeft(timeLeftOnTimer);
     }, 1000);
 

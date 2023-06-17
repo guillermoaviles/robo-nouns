@@ -17,7 +17,7 @@ export default function Navbar({ className, ...rest }) {
                         />
                     </Link>
                     <h1 className="font-press text-dark-gray text-2xl md:text-5xl -mb-1">
-                        RoboNouns
+                        Robo Nouns
                     </h1>
                 </div>
 

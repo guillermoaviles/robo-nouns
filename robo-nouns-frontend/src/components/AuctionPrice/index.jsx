@@ -2,7 +2,7 @@ import { ethers, utils } from "ethers";
 import { useAuction } from "@/context/AuctionContext.jsx";
 
 export default function AuctionDetails() {
-  const { currMintPrice, minMintPrice } = useAuction();
+  const { currMintPrice, reservePrice } = useAuction();
 
   const formatPrice = (price) => {
     if (price) {
@@ -17,9 +17,9 @@ export default function AuctionDetails() {
     <div className="w-fit md:w-full">
       <h2 className="text-[#1C2228] md:text-3xl font-['PT Sans']">
         Ξ
-        {currMintPrice > minMintPrice
+        {currMintPrice > reservePrice
           ? formatPrice(currMintPrice)
-          : minMintPrice}
+          : reservePrice}
       </h2>
     </div>
   );
