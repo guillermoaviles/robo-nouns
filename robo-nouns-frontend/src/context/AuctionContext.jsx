@@ -40,11 +40,13 @@ export function AuctionProvider({ children }) {
       addNounData(nounMeta);
 
       // setReservePrice
-      const resPrice = await contract?.call("reservePrice");
+      // const resPrice = await contract?.call("reservePrice");
+      const resPrice = await contract.reservePrice();
       setReservePrice(resPrice ? ethers.utils.formatEther(resPrice) : "");
 
       // setCurrMintPrice
-      const currVRGDAPrice = await contract?.call("getCurrentVRGDAPrice");
+      // const currVRGDAPrice = await contract?.call("getCurrentVRGDAPrice");
+      const currVRGDAPrice = await contract.getCurrentVRGDAPrice();
       const currentVRGDAPrice = currVRGDAPrice
         ? ethers.utils.formatEther(currVRGDAPrice)
         : "";
@@ -56,7 +58,8 @@ export function AuctionProvider({ children }) {
       }
 
       // setTargetMintPrice
-      const tgtPrice = await contract?.call("targetPrice");
+      // const tgtPrice = await contract?.call("targetPrice");
+      const tgtPrice = await contract.targetPrice();
       setTargetPrice(tgtPrice ? ethers.utils.formatEther(tgtPrice) : "");
     } catch (error) {
       console.error("Error fetching NFT metadata and price info:", error);

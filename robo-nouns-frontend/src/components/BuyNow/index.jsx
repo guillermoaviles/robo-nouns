@@ -6,7 +6,7 @@ export default function BuyNow({ nft, currMintPrice, nftNo }) {
 	const [loading, setLoading] = useState(false);
 
 	const { contract } = useContract(
-		"0x402CF8456F05D111ABEe84F4209334Ba37729479"
+		"0xC78A732E2f0f48B32aE26EFD2d39c6c9328ccDb5"
 	);
 
 	const call = async () => {
