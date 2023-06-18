@@ -69,14 +69,14 @@ export function AuctionProvider({ children }) {
   useEffect(() => {
     const interval = setInterval(() => {
       fetchNFTMetadata();
-      console.log("currMintPrice", currMintPrice);
-      console.log("reservePrice", reservePrice);
+    //   console.log("currMintPrice", currMintPrice);
+    //   console.log("reservePrice", reservePrice);
     }, 1000);
     return () => clearInterval(interval);
   }, [nounNFTMeta, contract]);
 
   const addNounData = (newNoun) => {
-    console.log("newNoun", newNoun);
+    // console.log("newNoun", newNoun);
     const isDuplicate = nounNFTMeta
       ? nounNFTMeta.some(
           (noun) =>
