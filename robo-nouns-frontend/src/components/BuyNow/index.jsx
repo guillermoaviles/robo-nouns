@@ -1,46 +1,41 @@
 import { useContract } from "@thirdweb-dev/react";
-import { useEffect, useState } from "react";
 import { ethers } from "ethers";
-import Modal from "react-modal";
+import Image from "next/image";
+import { Fragment, useState } from "react";
+import { Dialog, Transition } from "@headlessui/react";
+import loadingNoun from "../../assets/loading-skull-noun.gif";
 
-export default function BuyNow({ nft, currMintPrice, nftNo }) {
-  const [loading, setLoading] = useState(false);
+export default function BuyNow({ nft, currMintPrice }) {
   const [showModal, setShowModal] = useState(false);
   const [transactionStatus, setTransactionStatus] = useState("");
+  const [transactionHash, setTransactionHash] = useState("");
 
   const { contract } = useContract(
     "0xC78A732E2f0f48B32aE26EFD2d39c6c9328ccDb5"
   );
 
   const call = async () => {
-    setLoading(true);
-
     try {
       if (!contract) {
         throw new Error("Contract is undefined");
       }
-
+      setShowModal(true);
+      setTransactionStatus("Pending");
       const args = [ethers.BigNumber.from(nft.blockNumber).toString()];
       const currMintPriceBigNumber = ethers.utils.parseEther(currMintPrice);
       const tx = await contract.call("buyNow", args, {
         value: currMintPriceBigNumber,
         gasLimit: 1000000,
       });
-
-      console.info("settleAuction transaction sent:", tx.hash);
-      setTransactionStatus("Pending");
-      setShowModal(true);
+      const receipt = tx.receipt;
+      console.log("receipt", receipt);
+      setTransactionStatus("Success");
+      setTransactionHash(`${tx.receipt.transactionHash}`);
     } catch (err) {
       console.error("contract call failure", err);
       setTransactionStatus("Failed");
       setShowModal(true);
-    } finally {
-      setLoading(false);
     }
-  };
-
-  const closeModal = () => {
-    setShowModal(false);
   };
 
   return (
@@ -52,7 +47,10 @@ export default function BuyNow({ nft, currMintPrice, nftNo }) {
         height="60"
         viewBox="0, 0, 400,150"
       >
-        <a className="BuyBtn btn-primary hover:text-nouns-lime hover:scale-105 " onClick={call}>
+        <a
+          className="BuyBtn btn-primary hover:text-nouns-lime hover:scale-105 "
+          onClick={call}
+        >
           <g id="svgg">
             <path
               id="path0"
@@ -103,12 +101,127 @@ export default function BuyNow({ nft, currMintPrice, nftNo }) {
         </a>
       </svg>
 
-      <Modal isOpen={showModal} onRequestClose={closeModal}>
-        <h2>Transaction Status: {transactionStatus}</h2>
-        {transactionStatus === "Pending" && <p>Waiting for confirmation...</p>}
-        {transactionStatus === "Failed" && <p>Transaction failed.</p>}
-        <button onClick={closeModal}>Close</button>
-      </Modal>
+      <Transition.Root show={showModal} as={Fragment}>
+        <Dialog as="div" className="relative z-10" onClose={setShowModal}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 z-10 overflow-y-auto">
+            <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                enterTo="opacity-100 translate-y-0 sm:scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+              >
+                <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm">
+                  <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                    <div className="sm:flex sm:items-start">
+                      {/* <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center bg-[#70e890] sm:mx-0 sm:h-14 sm:w-14"> */}
+                      {transactionStatus === "Pending" && (
+                        <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center bg-[#70e890] sm:mx-0 sm:h-14 sm:w-14">
+                          <Image
+                            src={loadingNoun}
+                            alt={`Waiting Confirmation`}
+                            width={56}
+                            height={25}
+                          />
+                        </div>
+                      )}
+                      {transactionStatus === "Success" && (
+                        <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center bg-[#70e890] sm:mx-0 sm:h-14 sm:w-14">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            className="w-10 h-10"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </div>
+                      )}
+                      {transactionStatus === "Failed" && (
+                        <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center bg-red-600 sm:mx-0 sm:h-14 sm:w-14">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            className="w-10 h-10"
+                          >
+                            <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+                          </svg>
+                        </div>
+                      )}
+                      {/* </div> */}
+                      <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                        <Dialog.Title
+                          as="h3"
+                          className="text-base font-semibold leading-6 text-gray-900"
+                        >
+                          Transaction Status: {transactionStatus}
+                        </Dialog.Title>
+                        <div className="mt-2">
+                          {transactionStatus === "Pending" && (
+                            <p className="text-sm text-gray-500">
+                              Waiting for confirmation...
+                            </p>
+                          )}
+                          {transactionStatus === "Failed" && (
+                            <p className="text-sm text-gray-500">
+                              Transaction failed.
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                    <button
+                      type="button"
+                      className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
+                      onClick={() => setShowModal(false)}
+                    >
+                      Close
+                    </button>
+                    <div>
+                      {transactionStatus === "Success" && (
+                        <a
+                          href={`https://goerli.etherscan.io/tx/${transactionHash}`}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          <button
+                            type="button"
+                            className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 mr-28 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                          >
+                            View on Etherscan
+                          </button>
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition.Root>
     </div>
   );
 }
