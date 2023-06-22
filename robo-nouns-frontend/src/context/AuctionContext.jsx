@@ -10,7 +10,11 @@ export function useAuction() {
 }
 
 export function AuctionProvider({ children }) {
-	const [nounNFTMeta, setNounNFTMeta] = useState([]);
+	let length = 4;
+	const [nounNFTMeta, setNounNFTMeta] = useState(
+		Array.from({ length }, () => null)
+	);
+
 	const [reservePrice, setReservePrice] = useState("");
 	const [currMintPrice, setCurrMintPrice] = useState("");
 	const [targetPrice, setTargetPrice] = useState("");
@@ -76,16 +80,19 @@ export function AuctionProvider({ children }) {
 	}, [nounNFTMeta, contract]);
 
 	const addNounData = (newNoun) => {
-		// console.log("newNoun", newNoun);
 		const isDuplicate = nounNFTMeta
 			? nounNFTMeta.some(
 					(noun) =>
-						noun?.blockNumber.toNumber() === newNoun?.blockNumber.toNumber()
+						noun &&
+						newNoun &&
+						noun.blockNumber &&
+						newNoun.blockNumber &&
+						noun.blockNumber.toNumber() === newNoun.blockNumber.toNumber()
 			  )
 			: false;
 		if (!isDuplicate) {
 			const updatedNounNFTMeta = [newNoun, ...nounNFTMeta];
-			if (updatedNounNFTMeta.length > 4) {
+			if (updatedNounNFTMeta.length > length) {
 				updatedNounNFTMeta.pop();
 			}
 			setNounNFTMeta(updatedNounNFTMeta);
