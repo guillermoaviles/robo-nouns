@@ -91,10 +91,10 @@ const config: HardhatUserConfig = {
         localhost: {
             blockGasLimit: 15_000_000,
             chainId: 31337,
-            mining: {
-                auto: false,
-                interval: 12000, // 12 sec
-            },
+            // mining: {
+            //     auto: false,
+            //     interval: 12000, // 12 sec
+            // },
         },
         custom: {
             url: process.env.CUSTOM_NETWORK_URL || "",

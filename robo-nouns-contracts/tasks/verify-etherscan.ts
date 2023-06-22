@@ -1,15 +1,6 @@
 import { task, types } from "hardhat/config"
 import { ContractName, DeployedContract } from "./types"
 
-// prettier-ignore
-// These contracts require a fully qualified name to be passed because
-// they share bytecode with the underlying contract.
-const nameToFullyQualifiedName: Record<string, string> = {
-  NounsAuctionHouseProxy: 'contracts/proxies/NounsAuctionHouseProxy.sol:NounsAuctionHouseProxy',
-  NounsAuctionHouseProxyAdmin: 'contracts/proxies/NounsAuctionHouseProxyAdmin.sol:NounsAuctionHouseProxyAdmin',
-  NounsDAOLogicV1Harness: 'contracts/test/NounsDAOLogicV1Harness.sol:NounsDAOLogicV1Harness'
-};
-
 task("verify-etherscan", "Verify the contracts")
     .addParam(
         "contracts",
@@ -38,7 +29,6 @@ task("verify-etherscan", "Verify the contracts")
                     }
                     await hre.run("verify:verify", {
                         ...contract,
-                        contract: nameToFullyQualifiedName[contract.name],
                     })
                 } catch ({ message }) {
                     if (
