@@ -7,13 +7,21 @@
           "name": "_reservePrice",
           "type": "uint256"
         },
-        { "internalType": "int256", "name": "_targetPrice", "type": "int256" },
+        {
+          "internalType": "int256",
+          "name": "_targetPrice",
+          "type": "int256"
+        },
         {
           "internalType": "int256",
           "name": "_priceDecayPercent",
           "type": "int256"
         },
-        { "internalType": "int256", "name": "_perTimeUnit", "type": "int256" },
+        {
+          "internalType": "int256",
+          "name": "_perTimeUnit",
+          "type": "int256"
+        },
         {
           "internalType": "uint256",
           "name": "_priceDecayInterval",
@@ -24,7 +32,11 @@
           "name": "_targetSaleInterval",
           "type": "uint256"
         },
-        { "internalType": "address", "name": "_token", "type": "address" }
+        {
+          "internalType": "address",
+          "name": "_token",
+          "type": "address"
+        }
       ],
       "stateMutability": "nonpayable",
       "type": "constructor"
@@ -154,7 +166,13 @@
     {
       "inputs": [],
       "name": "decayConstant",
-      "outputs": [{ "internalType": "int256", "name": "", "type": "int256" }],
+      "outputs": [
+        {
+          "internalType": "int256",
+          "name": "",
+          "type": "int256"
+        }
+      ],
       "stateMutability": "view",
       "type": "function"
     },
@@ -162,7 +180,11 @@
       "inputs": [],
       "name": "fetchNextNoun",
       "outputs": [
-        { "internalType": "uint256", "name": "nounId", "type": "uint256" },
+        {
+          "internalType": "uint256",
+          "name": "nounId",
+          "type": "uint256"
+        },
         {
           "components": [
             {
@@ -170,18 +192,46 @@
               "name": "background",
               "type": "uint48"
             },
-            { "internalType": "uint48", "name": "body", "type": "uint48" },
-            { "internalType": "uint48", "name": "accessory", "type": "uint48" },
-            { "internalType": "uint48", "name": "head", "type": "uint48" },
-            { "internalType": "uint48", "name": "glasses", "type": "uint48" }
+            {
+              "internalType": "uint48",
+              "name": "body",
+              "type": "uint48"
+            },
+            {
+              "internalType": "uint48",
+              "name": "accessory",
+              "type": "uint48"
+            },
+            {
+              "internalType": "uint48",
+              "name": "head",
+              "type": "uint48"
+            },
+            {
+              "internalType": "uint48",
+              "name": "glasses",
+              "type": "uint48"
+            }
           ],
           "internalType": "struct INounsSeeder.Seed",
           "name": "seed",
           "type": "tuple"
         },
-        { "internalType": "string", "name": "svg", "type": "string" },
-        { "internalType": "uint256", "name": "price", "type": "uint256" },
-        { "internalType": "uint256", "name": "blockNumber", "type": "uint256" }
+        {
+          "internalType": "string",
+          "name": "svg",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "price",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "blockNumber",
+          "type": "uint256"
+        }
       ],
       "stateMutability": "view",
       "type": "function"
@@ -189,42 +239,78 @@
     {
       "inputs": [],
       "name": "getCurrentVRGDAPrice",
-      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
       "stateMutability": "view",
       "type": "function"
     },
     {
       "inputs": [],
       "name": "lastTokenBlock",
-      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
       "stateMutability": "view",
       "type": "function"
     },
     {
       "inputs": [],
       "name": "nounsDAO",
-      "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
       "stateMutability": "view",
       "type": "function"
     },
     {
       "inputs": [],
       "name": "owner",
-      "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
       "stateMutability": "view",
       "type": "function"
     },
     {
       "inputs": [],
       "name": "perTimeUnit",
-      "outputs": [{ "internalType": "int256", "name": "", "type": "int256" }],
+      "outputs": [
+        {
+          "internalType": "int256",
+          "name": "",
+          "type": "int256"
+        }
+      ],
       "stateMutability": "view",
       "type": "function"
     },
     {
       "inputs": [],
       "name": "priceDecayInterval",
-      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
       "stateMutability": "view",
       "type": "function"
     },
@@ -238,7 +324,13 @@
     {
       "inputs": [],
       "name": "reservePrice",
-      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
       "stateMutability": "view",
       "type": "function"
     },
@@ -257,7 +349,11 @@
     },
     {
       "inputs": [
-        { "internalType": "uint256", "name": "_perTimeUnit", "type": "uint256" }
+        {
+          "internalType": "uint256",
+          "name": "_perTimeUnit",
+          "type": "uint256"
+        }
       ],
       "name": "setPerTimeUnit",
       "outputs": [],
@@ -292,7 +388,11 @@
     },
     {
       "inputs": [
-        { "internalType": "int256", "name": "_targetPrice", "type": "int256" }
+        {
+          "internalType": "int256",
+          "name": "_targetPrice",
+          "type": "int256"
+        }
       ],
       "name": "setTargetPrice",
       "outputs": [],
@@ -315,27 +415,49 @@
     {
       "inputs": [],
       "name": "startTime",
-      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
       "stateMutability": "view",
       "type": "function"
     },
     {
       "inputs": [],
       "name": "targetPrice",
-      "outputs": [{ "internalType": "int256", "name": "", "type": "int256" }],
+      "outputs": [
+        {
+          "internalType": "int256",
+          "name": "",
+          "type": "int256"
+        }
+      ],
       "stateMutability": "view",
       "type": "function"
     },
     {
       "inputs": [],
       "name": "targetSaleInterval",
-      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
       "stateMutability": "view",
       "type": "function"
     },
     {
       "inputs": [
-        { "internalType": "uint256", "name": "timeSince", "type": "uint256" },
+        {
+          "internalType": "uint256",
+          "name": "timeSince",
+          "type": "uint256"
+        },
         {
           "internalType": "uint256",
           "name": "intervalTarget",
@@ -343,13 +465,23 @@
         }
       ],
       "name": "toTimeIntervalWadUnsafe",
-      "outputs": [{ "internalType": "int256", "name": "r", "type": "int256" }],
+      "outputs": [
+        {
+          "internalType": "int256",
+          "name": "r",
+          "type": "int256"
+        }
+      ],
       "stateMutability": "pure",
       "type": "function"
     },
     {
       "inputs": [
-        { "internalType": "address", "name": "newOwner", "type": "address" }
+        {
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
       ],
       "name": "transferOwnership",
       "outputs": [],
