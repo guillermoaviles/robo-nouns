@@ -137,7 +137,7 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
         override
         returns (uint256 nounId, INounsSeeder.Seed memory seed, string memory svg, uint256 price, uint256 blockNumber)
     {
-        uint256 nextId = roboNounsToken.currentNounId() + 1;
+        uint256 nextId = roboNounsToken.currentNounId();
         INounsSeeder seeder = INounsSeeder(roboNounsToken.seeder());
         INounsDescriptorMinimal roboDescriptor = roboNounsToken.roboDescriptor();
         INounsDescriptorV2 descriptor = INounsDescriptorV2(address(roboNounsToken.roboDescriptor()));

@@ -6,7 +6,12 @@ import saveDeployedContract from "./utils/saveDeployment"
 interface Contract {
     name?: string
     address?: string
-    args?: (string | number | BigNumber | (() => string | undefined))[]
+    constructorArguments?: (
+        | string
+        | number
+        | BigNumber
+        | (() => string | undefined)
+    )[]
     instance?: EthersContract
     libraries?: () => Record<string, string>
     waitForConfirmation?: boolean
@@ -24,13 +29,6 @@ task("deploy-goerli", "Deploy contracts to goerli").setAction(
         const nonce = await deployer.getTransactionCount()
         const NOUNS_ART_NONCE_OFFSET = 4
         const VRGDA_NONCE_OFFSET = 7
-        // const NOUNS_DESCRIPTOR_MAINNET =
-        //     "0x6229c811d04501523c6058bfaac29c91bb586268"
-        // const NOUNS_ART_MAINNET = "0x48A7C62e2560d1336869D6550841222942768C49"
-        // const NOUNS_ART_GOERLI = "0xf786148F2B31d12A9B0795EBF39c3a0330760da4"
-        // const NOUNS_DESCRIPTOR_GOERLI =
-        //     "0xB6D0AF8C27930E13005Bf447d54be8235724a102"
-        // const NOUNS_INFLATOR = "0xa2acee85Cd81c42BcAa1FeFA8eD2516b68872Dbe"
 
         console.log("deploying to chain: ", network.chainId)
         console.log("deploying addr: ", deployer.address)
@@ -50,7 +48,7 @@ task("deploy-goerli", "Deploy contracts to goerli").setAction(
             SVGRenderer: { name: "SVGRenderer" },
             NounsDescriptorV2: {
                 name: "NounsDescriptorV2",
-                args: [
+                constructorArguments: [
                     expectedRoboNounsArtAddress,
                     () => contracts.SVGRenderer.instance?.address,
                 ],
@@ -62,7 +60,7 @@ task("deploy-goerli", "Deploy contracts to goerli").setAction(
             Inflator: { name: "Inflator" },
             NounsArt: {
                 name: "NounsArt",
-                args: [
+                constructorArguments: [
                     () => contracts.NounsDescriptorV2.instance?.address,
                     () => contracts.Inflator.instance?.address,
                 ],
@@ -70,7 +68,7 @@ task("deploy-goerli", "Deploy contracts to goerli").setAction(
             RoboNounsSeeder: { name: "RoboNounsSeeder" },
             RoboNounsToken: {
                 name: "RoboNounsToken",
-                args: [
+                constructorArguments: [
                     expectedVRGDAAddress,
                     () => contracts.NounsDescriptorV2.instance?.address,
                     () => contracts.RoboNounsSeeder.instance?.address,
@@ -78,7 +76,7 @@ task("deploy-goerli", "Deploy contracts to goerli").setAction(
             },
             RoboNounsVRGDA: {
                 name: "RoboNounsVRGDA",
-                args: [
+                constructorArguments: [
                     ethers.utils.parseEther("0.0001"), // reservePrice = 0.01 ETH = "100000000000000"
                     ethers.utils.parseEther("0.0015"), //  targetPrice = 0.15 ETH = "1500000000000000"
                     "31" + "0000000000000000", // priceDecayPercent = 31% or 0.31 * 1e18 = "310000000000000000"
@@ -97,12 +95,10 @@ task("deploy-goerli", "Deploy contracts to goerli").setAction(
             })
 
             const deployedContract = await factory.deploy(
-                ...(contract.args?.map((a) =>
+                ...(contract.constructorArguments?.map((a) =>
                     typeof a === "function" ? a() : a
                 ) ?? [])
             )
-
-            contract.address = deployedContract.address
 
             if (contract.waitForConfirmation) {
                 await deployedContract.deployed()
@@ -122,18 +118,18 @@ task("deploy-goerli", "Deploy contracts to goerli").setAction(
             await delay(3)
         }
 
-        // if (network.name !== "localhost") {
-        //     console.log(
-        //         "Waiting 1 minute before verifying contracts on Etherscan"
-        //     )
-        //     await delay(30)
+        if (network.chainId !== 33137) {
+            console.log(
+                "Waiting 1 minute before verifying contracts on Etherscan"
+            )
+            await delay(60)
 
-        //     console.log("Verifying contracts on Etherscan...")
-        //     await run("verify-etherscan", {
-        //         contracts,
-        //     })
-        //     console.log("Verify complete.")
-        // }
+            console.log("Verifying contracts on Etherscan...")
+            await run("verify-etherscan", {
+                contracts,
+            })
+            console.log("Verify complete.")
+        }
 
         return contracts
     }
