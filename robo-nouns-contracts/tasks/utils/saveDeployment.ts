@@ -3,7 +3,7 @@ import path from "path"
 
 const DESTINATION = path.join(__dirname, "../utils/deployments.json")
 
-export default async function (chain: number, name: string, address: string) {
+export default async function (chain: number, name: string, address: string, abi: object) {
     let deployments
     try {
         const fileContent = await fs.readFile(DESTINATION, "utf8")
@@ -14,7 +14,11 @@ export default async function (chain: number, name: string, address: string) {
     }
 
     // This line will always add or update the contract information
-    deployments[name] = address
+    if(!deployments[name]){
+        deployments[name] = {}
+    }
+    deployments[name].address = address
+    deployments[name].abi = abi
 
     await fs.writeFile(DESTINATION, JSON.stringify(deployments))
 }

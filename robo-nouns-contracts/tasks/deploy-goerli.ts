@@ -110,10 +110,13 @@ task("deploy-goerli", "Deploy contracts to goerli").setAction(
                 `${name} deployment saved and deployed to ${deployedContract.address}`
             )
 
+            const abi = factory.interface.format('json');
+
             await saveDeployedContract(
                 network.chainId,
                 name,
-                deployedContract.address
+                deployedContract.address,
+                abi
             )
             await delay(3)
         }
