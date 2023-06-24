@@ -1,0 +1,12 @@
+.husky
+artifacts
+cache
+docs
+node_modules
+
+coverage*
+.*rc
+.env*
+.*ignore
+tags*
+yarn*
