@@ -1,30 +1,47 @@
-import { useState, useEffect } from "react";
+import { useAuction } from "@/context/AuctionContext"
+import { useState, useEffect } from "react"
 
 function CountdownTimer() {
-  const [timeLeft, setTimeLeft] = useState(0);
+    const { contract } = useAuction()
+    const [globalStartTime, setGlobalStartTime] = useState(0)
+    const [priceDecayInterval, setPriceDecayInterval] = useState(0)
+    const [timeLeft, setTimeLeft] = useState(0)
+    const minutes = Math.floor(timeLeft / 60)
+    const seconds = timeLeft % 60
 
-  const globalStartTime = 1686788976;
+    useEffect(() => {
+        async function fetchStartTime() {
+            const startTime = await contract.startTime()
+            setGlobalStartTime(startTime.toNumber())
+        }
 
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      const currentTime = new Date().getTime();
-      const elapsedTime = Math.floor((currentTime - globalStartTime) / 1000);
-      const adjustedElapsedTime = elapsedTime + 210; 
-      const timeLeftOnTimer = 300 - (adjustedElapsedTime % 300);
-      setTimeLeft(timeLeftOnTimer);
-    }, 1000);
+        async function fetchPriceDecayInterval() {
+            const priceDecayInterval = await contract.priceDecayInterval()
+            setPriceDecayInterval(priceDecayInterval.toNumber())
+        }
 
-    return () => clearInterval(intervalId);
-  }, [globalStartTime]);
+        fetchStartTime()
+        fetchPriceDecayInterval()
+    }, [])
 
-  const minutes = Math.floor(timeLeft / 60);
-  const seconds = timeLeft % 60;
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            const currentTime = Math.floor(new Date().getTime() / 1000)
+            const elapsedTime = Math.floor(currentTime - globalStartTime)
 
-  return (
-    <span className="text-dark-gray md:text-3xl font-['PT Sans']">
-      {minutes}:{seconds < 10 ? "0" + seconds : seconds}
-    </span>
-  );
+            const timeLeftOnTimer =
+                priceDecayInterval - (elapsedTime % priceDecayInterval)
+            setTimeLeft(timeLeftOnTimer)
+        }, 1000)
+
+        return () => clearInterval(intervalId)
+    }, [globalStartTime, priceDecayInterval, contract])
+
+    return (
+        <span className="text-dark-gray md:text-3xl font-['PT Sans']">
+            {minutes}:{seconds < 10 ? "0" + seconds : seconds}
+        </span>
+    )
 }
 
-export default CountdownTimer;
+export default CountdownTimer
