@@ -1,26 +1,13 @@
-import { ethers, utils } from "ethers";
-import { useAuction } from "@/context/AuctionContext.jsx";
+import { useAuction } from "@/context/AuctionContext.jsx"
 
 export default function AuctionDetails() {
-  const { currMintPrice, reservePrice } = useAuction();
+    const { currMintPrice } = useAuction()
 
-  const formatPrice = (price) => {
-    if (price) {
-      const parsedPrice = ethers.utils.parseEther(price.toString());
-      const formattedPrice = utils.formatEther(parsedPrice);
-      return Number(formattedPrice).toFixed(3);
-    }
-    return "";
-  };
-
-  return (
-    <div className="w-fit md:w-full">
-      <h2 className="text-[#1C2228] md:text-3xl font-['PT Sans']">
-        Ξ
-        {currMintPrice > reservePrice
-          ? formatPrice(currMintPrice)
-          : reservePrice}
-      </h2>
-    </div>
-  );
+    return (
+        <div className="w-fit md:w-full">
+            <h2 className="text-[#1C2228] md:text-3xl font-['PT Sans']">
+                Ξ{currMintPrice || "0.00"}
+            </h2>
+        </div>
+    )
 }
