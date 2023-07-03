@@ -58,6 +58,7 @@ export function AuctionProvider({ children }) {
             fetchNFTMetadata()
             console.log(currMintPrice)
             console.log(reservePrice)
+            console.log(lastTokenBlock)
         }, 1000)
         return () => clearInterval(interval)
     }, [nounNFTMeta])
