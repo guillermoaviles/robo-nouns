@@ -14,10 +14,12 @@ export function AuctionProvider({ children }) {
     const [nounNFTMeta, setNounNFTMeta] = useState(
         Array.from({ length }, () => null)
     )
-    const [lastTokenBlock, setLastTokenBlock] = useState(0)
-    const [reservePrice, setReservePrice] = useState("")
-    const [currMintPrice, setCurrMintPrice] = useState("")
-    const [targetPrice, setTargetPrice] = useState("")
+    const [lastTokenBlock, setLastTokenBlock] = useState(0);
+    const [globalStartTime, setGlobalStartTime] = useState(0)
+    const [priceDecayInterval, setPriceDecayInterval] = useState(0)
+    const [reservePrice, setReservePrice] = useState("");
+    const [currMintPrice, setCurrMintPrice] = useState("");
+    const [targetPrice, setTargetPrice] = useState("");
 
     const providerUrl =
         "https://eth-goerli.g.alchemy.com/v2/8kIFZ8iBRuBDAQqIH73BfPB8ESBwbIUt"
@@ -33,18 +35,20 @@ export function AuctionProvider({ children }) {
 
     const fetchNFTMetadata = async () => {
         try {
-            const lastTokenBlock = await contract.lastTokenBlock()
-            setLastTokenBlock(lastTokenBlock.toNumber())
-
-            const nounMeta = await contract.fetchNextNoun()
-            addNounData(nounMeta)
-
-            const reservePrice = await contract.reservePrice()
-            const currVRGDAPrice = await contract.getCurrentVRGDAPrice()
+            const lastTokenBlock = await contract.lastTokenBlock();
+            setLastTokenBlock(lastTokenBlock.toNumber());
+            const nounMeta = await contract.fetchNextNoun();
+            addNounData(nounMeta);
+            const startTime = await contract.startTime();
+            setGlobalStartTime(startTime.toNumber());
+            const priceDecayInterval = await contract.priceDecayInterval();
+            setPriceDecayInterval(priceDecayInterval.toNumber());
+            const reservePrice = await contract.reservePrice();
+            const currVRGDAPrice = await contract.getCurrentVRGDAPrice();
             const maxPrice = reservePrice.gt(currVRGDAPrice)
                 ? reservePrice
                 : currVRGDAPrice
-            setCurrMintPrice(ethers.utils.formatEther(maxPrice))
+            setCurrMintPrice(ethers.utils.formatEther(maxPrice));
 
             const targetPrice = await contract.targetPrice()
             setTargetPrice(ethers.utils.formatEther(targetPrice))
@@ -90,6 +94,8 @@ export function AuctionProvider({ children }) {
         nounNFTMeta,
         setNounNFTMeta,
         reservePrice,
+        globalStartTime,
+        priceDecayInterval,
         currMintPrice,
         targetPrice,
     }

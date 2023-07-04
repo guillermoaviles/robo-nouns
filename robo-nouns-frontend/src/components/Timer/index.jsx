@@ -2,27 +2,10 @@ import { useAuction } from "@/context/AuctionContext"
 import { useState, useEffect } from "react"
 
 function CountdownTimer() {
-    const { contract } = useAuction()
-    const [globalStartTime, setGlobalStartTime] = useState(0)
-    const [priceDecayInterval, setPriceDecayInterval] = useState(0)
+    const { globalStartTime, priceDecayInterval } = useAuction()
     const [timeLeft, setTimeLeft] = useState(0)
     const minutes = Math.floor(timeLeft / 60)
     const seconds = timeLeft % 60
-
-    useEffect(() => {
-        async function fetchStartTime() {
-            const startTime = await contract.startTime()
-            setGlobalStartTime(startTime.toNumber())
-        }
-
-        async function fetchPriceDecayInterval() {
-            const priceDecayInterval = await contract.priceDecayInterval()
-            setPriceDecayInterval(priceDecayInterval.toNumber())
-        }
-
-        fetchStartTime()
-        fetchPriceDecayInterval()
-    }, [])
 
     useEffect(() => {
         const intervalId = setInterval(() => {
@@ -35,7 +18,7 @@ function CountdownTimer() {
         }, 1000)
 
         return () => clearInterval(intervalId)
-    }, [globalStartTime, priceDecayInterval, contract])
+    }, [globalStartTime, priceDecayInterval])
 
     return (
         <span className="text-dark-gray md:text-3xl font-['PT Sans']">
