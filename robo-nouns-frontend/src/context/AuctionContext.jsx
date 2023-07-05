@@ -44,6 +44,7 @@ export function AuctionProvider({ children }) {
             const priceDecayInterval = await contract.priceDecayInterval();
             setPriceDecayInterval(priceDecayInterval.toNumber());
             const reservePrice = await contract.reservePrice();
+            setReservePrice(ethers.utils.formatEther(reservePrice))
             const currVRGDAPrice = await contract.getCurrentVRGDAPrice();
             const maxPrice = reservePrice.gt(currVRGDAPrice)
                 ? reservePrice
@@ -60,9 +61,10 @@ export function AuctionProvider({ children }) {
     useEffect(() => {
         const interval = setInterval(() => {
             fetchNFTMetadata()
-            console.log(currMintPrice)
-            console.log(reservePrice)
-            console.log(lastTokenBlock)
+            console.log("currMintPrice", currMintPrice)
+            console.log("reservePrice", reservePrice)
+            console.log("lastTokenBlock", lastTokenBlock)
+            console.log("currBlockNumber", nounNFTMeta[0]?.blockNumber.toNumber())
         }, 1000)
         return () => clearInterval(interval)
     }, [nounNFTMeta])

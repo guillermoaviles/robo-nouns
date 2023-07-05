@@ -23,7 +23,7 @@ export default function BuyNow({ nft, currMintPrice }) {
             }
             console.log("lastTokenBlock", lastTokenBlock)
             console.log(
-                "currBlockNuumber",
+                "currBlockNumber",
                 ethers.BigNumber.from(nft.blockNumber).toString()
             )
             setShowModal(true)
@@ -48,7 +48,7 @@ export default function BuyNow({ nft, currMintPrice }) {
 
     return (
         <div className="input-group">
-            {lastTokenBlock >= nft?.blockNumber ? (
+            {lastTokenBlock - 2 >= nft?.blockNumber ? (
                 <svg
                     className="cursor-pointer overflow-visible mx-auto"
                     id="svg"
@@ -57,11 +57,7 @@ export default function BuyNow({ nft, currMintPrice }) {
                     viewBox="0, 0, 400,150"
                 >
                     <a
-                        className={`BuyBtn btn-primary hover:text-nouns-lime hover:scale-105 ${
-                            lastTokenBlock >= nft?.blockNumber
-                                ? "shaded-out"
-                                : ""
-                        }`}
+                        className={"BuyBtn btn-primary hover:text-nouns-lime hover:scale-105"}
                         onClick={null}
                     >
                         <g id="svgg">
