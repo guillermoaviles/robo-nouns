@@ -29,7 +29,6 @@ task("verify-etherscan", "Verify the Solidity contracts on Etherscan")
                     }
                     await hre.run("verify:verify", {
                         ...contract,
-                        contract: [contract.name],
                     })
                 } catch ({ message }) {
                     if (

@@ -36,11 +36,12 @@ task("deploy-goerli", "Deploy contracts to goerli").setAction(
         ).deploy()
         contracts.NFTDescriptorV2 = {
             name: "NFTDescriptorV2",
-            address: library.address,
+            address: library.address.toString(),
             instance: library,
             constructorArguments: [],
             libraries: {},
         }
+        await delay(3)
 
         const renderer = await (
             await ethers.getContractFactory("SVGRenderer", deployer)
@@ -52,6 +53,7 @@ task("deploy-goerli", "Deploy contracts to goerli").setAction(
             constructorArguments: [],
             libraries: {},
         }
+        await delay(3)
 
         const nounsDescriptorFactory = await ethers.getContractFactory(
             "NounsDescriptorV2",
@@ -61,6 +63,8 @@ task("deploy-goerli", "Deploy contracts to goerli").setAction(
                 },
             }
         )
+        await delay(3)
+
         const nounsDescriptor = await nounsDescriptorFactory.deploy(
             expectedRoboNounsArtAddress,
             renderer.address
@@ -69,7 +73,7 @@ task("deploy-goerli", "Deploy contracts to goerli").setAction(
             name: "NounsDescriptorV2",
             address: nounsDescriptor.address,
             constructorArguments: [
-                expectedRoboNounsArtAddress,
+                expectedRoboNounsArtAddress.toString(),
                 renderer.address,
             ],
             instance: nounsDescriptor,
@@ -77,6 +81,7 @@ task("deploy-goerli", "Deploy contracts to goerli").setAction(
                 NFTDescriptorV2: library.address,
             },
         }
+        await delay(3)
 
         const inflator = await (
             await ethers.getContractFactory("Inflator", deployer)
@@ -88,6 +93,7 @@ task("deploy-goerli", "Deploy contracts to goerli").setAction(
             constructorArguments: [],
             libraries: {},
         }
+        await delay(3)
 
         const art = await (
             await ethers.getContractFactory("NounsArt", deployer)
@@ -99,6 +105,7 @@ task("deploy-goerli", "Deploy contracts to goerli").setAction(
             instance: art,
             libraries: {},
         }
+        await delay(3)
 
         const roboNounsSeeder = await (
             await ethers.getContractFactory("RoboNounsSeeder", deployer)
@@ -110,6 +117,7 @@ task("deploy-goerli", "Deploy contracts to goerli").setAction(
             instance: roboNounsSeeder,
             libraries: {},
         }
+        await delay(3)
 
         const roboNounsToken = await (
             await ethers.getContractFactory("RoboNounsToken", deployer)
@@ -129,6 +137,7 @@ task("deploy-goerli", "Deploy contracts to goerli").setAction(
             instance: roboNounsToken,
             libraries: {},
         }
+        await delay(3)
 
         const roboNounsVRGDA = await (
             await ethers.getContractFactory("RoboNounsVRGDA", deployer)
@@ -157,52 +166,6 @@ task("deploy-goerli", "Deploy contracts to goerli").setAction(
             libraries: {},
         }
 
-        // const contracts: Record<ContractName, Contract> = {
-        //     NFTDescriptorV2: { name: "NFTDescriptorV2" },
-        //     SVGRenderer: { name: "SVGRenderer" },
-        //     NounsDescriptorV2: {
-        //         name: "NounsDescriptorV2",
-        //         constructorArguments: [
-        //             expectedRoboNounsArtAddress,
-        //             () => contracts.SVGRenderer.instance?.address,
-        //         ],
-        //         libraries: () => ({
-        //             NFTDescriptorV2: contracts.NFTDescriptorV2.instance
-        //                 ?.address as string,
-        //         }),
-        //     },
-        //     Inflator: { name: "Inflator" },
-        //     NounsArt: {
-        //         name: "NounsArt",
-        //         constructorArguments: [
-        //             () => contracts.NounsDescriptorV2.instance?.address,
-        //             () => contracts.Inflator.instance?.address,
-        //         ],
-        //     },
-        //     RoboNounsSeeder: { name: "RoboNounsSeeder" },
-        //     RoboNounsToken: {
-        //         name: "RoboNounsToken",
-        //         constructorArguments: [
-        //             expectedVRGDAAddress,
-        //             () => contracts.NounsDescriptorV2.instance?.address,
-        //             () => contracts.RoboNounsSeeder.instance?.address,
-        //         ],
-        //     },
-        //     RoboNounsVRGDA: {
-        //         name: "RoboNounsVRGDA",
-        //         constructorArguments: [
-        //             ethers.utils.parseEther("0.0001"), // reservePrice = 0.01 ETH = "100000000000000"
-        //             ethers.utils.parseEther("0.0015"), //  targetPrice = 0.15 ETH = "1500000000000000"
-        //             "31" + "0000000000000000", // priceDecayPercent = 31% or 0.31 * 1e18 = "310000000000000000"
-        //             "1" + "000000000000000000", // perTimeUnit = 1 nouns per 15 min or 1 * 1e18 = "1000000000000000000"
-        //             "300", // updateInterval = 5 minutes
-        //             "900", // targetSaleInterval = 15 minutes
-        //             () => contracts.RoboNounsToken.instance?.address,
-        //         ],
-        //         waitForConfirmation: true,
-        //     },
-        // }
-
         console.log("Waiting for contracts to be deployed")
         for (const c of Object.values<DeployedContract>(contracts)) {
             console.log(`Waiting for ${c.name} to be deployed`)
@@ -224,38 +187,6 @@ task("deploy-goerli", "Deploy contracts to goerli").setAction(
             nounsDescriptor: contracts.NounsDescriptorV2.address,
         })
         console.log("Population complete.")
-
-        // for (const [name, contract] of Object.entries(contracts)) {
-        //     const factory = await ethers.getContractFactory(name, {
-        //         libraries: contract?.libraries?.(),
-        //     })
-
-        //     const deployedContract = await factory.deploy(
-        //         ...(contract.constructorArguments?.map((a) =>
-        //             typeof a === "function" ? a() : a
-        //         ) ?? [])
-        //     )
-
-        //     if (contract.waitForConfirmation) {
-        //         await deployedContract.deployed()
-        //     }
-
-        //     contracts[name as ContractName].instance = deployedContract
-        //     contracts[name as ContractName].address = deployedContract.address
-        //     console.log(
-        //         `${name} deployment saved and deployed to ${deployedContract.address}`
-        //     )
-
-        //     const abi = factory.interface.format("json")
-
-        //     await saveDeployedContract(
-        //         network.chainId,
-        //         name,
-        //         deployedContract.address,
-        //         abi
-        //     )
-        //     await delay(3)
-        // }
 
         if (network.chainId !== 33137) {
             console.log(

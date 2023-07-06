@@ -12,7 +12,7 @@ import { RoboNounsToken } from "contracts/RoboNounsToken.sol";
 import { toWadUnsafe, toDaysWadUnsafe, wadLn } from "solmate/src/utils/SignedWadMath.sol";
 
 contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
-    address public constant nounsDAO = 0x0BC3807Ec262cB779b38D65b38158acC3bfedE10;
+    address public constant nounsDAO = 0xA7F1653E99CdE8f76839C70c64122456AFA5Cf6E;
 
     /// @notice Time of sale of the first RoboNoun, used to calculate VRGDA price
     uint256 public startTime;
@@ -88,15 +88,6 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
 
         // Sends token to caller.
         roboNounsToken.transferFrom(address(this), msg.sender, mintedNounId);
-
-        // refund
-        uint256 refund = msg.value - price;
-        if (refund > 0) {
-            _sendETH(msg.sender, refund);
-        }
-
-        // send the funds to the DAO
-        _sendETH(nounsDAO, address(this).balance);
 
         emit AuctionSettled(mintedNounId, msg.sender, price);
     }
@@ -190,9 +181,8 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
         }
     }
 
-    function _sendETH(address to, uint256 _value) internal {
-        require(_value > 0, "0 funds to send");
-        (bool sent, ) = to.call{ value: _value }("");
+    function _sendETH(uint256 _value) internal {
+        (bool sent, ) = payable(nounsDAO).call{ value: _value }("");
         require(sent, "failed to send eth");
     }
 }
