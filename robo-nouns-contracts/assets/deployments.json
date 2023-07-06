@@ -1,6 +1,6 @@
 {
     "NFTDescriptorV2": {
-        "address": "0xcA803f900D00169a518db8b2249e64e1b6D2f8AE",
+        "address": "0xc3102da8bd3516F5638eb352E5beC128E82C9a9C",
         "abi": [
             {
                 "type": "function",
@@ -98,7 +98,7 @@
         ]
     },
     "NounsDescriptorV2": {
-        "address": "0x2B9388d017d35FD6149675fA6A72E30CB5850831",
+        "address": "0x8fD5565c1355c5D11311F862ce35ecaCB47568E5",
         "abi": [
             {
                 "type": "constructor",
@@ -1010,7 +1010,7 @@
         ]
     },
     "RoboNounsVRGDA": {
-        "address": "0xf6a06a014DB77097EbC5Bf9076Fc5e6E90df0727",
+        "address": "0x7A4c7c4Ca68123329DF2Ee959B324e5Ae104bB1c",
         "abi": [
             {
                 "type": "constructor",
@@ -1524,7 +1524,7 @@
         ]
     },
     "SVGRenderer": {
-        "address": "0x0A1e0969734F8844012Ac9C3aAdaAe570060E045",
+        "address": "0xb1D40A935Ef07f4E233C8d0fddb1A8dC169433f0",
         "abi": [
             {
                 "type": "function",
@@ -1626,7 +1626,7 @@
         ]
     },
     "Inflator": {
-        "address": "0x15765307cE7eB8fF6be1E99dA88e0A511a2cb312",
+        "address": "0x8FF15BEA4D24Ee42983d5204a0d0caa5C762bc53",
         "abi": [
             {
                 "type": "function",
@@ -1656,7 +1656,7 @@
         ]
     },
     "NounsArt": {
-        "address": "0xab70a85a2D1F5b04880Fc0e12D8FccAb144c4034",
+        "address": "0x262E499B65D0f783D2d4c85A055947E56CD4D16a",
         "abi": [
             {
                 "type": "constructor",
@@ -2442,7 +2442,7 @@
         ]
     },
     "RoboNounsSeeder": {
-        "address": "0x0e12049449d0C9350f132C1477825ce7a95498DC",
+        "address": "0xA1320Dee0C7626cf82AE20a6540A5b67F866D0CE",
         "abi": [
             {
                 "type": "function",
@@ -2495,7 +2495,7 @@
         ]
     },
     "RoboNounsToken": {
-        "address": "0x2c91d1CAae203487335725f6729d05De1f25F78C",
+        "address": "0xF548f3baeAB0254a8eF5505Fc4aB16D4BC1cB4Cb",
         "abi": [
             {
                 "type": "constructor",

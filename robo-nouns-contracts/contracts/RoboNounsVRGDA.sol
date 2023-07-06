@@ -76,7 +76,7 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
         );
 
         // making it unable to get the a token with the traits for any previous token (pool is emptied when a noun is bought, this prevents buying duplicates)
-        lastTokenBlock = block.number;
+        lastTokenBlock = expectedBlockNumber;
 
         // Validate the purchase request against the VRGDA rules.
         uint256 vrgdaPrice = getCurrentVRGDAPrice();
