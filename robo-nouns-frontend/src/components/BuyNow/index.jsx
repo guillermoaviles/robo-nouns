@@ -7,14 +7,12 @@ import loadingNoun from "../../assets/loading-skull-noun.gif"
 import { useAuction } from "@/context/AuctionContext"
 
 export default function BuyNow({ nft, currMintPrice }) {
-    const { lastTokenBlock } = useAuction()
+    const { lastTokenBlock, auctionContractAddress } = useAuction()
     const [showModal, setShowModal] = useState(false)
     const [transactionStatus, setTransactionStatus] = useState("")
     const [transactionHash, setTransactionHash] = useState("")
 
-    const { contract } = useContract(
-        "0x7330fF513F4BF1CcbcC7E42eF34907eE4708Fa2e"
-    )
+    const { contract } = useContract(auctionContractAddress)
 
     const call = async () => {
         try {

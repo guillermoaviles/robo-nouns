@@ -20,12 +20,12 @@ export function AuctionProvider({ children }) {
     const [reservePrice, setReservePrice] = useState("")
     const [currMintPrice, setCurrMintPrice] = useState("")
     const [targetPrice, setTargetPrice] = useState("")
+    const auctionContractAddress = deployments.RoboNounsVRGDA.address
 
     const providerUrl =
         "https://eth-goerli.g.alchemy.com/v2/8kIFZ8iBRuBDAQqIH73BfPB8ESBwbIUt"
     const provider = new ethers.providers.JsonRpcProvider(providerUrl)
 
-    const auctionContractAddress = deployments.RoboNounsVRGDA.address
     const auctionContractABI = deployments.RoboNounsVRGDA.abi
     const contract = new ethers.Contract(
         auctionContractAddress,
@@ -105,6 +105,7 @@ export function AuctionProvider({ children }) {
     }
 
     const auctionData = {
+        auctionContractAddress,
         contract,
         lastTokenBlock,
         nounNFTMeta,
