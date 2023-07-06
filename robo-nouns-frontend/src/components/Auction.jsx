@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 import moment from "moment"
 import AuctionPrice from "./AuctionPrice"
 import AuctionPriceRange from "./AuctionPriceRange"
@@ -9,25 +9,64 @@ import { useAuction } from "@/context/AuctionContext.jsx"
 
 const Auction = () => {
     const { nounNFTMeta, currMintPrice } = useAuction()
+    const [flexDirection, setFlexDirection] = useState("row")
+
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth <= 1040) {
+                setFlexDirection("column")
+            } else {
+                setFlexDirection("row")
+            }
+        }
+
+        window.addEventListener("resize", handleResize)
+        handleResize()
+
+        return () => {
+            window.removeEventListener("resize", handleResize)
+        }
+    }, [])
 
     return (
-        <div className="container md:bg-nouns-lime mx-auto mt-2 md:pb-0 pb-10">
-            <div className="flex flex-wrap md:mx-0 -mt-0">
-                <NounImg />
-                <div className="flex w-full lg:w-1/2 md:bg-nouns-lime items-center md:mx-auto pt-6 md:pt-0 pb-0 md:min-h-[520px]">
+        <div className="lg:w-full md:bg-nouns-lime mx-auto mt-2">
+            <div className="flex flex-wrap justify-center md:mx-0 -mt-0">
+                <div className="flex w-full lg:w-1/2 lg:pr-10px">
+                    <NounImg />
+                </div>
+                <div
+                    className={`flex w-full lg:w-1/2 md:bg-nouns-lime items-center md:mx-auto pt-6 md:pt-0 pb-0 md:min-h-[520px] md:min-w-[520px] ${
+                        flexDirection === "column" ? "bg-dark-gray" : ""
+                    }`}
+                    style={{
+                        flexDirection: flexDirection,
+                    }}
+                >
                     <div>
                         <div className="mb-2">
                             <div className="flex flex-col mb-0">
                                 <div className="w-full">
                                     <div className="w-auto">
-                                        <h4 className="text-dark-gray mt-1 text-lg font-bold">
+                                        <h4
+                                            className={`text-dark-gray mt-1 text-lg font-bold ${
+                                                flexDirection === "column"
+                                                    ? "text-white"
+                                                    : ""
+                                            }`}
+                                        >
                                             {moment().format("MMMM Do, YYYY")}
                                         </h4>
                                     </div>
                                 </div>
                                 <div className="w-full">
                                     <div className="font-press">
-                                        <h1 className="text-dark-gray text-2xl md:text-4xl mt-2">
+                                        <h1
+                                            className={`text-dark-gray text-2xl md:text-4xl mt-2 ${
+                                                flexDirection === "column"
+                                                    ? "text-white"
+                                                    : ""
+                                            }`}
+                                        >
                                             Robo Noun{" "}
                                             {nounNFTMeta[0]?.nounId?.toNumber() ||
                                                 "0"}
@@ -38,7 +77,13 @@ const Auction = () => {
                             <div className="flex flex-col md:flex-row mb-0">
                                 <div className="border-r-[#79809c49] w-full lg:w-1/3">
                                     <div className="px-0 flex flex-row justify-between md:justify-normal items-center md:block">
-                                        <h4 className="text-dark-gray text-lg font-bold">
+                                        <h4
+                                            className={`text-dark-gray text-lg font-bold ${
+                                                flexDirection === "column"
+                                                    ? "text-white"
+                                                    : ""
+                                            }`}
+                                        >
                                             Current price
                                         </h4>
                                         <AuctionPrice />
@@ -48,7 +93,14 @@ const Auction = () => {
                                     <div className="md:px-10 flex flex-row justify-between md:justify-normal md:block items-center">
                                         <div className=" w-full">
                                             <div className="flex items-center">
-                                                <h4 className="text-dark-gray mb-0 md:mb-1 text-lg font-bold">
+                                                <h4
+                                                    className={`text-dark-gray mb-0 md:mb-1 text-lg font-bold ${
+                                                        flexDirection ===
+                                                        "column"
+                                                            ? "text-white"
+                                                            : ""
+                                                    }`}
+                                                >
                                                     Price drops in
                                                 </h4>
                                             </div>

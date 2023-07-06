@@ -10,7 +10,9 @@ const PriceBlock: React.FC<{
         <>
             <div
                 style={{
-                    border: isActive ? "2px solid #000" : "none",
+                    // border: isActive ? "2px solid #e7e9eb" : "none",
+                    boxShadow: isActive ? "0px 0px 3.5px 3.5px #807f7e" : "none",
+                    borderRadius: "5px"
                 }}
                 className={`md:w-[30px] md:h-[30px] w-[21px] h-[21px] ${bgColor}`}
             ></div>
