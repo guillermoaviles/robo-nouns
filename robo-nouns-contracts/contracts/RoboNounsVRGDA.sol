@@ -89,6 +89,15 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
         // Sends token to caller.
         roboNounsToken.transferFrom(address(this), msg.sender, mintedNounId);
 
+        // refund
+        uint refund = msg.value - price;
+        if (msg.value > price) {
+            _sendETH(msg.sender, refund);
+        }
+
+        // Send funds to DAO.
+        _sendETH(nounsDAO, msg.value - refund);
+
         emit AuctionSettled(mintedNounId, msg.sender, price);
     }
 
@@ -153,6 +162,22 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
         return (nextId, seed, svg, price, block.number - 1);
     }
 
+    /// @notice Fetch data associated with the noun for sale
+    /// @dev This function should be called using the `pending` block tag.
+    function fetchNoun(uint256 blockNumber) external view returns (INounsSeeder.Seed memory seed, string memory svg) {
+        uint256 nextId = roboNounsToken.currentNounId();
+        INounsSeeder seeder = INounsSeeder(roboNounsToken.seeder());
+        INounsDescriptorMinimal roboDescriptor = roboNounsToken.roboDescriptor();
+        INounsDescriptorV2 descriptor = INounsDescriptorV2(address(roboNounsToken.roboDescriptor()));
+
+        seed = seeder.generateSeed(nextId, roboDescriptor, blockNumber);
+
+        // Generate the SVG from seed using the descriptor.
+        svg = descriptor.generateSVGImage(seed);
+
+        return (seed, svg);
+    }
+
     /// @notice Get the current price according to the VRGDA rules.
     /// @return price The current price in Wei
     function getCurrentVRGDAPrice() public view returns (uint256) {
@@ -181,8 +206,8 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
         }
     }
 
-    function _sendETH(uint256 _value) internal {
-        (bool sent, ) = payable(nounsDAO).call{ value: _value }("");
+    function _sendETH(address to, uint256 _value) internal {
+        (bool sent, ) = to.call{ value: _value }("");
         require(sent, "failed to send eth");
     }
 }

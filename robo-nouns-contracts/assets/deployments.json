@@ -1,6 +1,6 @@
 {
     "NFTDescriptorV2": {
-        "address": "0xbd7Fc729adb6cF2cfe3Dd2eB73F3D18DB36e5AcF",
+        "address": "0xcA803f900D00169a518db8b2249e64e1b6D2f8AE",
         "abi": [
             {
                 "type": "function",
@@ -98,7 +98,7 @@
         ]
     },
     "NounsDescriptorV2": {
-        "address": "0x847965C2bb974189D4bfF889843C93F14A490Bb1",
+        "address": "0x2B9388d017d35FD6149675fA6A72E30CB5850831",
         "abi": [
             {
                 "type": "constructor",
@@ -1010,7 +1010,7 @@
         ]
     },
     "RoboNounsVRGDA": {
-        "address": "0x03Ff7a0E97cCCc2572A3997265596168C421BAB1",
+        "address": "0xf6a06a014DB77097EbC5Bf9076Fc5e6E90df0727",
         "abi": [
             {
                 "type": "constructor",
@@ -1221,6 +1221,51 @@
                     {
                         "type": "uint256",
                         "name": "blockNumber"
+                    }
+                ]
+            },
+            {
+                "type": "function",
+                "name": "fetchNoun",
+                "constant": true,
+                "stateMutability": "view",
+                "payable": false,
+                "inputs": [
+                    {
+                        "type": "uint256",
+                        "name": "blockNumber"
+                    }
+                ],
+                "outputs": [
+                    {
+                        "type": "tuple",
+                        "name": "seed",
+                        "components": [
+                            {
+                                "type": "uint48",
+                                "name": "background"
+                            },
+                            {
+                                "type": "uint48",
+                                "name": "body"
+                            },
+                            {
+                                "type": "uint48",
+                                "name": "accessory"
+                            },
+                            {
+                                "type": "uint48",
+                                "name": "head"
+                            },
+                            {
+                                "type": "uint48",
+                                "name": "glasses"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "string",
+                        "name": "svg"
                     }
                 ]
             },
@@ -1479,7 +1524,7 @@
         ]
     },
     "SVGRenderer": {
-        "address": "0x13bd4F735fdA08CdC5E13B2F5da84263ebbCc656",
+        "address": "0x0A1e0969734F8844012Ac9C3aAdaAe570060E045",
         "abi": [
             {
                 "type": "function",
@@ -1581,7 +1626,7 @@
         ]
     },
     "Inflator": {
-        "address": "0x4CD70575C57A0f0c81ABd5f100DB7Dd3548c793E",
+        "address": "0x15765307cE7eB8fF6be1E99dA88e0A511a2cb312",
         "abi": [
             {
                 "type": "function",
@@ -1611,7 +1656,7 @@
         ]
     },
     "NounsArt": {
-        "address": "0xDCf93f53BB92Bb52170e4B3E431908445a251314",
+        "address": "0xab70a85a2D1F5b04880Fc0e12D8FccAb144c4034",
         "abi": [
             {
                 "type": "constructor",
@@ -2397,7 +2442,7 @@
         ]
     },
     "RoboNounsSeeder": {
-        "address": "0x499D7b46fD42d497009F646Fb7b5CB55f494CC34",
+        "address": "0x0e12049449d0C9350f132C1477825ce7a95498DC",
         "abi": [
             {
                 "type": "function",
@@ -2450,7 +2495,7 @@
         ]
     },
     "RoboNounsToken": {
-        "address": "0xe1736b2F8088f66FAB74FA77C919c6DCCbF0a3dF",
+        "address": "0x2c91d1CAae203487335725f6729d05De1f25F78C",
         "abi": [
             {
                 "type": "constructor",
