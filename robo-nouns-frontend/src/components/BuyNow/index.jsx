@@ -4,7 +4,7 @@ import Image from "next/image"
 import { Fragment, useState } from "react"
 import { Dialog, Transition } from "@headlessui/react"
 import loadingNoun from "../../assets/loading-skull-noun.gif"
-import { useAuction } from "@/context/AuctionContext.jsx"
+import { useAuction } from "@/context/AuctionContext"
 
 export default function BuyNow({ nft, currMintPrice }) {
     const { lastTokenBlock } = useAuction()
@@ -13,7 +13,7 @@ export default function BuyNow({ nft, currMintPrice }) {
     const [transactionHash, setTransactionHash] = useState("")
 
     const { contract } = useContract(
-        "0x632385261472Aa60b429E00f1941dE2280935aA3"
+        "0x7330fF513F4BF1CcbcC7E42eF34907eE4708Fa2e"
     )
 
     const call = async () => {
@@ -57,7 +57,9 @@ export default function BuyNow({ nft, currMintPrice }) {
                     viewBox="0, 0, 400,150"
                 >
                     <a
-                        className={"BuyBtn btn-primary hover:text-nouns-lime hover:scale-105"}
+                        className={
+                            "BuyBtn btn-primary hover:text-nouns-lime hover:scale-105"
+                        }
                         onClick={null}
                     >
                         <g id="svgg">
@@ -118,7 +120,9 @@ export default function BuyNow({ nft, currMintPrice }) {
                     viewBox="0, 0, 400,150"
                 >
                     <a
-                        className={"BuyBtn btn-primary hover:text-nouns-lime hover:scale-105"}
+                        className={
+                            "BuyBtn btn-primary hover:text-nouns-lime hover:scale-105"
+                        }
                         onClick={call}
                     >
                         <g id="svgg">

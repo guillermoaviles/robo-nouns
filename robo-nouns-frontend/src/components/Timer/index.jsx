@@ -10,9 +10,10 @@ function CountdownTimer() {
     useEffect(() => {
         const intervalId = setInterval(() => {
             const currentTime = Math.floor(new Date().getTime() / 1000)
-            const elapsedTime = Math.floor(currentTime - globalStartTime)
-
+            const elapsedTime =
+                globalStartTime && Math.floor(currentTime - globalStartTime)
             const timeLeftOnTimer =
+                priceDecayInterval &&
                 priceDecayInterval - (elapsedTime % priceDecayInterval)
             setTimeLeft(timeLeftOnTimer)
         }, 1000)
