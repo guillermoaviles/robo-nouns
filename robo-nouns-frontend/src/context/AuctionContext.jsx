@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react"
 import { useContract } from "@thirdweb-dev/react"
 import { ethers } from "ethers"
-import vrgdaAbi from "../utils/vrgdaAbi.json"
+import deployments from "../../../robo-nouns-contracts/assets/deployments.json"
 
 const AuctionContext = createContext()
 
@@ -14,19 +14,19 @@ export function AuctionProvider({ children }) {
     const [nounNFTMeta, setNounNFTMeta] = useState(
         Array.from({ length }, () => null)
     )
-    const [lastTokenBlock, setLastTokenBlock] = useState(0);
+    const [lastTokenBlock, setLastTokenBlock] = useState(0)
     const [globalStartTime, setGlobalStartTime] = useState(0)
     const [priceDecayInterval, setPriceDecayInterval] = useState(0)
-    const [reservePrice, setReservePrice] = useState("");
-    const [currMintPrice, setCurrMintPrice] = useState("");
-    const [targetPrice, setTargetPrice] = useState("");
+    const [reservePrice, setReservePrice] = useState("")
+    const [currMintPrice, setCurrMintPrice] = useState("")
+    const [targetPrice, setTargetPrice] = useState("")
 
     const providerUrl =
         "https://eth-goerli.g.alchemy.com/v2/8kIFZ8iBRuBDAQqIH73BfPB8ESBwbIUt"
     const provider = new ethers.providers.JsonRpcProvider(providerUrl)
 
-    const auctionContractAddress = "0x632385261472Aa60b429E00f1941dE2280935aA3"
-    const auctionContractABI = vrgdaAbi.abi
+    const auctionContractAddress = deployments.RoboNounsVRGDA.address
+    const auctionContractABI = deployments.RoboNounsVRGDA.abi
     const contract = new ethers.Contract(
         auctionContractAddress,
         auctionContractABI,
@@ -35,28 +35,39 @@ export function AuctionProvider({ children }) {
 
     const fetchNFTMetadata = async () => {
         try {
-            const lastTokenBlock = await contract.lastTokenBlock();
-            setLastTokenBlock(lastTokenBlock.toNumber());
-            const nounMeta = await contract.fetchNextNoun();
-            addNounData(nounMeta);
-            const startTime = await contract.startTime();
-            setGlobalStartTime(startTime.toNumber());
-            const priceDecayInterval = await contract.priceDecayInterval();
-            setPriceDecayInterval(priceDecayInterval.toNumber());
-            const reservePrice = await contract.reservePrice();
-            setReservePrice(ethers.utils.formatEther(reservePrice))
-            const currVRGDAPrice = await contract.getCurrentVRGDAPrice();
-            const maxPrice = reservePrice.gt(currVRGDAPrice)
-                ? reservePrice
-                : currVRGDAPrice
-            setCurrMintPrice(ethers.utils.formatEther(maxPrice));
+            const lastTokenBlock = await contract.lastTokenBlock()
+            setLastTokenBlock(lastTokenBlock.toNumber())
 
-            const targetPrice = await contract.targetPrice()
-            setTargetPrice(ethers.utils.formatEther(targetPrice))
+            const nounMeta = await contract.fetchNextNoun()
+            addNounData(nounMeta)
+
+            const currVRGDAPrice = await contract.getCurrentVRGDAPrice()
+            const maxPrice =
+                reservePrice > currVRGDAPrice ? reservePrice : currVRGDAPrice
+            setCurrMintPrice(ethers.utils.formatEther(maxPrice))
         } catch (error) {
             console.error("Error fetching NFT metadata and price info:", error)
         }
     }
+
+    useEffect(() => {
+        // this only need to run once - these values are constant
+        const setInitialValues = async () => {
+            const startTime = await contract.startTime()
+            setGlobalStartTime(startTime.toNumber())
+
+            const priceDecayInterval = await contract.priceDecayInterval()
+            setPriceDecayInterval(priceDecayInterval.toNumber())
+
+            const reservePrice = await contract.reservePrice()
+            setReservePrice(ethers.utils.formatEther(reservePrice))
+
+            const targetPrice = await contract.targetPrice()
+            setTargetPrice(ethers.utils.formatEther(targetPrice))
+        }
+
+        setInitialValues()
+    }, [])
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -64,7 +75,10 @@ export function AuctionProvider({ children }) {
             console.log("currMintPrice", currMintPrice)
             console.log("reservePrice", reservePrice)
             console.log("lastTokenBlock", lastTokenBlock)
-            console.log("currBlockNumber", nounNFTMeta[0]?.blockNumber.toNumber())
+            console.log(
+                "currBlockNumber",
+                nounNFTMeta[0]?.blockNumber.toNumber()
+            )
         }, 1000)
         return () => clearInterval(interval)
     }, [nounNFTMeta])
