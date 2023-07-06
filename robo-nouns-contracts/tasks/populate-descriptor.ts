@@ -4,7 +4,7 @@ import RoboData from "../assets/image-data-robo.json"
 import NounsData from "../assets/image-data-nouns.json"
 import RoboDataNoHeads from "../assets/image-data-robo-no-heads.json"
 import { dataToDescriptorInput } from "./utils"
-import * as deployments from "./utils/deployments.json"
+import * as deployments from "../assets/deployments.json"
 
 async function delay(seconds: number) {
     return new Promise((resolve) => setTimeout(resolve, 1000 * seconds))
@@ -17,13 +17,13 @@ task(
     .addOptionalParam(
         "nftDescriptor",
         "The `NFTDescriptorV2` contract address",
-        deployments.NFTDescriptorV2,
+        deployments.NFTDescriptorV2.address,
         types.string
     )
     .addOptionalParam(
         "nounsDescriptor",
         "The `NounsDescriptorV2` contract address",
-        deployments.NounsDescriptorV2,
+        deployments.NounsDescriptorV2.address,
         types.string
     )
     .setAction(

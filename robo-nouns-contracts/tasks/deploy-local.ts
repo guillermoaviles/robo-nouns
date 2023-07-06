@@ -111,11 +111,13 @@ task("deploy-local", "Deploy contracts to hardhat").setAction(
             console.log(
                 `${name} contract saved and deployed to ${deployedContract.address}`
             )
+            const abi = factory.interface.format("json")
 
             await saveDeployedContract(
                 network.chainId,
                 name,
-                deployedContract.address
+                deployedContract.address,
+                abi
             )
             // await delay(5)
         }

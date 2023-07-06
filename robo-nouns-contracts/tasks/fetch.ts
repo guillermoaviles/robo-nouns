@@ -1,5 +1,5 @@
 import { task, types } from "hardhat/config"
-import * as deployments from "./utils/deployments.json"
+import * as deployments from "../assets/deployments.json"
 
 task("fetch", "Calls fetchNextNoun on RoboNounsVRGDA")
     .addOptionalParam(

@@ -1,7 +1,7 @@
 import { task, types } from "hardhat/config"
 import { ContractName, DeployedContract } from "./types"
 
-task("verify-etherscan", "Verify the contracts")
+task("verify-etherscan", "Verify the Solidity contracts on Etherscan")
     .addParam(
         "contracts",
         "Contract objects from the deployment",
@@ -29,6 +29,7 @@ task("verify-etherscan", "Verify the contracts")
                     }
                     await hre.run("verify:verify", {
                         ...contract,
+                        contract: [contract.name],
                     })
                 } catch ({ message }) {
                     if (
