@@ -12,7 +12,7 @@ import { RoboNounsToken } from "contracts/RoboNounsToken.sol";
 import { toWadUnsafe, toDaysWadUnsafe, wadLn } from "solmate/src/utils/SignedWadMath.sol";
 
 contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
-    address public constant nounsDAO = 0xA7F1653E99CdE8f76839C70c64122456AFA5Cf6E;
+    address public constant nounsDAO = 0x0BC3807Ec262cB779b38D65b38158acC3bfedE10;
 
     /// @notice Time of sale of the first RoboNoun, used to calculate VRGDA price
     uint256 public startTime;
@@ -69,17 +69,18 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
     function buyNow(uint256 expectedBlockNumber) external payable {
         // will allow to mint token with traits generated from 4 last blocks (starting from parent, because current has not hash yet),
         require(
-            expectedBlockNumber >= block.number - 4 || expectedBlockNumber >= lastTokenBlock,
+            expectedBlockNumber <= block.number - 1 ||
+                expectedBlockNumber > lastTokenBlock ||
+                expectedBlockNumber >= block.number - 4,
             "Invalid block number"
         );
 
         // making it unable to get the a token with the traits for any previous token (pool is emptied when a noun is bought, this prevents buying duplicates)
         lastTokenBlock = block.number;
 
-        require(msg.value >= reservePrice, "Below reservePrice");
-
         // Validate the purchase request against the VRGDA rules.
-        uint256 price = getCurrentVRGDAPrice();
+        uint256 vrgdaPrice = getCurrentVRGDAPrice();
+        uint256 price = vrgdaPrice > reservePrice ? vrgdaPrice : reservePrice;
         require(msg.value >= price, "Insufficient funds");
 
         // Call settleAuction on the roboNouns contract.
@@ -88,9 +89,16 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
         // Sends token to caller.
         roboNounsToken.transferFrom(address(this), msg.sender, mintedNounId);
 
-        emit AuctionSettled(mintedNounId, msg.sender, price);
+        // refund
+        uint256 refund = msg.value - price;
+        if (refund > 0) {
+            _sendETH(msg.sender, refund);
+        }
 
-        _sendETH(msg.value);
+        // send the funds to the DAO
+        _sendETH(nounsDAO, address(this).balance);
+
+        emit AuctionSettled(mintedNounId, msg.sender, price);
     }
 
     /// @notice Set the auction reserve price.
@@ -182,8 +190,9 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
         }
     }
 
-    function _sendETH(uint256 _value) internal {
-        (bool sent, ) = nounsDAO.call{ value: _value }("");
+    function _sendETH(address to, uint256 _value) internal {
+        require(_value > 0, "0 funds to send");
+        (bool sent, ) = to.call{ value: _value }("");
         require(sent, "failed to send eth");
     }
 }
