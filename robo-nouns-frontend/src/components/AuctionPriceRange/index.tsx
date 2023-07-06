@@ -46,15 +46,15 @@ export default function AuctionPriceRange() {
 
     return (
         <>
-            <div className="inline-block relative">
-                <div className="flex lg:justify-between justify-start lg:space-x-0 md:space-x-32 space-x-28 text-dark-gray">
+            <div className="inline-block relative w-full">
+                <div className="flex lg:justify-between justify-start lg:space-x-0 md:space-x-32 space-x-24 text-dark-gray">
                     <h4 className="text-base -mb-2">
                         Ξ{reservePrice || "0.00"}
                     </h4>
                     <h4 className="text-base -mb-2">Ξ{targetPrice || ""}</h4>
                     <h4 className="text-base -mb-2">Ξ{maxPrice || "0.00"}</h4>
                 </div>
-                <div className="flex flex-row items-center justify-start space-x-[4px] mt-[12px]">
+                <div className="flex flex-row items-center justify-start space-x-[3.7px] mt-[12px]">
                     {colorsClassNames.map((color, index) => {
                         return (
                             <PriceBlock
