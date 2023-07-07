@@ -178,13 +178,18 @@ task("deploy-goerli", "Deploy contracts to goerli").setAction(
             console.log(`Waiting for ${c.name} to be deployed`)
             await c.instance.deployTransaction.wait()
             c.address = c.instance.address
+            try {
             await saveDeployedContract(
                 network.chainId,
                 c.name,
                 c.address,
                 c.instance.interface.format("json")
             )
-            console.log("Done")
+            console.log("Saved deployed contract")
+            } catch (e) {
+                console.log("Error saving deployed contract: ", e)
+            }
+            console.log(`${c.name} deployed to: ${c.address}`)
         }
 
         console.log("Populating Descriptor...")
