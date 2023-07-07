@@ -14,6 +14,14 @@ export function AuctionProvider({ children }) {
     const [nounNFTMeta, setNounNFTMeta] = useState(
         Array.from({ length }, () => null)
     )
+    const [nounTwo, setNounTwo] = useState("")
+    // const [prevNouns, setPrevNouns] = useState({
+    //     nounTwo: "",
+    //     nounThree: "",
+    //     nounFour: "",
+    // })
+    const [nounThree, setNounThree] = useState("")
+    const [nounFour, setNounFour] = useState("")
     const [lastTokenBlock, setLastTokenBlock] = useState(0)
     const [globalStartTime, setGlobalStartTime] = useState(0)
     const [priceDecayInterval, setPriceDecayInterval] = useState(0)
@@ -40,6 +48,21 @@ export function AuctionProvider({ children }) {
 
             const nounMeta = await contract.fetchNextNoun()
             addNounData(nounMeta)
+
+            const nounTwo = await contract.fetchNoun(
+                nounNFTMeta[0]?.blockNumber.toNumber() - 1
+            )
+            setNounTwo(nounTwo)
+
+            const nounThree = await contract.fetchNoun(
+                nounNFTMeta[0]?.blockNumber.toNumber() - 2
+            )
+            setNounThree(nounThree)
+
+            const nounFour = await contract.fetchNoun(
+                nounNFTMeta[0]?.blockNumber.toNumber() - 3
+            )
+            setNounFour(nounFour)
 
             const currVRGDAPrice = await contract.getCurrentVRGDAPrice()
             const maxPrice =
@@ -104,11 +127,35 @@ export function AuctionProvider({ children }) {
         }
     }
 
+    // const updateNounTwo = (newNounTwo) => {
+    //     setPrevNouns((prevNouns) => ({
+    //         ...prevNouns,
+    //         nounTwo: newNounTwo,
+    //     }))
+    // }
+
+    // const updateNounThree = (newNounThree) => {
+    //     setPrevNouns((prevNouns) => ({
+    //         ...prevNouns,
+    //         nounThree: newNounThree,
+    //     }))
+    // }
+
+    // const updateNounFour = (newNounFour) => {
+    //     setPrevNouns((prevNouns) => ({
+    //         ...prevNouns,
+    //         nounFour: newNounFour,
+    //     }))
+    // }
+
     const auctionData = {
         auctionContractAddress,
         contract,
         lastTokenBlock,
         nounNFTMeta,
+        nounTwo,
+        nounThree,
+        nounFour,
         setNounNFTMeta,
         reservePrice,
         globalStartTime,

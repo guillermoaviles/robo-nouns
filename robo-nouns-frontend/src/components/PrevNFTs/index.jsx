@@ -5,7 +5,7 @@ import BuyNow from "../BuyNow"
 import loadingNoun from "../../assets/loading-skull-noun.gif"
 
 const PrevNFTs = () => {
-    const { nounNFTMeta, currMintPrice } = useAuction()
+    const { nounTwo, nounThree, nounFour, currMintPrice } = useAuction()
 
     return (
         <div className="w-full md:pt-0 pt-8 bg-dark-gray px-20">
@@ -13,8 +13,68 @@ const PrevNFTs = () => {
                 Last 3 blocks:
             </h2>
             <div className="flex flex-col md:flex-row p-6 justify-center">
-                {nounNFTMeta &&
-                    nounNFTMeta.slice(-3).map((nft, index) => (
+            <div className="py-6">
+                            <Image
+                                className="bg-nouns-lime"
+                                src={
+                                    nounTwo?.svg
+                                        ? `data:image/svg+xml;base64,${nounTwo?.svg}`
+                                        : loadingNoun
+                                }
+                                alt={`NFT`}
+                                width={280}
+                                height={200}
+                            />
+                            <div className="justify-center mt-10">
+                                <BuyNow
+                                    nft={nounTwo}
+                                    currMintPrice={currMintPrice}
+                                    nftNo={0}
+                                />
+                            </div>
+                        </div>
+                        <div className="py-6">
+                            <Image
+                                className="bg-nouns-lime"
+                                src={
+                                    nounThree?.svg
+                                        ? `data:image/svg+xml;base64,${nounThree?.svg}`
+                                        : loadingNoun
+                                }
+                                alt={`NFT`}
+                                width={280}
+                                height={200}
+                            />
+                            <div className="justify-center mt-10">
+                                <BuyNow
+                                    nft={nounThree}
+                                    currMintPrice={currMintPrice}
+                                    nftNo={1}
+                                />
+                            </div>
+                        </div>
+                        <div className="py-6">
+                            <Image
+                                className="bg-nouns-lime"
+                                src={
+                                    nounFour?.svg
+                                        ? `data:image/svg+xml;base64,${nounFour?.svg}`
+                                        : loadingNoun
+                                }
+                                alt={`NFT`}
+                                width={280}
+                                height={200}
+                            />
+                            <div className="justify-center mt-10">
+                                <BuyNow
+                                    nft={nounFour}
+                                    currMintPrice={currMintPrice}
+                                    nftNo={2}
+                                />
+                            </div>
+                        </div>
+                {/* {prevNouns &&
+                    prevNouns.slice(-3).map((nft, index) => (
                         <div key={index} className="py-6">
                             <Image
                                 className="bg-nouns-lime"
@@ -35,7 +95,7 @@ const PrevNFTs = () => {
                                 />
                             </div>
                         </div>
-                    ))}
+                    ))} */}
             </div>
         </div>
     )
