@@ -139,27 +139,35 @@ task("deploy-goerli", "Deploy contracts to goerli").setAction(
         }
         await delay(3)
 
+        // VRGDA values
+        const reservePrice = ethers.utils.parseEther("0.015") // reservePrice = 0.015 ETH = "15000000000000000"
+        const targetPrice = ethers.utils.parseEther("0.075") //  targetPrice = 0.075 ETH = "75000000000000000"
+        const priceDecayPercent = "31" + "0000000000000000" // priceDecayPercent = 31% or 0.31 * 1e18 = "310000000000000000"
+        const perTimeUnit = "2" + "000000000000000000" // perTimeUnit = 1 nouns per 12 hours or 1 * 1e18 = "1000000000000000000"
+        const updateInterval = "300" // updateInterval = 5 minutes
+        const targetSaleInterval = "86400" // targetSaleInterval = 24 hours
+
         const roboNounsVRGDA = await (
             await ethers.getContractFactory("RoboNounsVRGDA", deployer)
         ).deploy(
-            ethers.utils.parseEther("0.0001"),
-            ethers.utils.parseEther("0.0015"),
-            "31" + "0000000000000000",
-            "1" + "000000000000000000",
-            "300",
-            "900",
+            reservePrice,
+            targetPrice,
+            priceDecayPercent,
+            perTimeUnit,
+            updateInterval,
+            targetSaleInterval,
             contracts.RoboNounsToken.address
         )
         contracts.RoboNounsVRGDA = {
             name: "RoboNounsVRGDA",
             address: roboNounsVRGDA.address,
             constructorArguments: [
-                ethers.utils.parseEther("0.0015").toString(), // reservePrice = 0.015 ETH = "15000000000000000"
-                ethers.utils.parseEther("0.075").toString(), //  targetPrice = 0.075 ETH = "75000000000000000"
-                "31" + "0000000000000000", // priceDecayPercent = 31% or 0.31 * 1e18 = "310000000000000000"
-                "2" + "000000000000000000", // perTimeUnit = 1 nouns per 12 hours or 1 * 1e18 = "1000000000000000000"
-                "300", // updateInterval = 5 minutes
-                "86400", // targetSaleInterval = 12 hours
+                reservePrice.toString(),
+                targetPrice.toString(),
+                priceDecayPercent,
+                perTimeUnit,
+                updateInterval,
+                targetSaleInterval,
                 contracts.RoboNounsToken.address,
             ],
             instance: roboNounsVRGDA,

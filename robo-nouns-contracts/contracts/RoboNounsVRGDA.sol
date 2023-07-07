@@ -63,6 +63,7 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
         perTimeUnit = _perTimeUnit;
         priceDecayInterval = _priceDecayInterval;
         targetSaleInterval = _targetSaleInterval;
+        lastTokenBlock = block.number;
     }
 
     /// @param expectedBlockNumber The block number to specify the traits of the token
@@ -137,12 +138,36 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
         emit AuctionPerTimeUnitUpdated(_perTimeUnit);
     }
 
-    /// @notice Fetch data associated with the noun for sale
-    /// @dev This function should be called using the `pending` block tag.
+    /// @notice Fetch data associated with the noun for sale by blockNumber
+    /// @dev this is front smooth run on the frontend
     function fetchNextNoun()
         external
         view
         override
+        returns (uint256 nounId, INounsSeeder.Seed memory seed, string memory svg, uint256 price, uint256 blockNumber)
+    {
+        return _fetchNoun(block.number - 1);
+    }
+
+    /// @notice Fetch data associated with the noun for sale
+    /// @dev This is used for the frontend initial state
+    function fetchNoun(
+        uint256 _blockNumber
+    )
+        external
+        view
+        returns (uint256 nounId, INounsSeeder.Seed memory seed, string memory svg, uint256 price, uint256 blockNumber)
+    {
+        return _fetchNoun(_blockNumber);
+    }
+
+    /// @notice Fetch data associated with the noun for sale
+    /// @dev actual implementation of the fetchNoun function
+    function _fetchNoun(
+        uint256 _blockNumber
+    )
+        private
+        view
         returns (uint256 nounId, INounsSeeder.Seed memory seed, string memory svg, uint256 price, uint256 blockNumber)
     {
         uint256 nextId = roboNounsToken.currentNounId();
@@ -150,7 +175,7 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
         INounsDescriptorMinimal roboDescriptor = roboNounsToken.roboDescriptor();
         INounsDescriptorV2 descriptor = INounsDescriptorV2(address(roboNounsToken.roboDescriptor()));
 
-        seed = seeder.generateSeed(nextId, roboDescriptor, block.number - 1);
+        seed = seeder.generateSeed(nextId, roboDescriptor, _blockNumber);
 
         // Generate the SVG from seed using the descriptor.
         svg = descriptor.generateSVGImage(seed);
@@ -159,23 +184,7 @@ contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
         uint256 vrgdaPrice = getCurrentVRGDAPrice();
         price = vrgdaPrice > reservePrice ? vrgdaPrice : reservePrice;
 
-        return (nextId, seed, svg, price, block.number - 1);
-    }
-
-    /// @notice Fetch data associated with the noun for sale
-    /// @dev This function should be called using the `pending` block tag.
-    function fetchNoun(uint256 blockNumber) external view returns (INounsSeeder.Seed memory seed, string memory svg) {
-        uint256 nextId = roboNounsToken.currentNounId();
-        INounsSeeder seeder = INounsSeeder(roboNounsToken.seeder());
-        INounsDescriptorMinimal roboDescriptor = roboNounsToken.roboDescriptor();
-        INounsDescriptorV2 descriptor = INounsDescriptorV2(address(roboNounsToken.roboDescriptor()));
-
-        seed = seeder.generateSeed(nextId, roboDescriptor, blockNumber);
-
-        // Generate the SVG from seed using the descriptor.
-        svg = descriptor.generateSVGImage(seed);
-
-        return (seed, svg);
+        return (nextId, seed, svg, price, _blockNumber);
     }
 
     /// @notice Get the current price according to the VRGDA rules.

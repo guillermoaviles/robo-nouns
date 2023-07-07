@@ -31,8 +31,8 @@ task(
             const options = {
                 gasLimit:
                     network.name === "hardhat" || "localhost"
-                        ? 15_000_000
-                        : 1_000_000,
+                        ? 30_000_000
+                        : undefined,
             }
 
             const descriptorFactory = await ethers.getContractFactory(
