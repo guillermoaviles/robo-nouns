@@ -47,7 +47,6 @@ export default function AuctionPriceRange() {
     ]
 
     return (
-        <>
             <div className="inline-block relative w-full">
                 <div className="flex lg:justify-between justify-start lg:space-x-0 md:space-x-32 space-x-24 text-dark-gray">
                     <h4 className="text-base -mb-2">
@@ -68,6 +67,5 @@ export default function AuctionPriceRange() {
                     })}
                 </div>
             </div>
-        </>
     )
 }

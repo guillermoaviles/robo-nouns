@@ -10,7 +10,7 @@ function CountdownTimer() {
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth <= 768) {
+      if (window.innerWidth <= 1040) {
         setFlexDirection("column");
       } else {
         setFlexDirection("row");

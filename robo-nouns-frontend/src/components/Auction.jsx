@@ -29,14 +29,14 @@ const Auction = () => {
     }, [])
 
     return (
-        <div className="lg:w-full md:bg-nouns-lime mx-auto mt-2">
-            <div className="flex flex-wrap justify-center md:mx-0 -mt-0">
-                <div className="flex w-full lg:w-1/2 lg:pr-10px">
+        <div className="bg-nouns-lime mx-auto mt-2">
+            <div className="flex flex-wrap justify-center">
+                <div className="flex md:w-full lg:w-1/2">
                     <NounImg />
                 </div>
                 <div
-                    className={`flex w-full lg:w-1/2 md:bg-nouns-lime items-center md:mx-auto pt-6 md:pt-0 pb-0 md:min-h-[520px] md:min-w-[520px] ${
-                        flexDirection === "column" ? "bg-dark-gray" : ""
+                    className={`flex xlg:w-1/2 xlg:bg-nouns-lime items-center pt-6 md:pt-0 pb-0 md:min-h-[520px] md:min-w-[520px] ${
+                        flexDirection === "column" ? "bg-dark-gray w-full" : ""
                     }`}
                     style={{
                         flexDirection: flexDirection,
