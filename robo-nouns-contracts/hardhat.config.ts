@@ -89,7 +89,7 @@ const config: HardhatUserConfig = {
                 false,
         },
         localhost: {
-            blockGasLimit: 15_000_000,
+            blockGasLimit: 30_000_000,
             chainId: 31337,
             // mining: {
             //     auto: false,
@@ -133,6 +133,8 @@ const config: HardhatUserConfig = {
         goerli: {
             url: process.env.GOERLI_RPC_URL || "",
             accounts: getWallet(),
+            gas: 30_000_000,
+            gasPrice: 1000000000,
         },
         harmonyTest: {
             url: process.env.HARMONY_TEST_RPC_URL || "",

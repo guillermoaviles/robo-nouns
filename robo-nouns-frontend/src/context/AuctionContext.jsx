@@ -81,7 +81,7 @@ export function AuctionProvider({ children }) {
             )
         }, 1000)
         return () => clearInterval(interval)
-    }, [nounNFTMeta])
+    }, [])
 
     const addNounData = (newNoun) => {
         const isDuplicate = nounNFTMeta

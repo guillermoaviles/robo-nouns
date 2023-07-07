@@ -11,7 +11,7 @@
         "clean": "hardhat clean",
         "fetch-local": "npx hardhat fetch --network localhost",
         "fetch-goerli": "npx hardhat fetch --network goerli",
-        "deploy-local": "npx hardhat deploy-goerli --network localhost",
+        "deploy-local": "npx hardhat deploy-local --network localhost",
         "deploy-goerli": "npx hardhat deploy-goerli --network goerli",
         "descriptor-local": "npx hardhat populate-descriptor --network localhost",
         "descriptor-goerli": "npx hardhat populate-descriptor --network goerli",

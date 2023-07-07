@@ -1,10 +1,7 @@
 import { task, types } from "hardhat/config"
-import ImageData from "../assets/image-data_old.json"
 import RoboData from "../assets/image-data-robo.json"
-import NounsData from "../assets/image-data-nouns.json"
-import RoboDataNoHeads from "../assets/image-data-robo-no-heads.json"
 import { dataToDescriptorInput } from "./utils"
-import * as deployments from "../assets/deployments.json"
+import deployments from "../assets/deployments.json"
 
 async function delay(seconds: number) {
     return new Promise((resolve) => setTimeout(resolve, 1000 * seconds))
@@ -30,9 +27,9 @@ task(
         async ({ nftDescriptor, nounsDescriptor }, { ethers, network }) => {
             const options = {
                 gasLimit:
-                    network.name === "hardhat" || "localhost"
-                        ? 30_000_000
-                        : undefined,
+                    network.name === "hardhat" || network.name === "localhost"
+                        ? 15_000_000
+                        : 5000000,
             }
 
             const descriptorFactory = await ethers.getContractFactory(
@@ -63,8 +60,10 @@ task(
             )
 
             try {
+                console.log("Adding backgrounds and palettes...")
                 await descriptorContract.addManyBackgrounds(bgcolors)
                 await delay(2)
+                console.log("Backgrounds added.")
 
                 await descriptorContract.setPalette(
                     0,

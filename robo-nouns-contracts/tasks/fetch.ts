@@ -1,11 +1,11 @@
 import { task, types } from "hardhat/config"
-import * as deployments from "../assets/deployments.json"
+import deployments from "../assets/deployments.json"
 
 task("fetch", "Calls fetchNextNoun on RoboNounsVRGDA")
     .addOptionalParam(
         "vrgda",
         "The `RoboNounsVRGDA` contract address",
-        deployments.RoboNounsVRGDA,
+        deployments.RoboNounsVRGDA.address,
         types.string
     )
     .setAction(async ({ vrgda }, { ethers, network }) => {

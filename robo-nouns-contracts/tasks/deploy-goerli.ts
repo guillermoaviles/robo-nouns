@@ -1,5 +1,4 @@
-import { task, types } from "hardhat/config"
-import { BigNumber, Contract as EthersContract } from "ethers"
+import { task } from "hardhat/config"
 import { ContractName, DeployedContract } from "./types"
 import saveDeployedContract from "./utils/saveDeployment"
 
@@ -36,12 +35,12 @@ task("deploy-goerli", "Deploy contracts to goerli").setAction(
         ).deploy()
         contracts.NFTDescriptorV2 = {
             name: "NFTDescriptorV2",
-            address: library.address.toString(),
+            address: library.address,
             instance: library,
             constructorArguments: [],
             libraries: {},
         }
-        await delay(3)
+        await delay(5)
 
         const renderer = await (
             await ethers.getContractFactory("SVGRenderer", deployer)
@@ -53,7 +52,7 @@ task("deploy-goerli", "Deploy contracts to goerli").setAction(
             constructorArguments: [],
             libraries: {},
         }
-        await delay(3)
+        await delay(5)
 
         const nounsDescriptorFactory = await ethers.getContractFactory(
             "NounsDescriptorV2",
@@ -63,7 +62,6 @@ task("deploy-goerli", "Deploy contracts to goerli").setAction(
                 },
             }
         )
-        await delay(3)
 
         const nounsDescriptor = await nounsDescriptorFactory.deploy(
             expectedRoboNounsArtAddress,
@@ -73,7 +71,7 @@ task("deploy-goerli", "Deploy contracts to goerli").setAction(
             name: "NounsDescriptorV2",
             address: nounsDescriptor.address,
             constructorArguments: [
-                expectedRoboNounsArtAddress.toString(),
+                expectedRoboNounsArtAddress,
                 renderer.address,
             ],
             instance: nounsDescriptor,
@@ -81,7 +79,7 @@ task("deploy-goerli", "Deploy contracts to goerli").setAction(
                 NFTDescriptorV2: library.address,
             },
         }
-        await delay(3)
+        await delay(5)
 
         const inflator = await (
             await ethers.getContractFactory("Inflator", deployer)
@@ -93,7 +91,7 @@ task("deploy-goerli", "Deploy contracts to goerli").setAction(
             constructorArguments: [],
             libraries: {},
         }
-        await delay(3)
+        await delay(5)
 
         const art = await (
             await ethers.getContractFactory("NounsArt", deployer)
@@ -105,7 +103,7 @@ task("deploy-goerli", "Deploy contracts to goerli").setAction(
             instance: art,
             libraries: {},
         }
-        await delay(3)
+        await delay(5)
 
         const roboNounsSeeder = await (
             await ethers.getContractFactory("RoboNounsSeeder", deployer)
@@ -117,7 +115,7 @@ task("deploy-goerli", "Deploy contracts to goerli").setAction(
             instance: roboNounsSeeder,
             libraries: {},
         }
-        await delay(3)
+        await delay(5)
 
         const roboNounsToken = await (
             await ethers.getContractFactory("RoboNounsToken", deployer)
@@ -137,13 +135,13 @@ task("deploy-goerli", "Deploy contracts to goerli").setAction(
             instance: roboNounsToken,
             libraries: {},
         }
-        await delay(3)
+        await delay(5)
 
         // VRGDA values
-        const reservePrice = ethers.utils.parseEther("0.015") // reservePrice = 0.015 ETH = "15000000000000000"
-        const targetPrice = ethers.utils.parseEther("0.075") //  targetPrice = 0.075 ETH = "75000000000000000"
+        const reservePrice = "15000000000000000"
+        const targetPrice = "75000000000000000"
         const priceDecayPercent = "31" + "0000000000000000" // priceDecayPercent = 31% or 0.31 * 1e18 = "310000000000000000"
-        const perTimeUnit = "2" + "000000000000000000" // perTimeUnit = 1 nouns per 12 hours or 1 * 1e18 = "1000000000000000000"
+        const perTimeUnit = "2" + "000000000000000000" // perTimeUnit = 2 nouns per 12 hours or 2 * 1e18 = "1000000000000000000"
         const updateInterval = "300" // updateInterval = 5 minutes
         const targetSaleInterval = "86400" // targetSaleInterval = 24 hours
 
@@ -162,8 +160,8 @@ task("deploy-goerli", "Deploy contracts to goerli").setAction(
             name: "RoboNounsVRGDA",
             address: roboNounsVRGDA.address,
             constructorArguments: [
-                reservePrice.toString(),
-                targetPrice.toString(),
+                reservePrice,
+                targetPrice,
                 priceDecayPercent,
                 perTimeUnit,
                 updateInterval,
@@ -173,13 +171,13 @@ task("deploy-goerli", "Deploy contracts to goerli").setAction(
             instance: roboNounsVRGDA,
             libraries: {},
         }
+        await delay(5)
 
         console.log("Waiting for contracts to be deployed")
         for (const c of Object.values<DeployedContract>(contracts)) {
             console.log(`Waiting for ${c.name} to be deployed`)
             await c.instance.deployTransaction.wait()
             c.address = c.instance.address
-            await delay(3)
             await saveDeployedContract(
                 network.chainId,
                 c.name,

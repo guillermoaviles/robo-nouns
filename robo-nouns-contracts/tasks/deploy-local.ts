@@ -1,46 +1,24 @@
 import { task, types } from "hardhat/config"
-import { Contract as EthersContract } from "ethers"
-import { ContractName } from "./types"
+import { BigNumber, Contract as EthersContract } from "ethers"
+import { ContractName, DeployedContract } from "./types"
 import saveDeployedContract from "./utils/saveDeployment"
-
-interface Contract {
-    args?: (string | number | (() => string | undefined))[]
-    instance?: EthersContract
-    libraries?: () => Record<string, string>
-    waitForConfirmation?: boolean
-}
 
 async function delay(seconds: number) {
     return new Promise((resolve) => setTimeout(resolve, 1000 * seconds))
 }
 
-task("deploy-local", "Deploy contracts to hardhat").setAction(
+task("deploy-local", "Deploy contracts to goerli").setAction(
     async (args, { ethers, run }) => {
+        const contracts: Record<ContractName, DeployedContract> = {} as Record<
+            ContractName,
+            DeployedContract
+        >
         const network = await ethers.provider.getNetwork()
-        // if (network.chainId !== 31337) {
-        //     console.log(
-        //         `Invalid chain id. Expected 31337. Got: ${network.chainId}.`
-        //     )
-        //     return
-        // }
-
-        const NOUNS_ART_NONCE_OFFSET = 4
-        const VRGDA_NONCE_OFFSET = 7
-        const NOUNS_DESCRIPTOR_MAINNET =
-            "0x6229c811d04501523c6058bfaac29c91bb586268"
-        const NOUNS_ART_MAINNET = "0x48A7C62e2560d1336869D6550841222942768C49"
-
-        // Goerli
-        const NOUNS_ART_GOERLI = "0xf786148F2B31d12A9B0795EBF39c3a0330760da4"
-        const NOUNS_DESCRIPTOR_GOERLI =
-            "0xB6D0AF8C27930E13005Bf447d54be8235724a102"
-
         const [deployer] = await ethers.getSigners()
 
-        console.log("deploying to chain: ", network.chainId)
-        console.log("deploying addr: ", deployer.address)
-
         const nonce = await deployer.getTransactionCount()
+        const NOUNS_ART_NONCE_OFFSET = 4
+        const VRGDA_NONCE_OFFSET = 7
         const expectedRoboNounsArtAddress = ethers.utils.getContractAddress({
             from: deployer.address,
             nonce: nonce + NOUNS_ART_NONCE_OFFSET,
@@ -51,89 +29,164 @@ task("deploy-local", "Deploy contracts to hardhat").setAction(
             nonce: nonce + VRGDA_NONCE_OFFSET,
         })
 
-        const contracts: Record<ContractName, Contract> = {
-            NFTDescriptorV2: {},
-            SVGRenderer: {},
-            NounsDescriptorV2: {
-                args: [
-                    expectedRoboNounsArtAddress,
-                    NOUNS_ART_GOERLI,
-                    () => contracts.SVGRenderer.instance?.address,
-                ],
-                libraries: () => ({
-                    NFTDescriptorV2: contracts.NFTDescriptorV2.instance
-                        ?.address as string,
-                }),
-            },
-            Inflator: {},
-            NounsArt: {
-                args: [
-                    () => contracts.NounsDescriptorV2.instance?.address,
-                    () => contracts.Inflator.instance?.address,
-                ],
-            },
-            RoboNounsSeeder: {},
-            RoboNounsToken: {
-                args: [
-                    expectedVRGDAAddress,
-                    () => contracts.NounsDescriptorV2.instance?.address,
-                    NOUNS_DESCRIPTOR_GOERLI,
-                    () => contracts.RoboNounsSeeder.instance?.address,
-                ],
-            },
-            RoboNounsVRGDA: {
-                args: [
-                    "150000000000000000", // 0.15 ETH
-                    "100000000000000000", // 10%
-                    "24000000000000000000", // 24 nouns per time interval
-                    () => contracts.RoboNounsToken.instance?.address,
-                ],
-                waitForConfirmation: true,
+        console.log("Deploying contracts...")
+        console.log("Deployer is: ", deployer.address)
+        const library = await (
+            await ethers.getContractFactory("NFTDescriptorV2", deployer)
+        ).deploy()
+        contracts.NFTDescriptorV2 = {
+            name: "NFTDescriptorV2",
+            address: library.address.toString(),
+            instance: library,
+            constructorArguments: [],
+            libraries: {},
+        }
+
+        const renderer = await (
+            await ethers.getContractFactory("SVGRenderer", deployer)
+        ).deploy()
+        contracts.SVGRenderer = {
+            name: "SVGRenderer",
+            address: renderer.address,
+            instance: renderer,
+            constructorArguments: [],
+            libraries: {},
+        }
+
+        const nounsDescriptorFactory = await ethers.getContractFactory(
+            "NounsDescriptorV2",
+            {
+                libraries: {
+                    NFTDescriptorV2: library.address,
+                },
+            }
+        )
+
+        const nounsDescriptor = await nounsDescriptorFactory.deploy(
+            expectedRoboNounsArtAddress,
+            renderer.address
+        )
+        contracts.NounsDescriptorV2 = {
+            name: "NounsDescriptorV2",
+            address: nounsDescriptor.address,
+            constructorArguments: [
+                expectedRoboNounsArtAddress.toString(),
+                renderer.address,
+            ],
+            instance: nounsDescriptor,
+            libraries: {
+                NFTDescriptorV2: library.address,
             },
         }
 
-        for (const [name, contract] of Object.entries(contracts)) {
-            const factory = await ethers.getContractFactory(name, {
-                libraries: contract?.libraries?.(),
-            })
+        const inflator = await (
+            await ethers.getContractFactory("Inflator", deployer)
+        ).deploy()
+        contracts.Inflator = {
+            name: "Inflator",
+            address: inflator.address,
+            instance: inflator,
+            constructorArguments: [],
+            libraries: {},
+        }
 
-            const deployedContract = await factory.deploy(
-                ...(contract.args?.map((a) =>
-                    typeof a === "function" ? a() : a
-                ) ?? [])
-            )
+        const art = await (
+            await ethers.getContractFactory("NounsArt", deployer)
+        ).deploy(nounsDescriptor.address, inflator.address)
+        contracts.NounsArt = {
+            name: "NounsArt",
+            address: art.address,
+            constructorArguments: [nounsDescriptor.address, inflator.address],
+            instance: art,
+            libraries: {},
+        }
 
-            if (contract.waitForConfirmation) {
-                await deployedContract.deployed()
-            }
+        const roboNounsSeeder = await (
+            await ethers.getContractFactory("RoboNounsSeeder", deployer)
+        ).deploy()
+        contracts.RoboNounsSeeder = {
+            name: "RoboNounsSeeder",
+            address: roboNounsSeeder.address,
+            constructorArguments: [],
+            instance: roboNounsSeeder,
+            libraries: {},
+        }
 
-            contracts[name as ContractName].instance = deployedContract
-            console.log(
-                `${name} contract saved and deployed to ${deployedContract.address}`
-            )
-            const abi = factory.interface.format("json")
+        const roboNounsToken = await (
+            await ethers.getContractFactory("RoboNounsToken", deployer)
+        ).deploy(
+            expectedVRGDAAddress,
+            contracts.NounsDescriptorV2.address,
+            contracts.RoboNounsSeeder.address
+        )
+        contracts.RoboNounsToken = {
+            name: "RoboNounsToken",
+            address: roboNounsToken.address,
+            constructorArguments: [
+                expectedVRGDAAddress,
+                contracts.NounsDescriptorV2.address,
+                contracts.RoboNounsSeeder.address,
+            ],
+            instance: roboNounsToken,
+            libraries: {},
+        }
+
+        // VRGDA values
+        const reservePrice = ethers.utils.parseEther("0.015") // reservePrice = 0.015 ETH = "15000000000000000"
+        const targetPrice = ethers.utils.parseEther("0.075") //  targetPrice = 0.075 ETH = "75000000000000000"
+        const priceDecayPercent = "31" + "0000000000000000" // priceDecayPercent = 31% or 0.31 * 1e18 = "310000000000000000"
+        const perTimeUnit = "2" + "000000000000000000" // perTimeUnit = 2 nouns per 12 hours or 2 * 1e18 = "1000000000000000000"
+        const updateInterval = "300" // updateInterval = 5 minutes
+        const targetSaleInterval = "86400" // targetSaleInterval = 24 hours
+
+        const roboNounsVRGDA = await (
+            await ethers.getContractFactory("RoboNounsVRGDA", deployer)
+        ).deploy(
+            reservePrice,
+            targetPrice,
+            priceDecayPercent,
+            perTimeUnit,
+            updateInterval,
+            targetSaleInterval,
+            contracts.RoboNounsToken.address
+        )
+        contracts.RoboNounsVRGDA = {
+            name: "RoboNounsVRGDA",
+            address: roboNounsVRGDA.address,
+            constructorArguments: [
+                reservePrice.toString(),
+                targetPrice.toString(),
+                priceDecayPercent,
+                perTimeUnit,
+                updateInterval,
+                targetSaleInterval,
+                contracts.RoboNounsToken.address,
+            ],
+            instance: roboNounsVRGDA,
+            libraries: {},
+        }
+
+        console.log("Waiting for contracts to be deployed")
+        for (const c of Object.values<DeployedContract>(contracts)) {
+            console.log(`Waiting for ${c.name} to be deployed`)
+            await c.instance.deployTransaction.wait()
+            c.address = c.instance.address
 
             await saveDeployedContract(
                 network.chainId,
-                name,
-                deployedContract.address,
-                abi
+                c.name,
+                c.address,
+                c.instance.interface.format("json")
             )
-            // await delay(5)
+            console.log("Done")
         }
 
-        // if (network.name !== "localhost") {
-        //     console.log(
-        //         "Waiting 1 minute before verifying contracts on Etherscan"
-        //     )
-        //     await delay(30)
-
-        //     console.log("Verifying contracts on Etherscan...")
-        //     await run("verify-etherscan", {
-        //         contracts,
-        //     })
-        //     console.log("Verify complete.")
-        // }
+        console.log("Populating Descriptor...")
+        await run("populate-descriptor", {
+            nftDescriptor: contracts.NFTDescriptorV2.address,
+            nounsDescriptor: contracts.NounsDescriptorV2.address,
+        })
+        console.log("Population complete.")
 
         return contracts
     }
