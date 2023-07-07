@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react"
 import { useContract } from "@thirdweb-dev/react"
 import { ethers } from "ethers"
 import deployments from "../../../robo-nouns-contracts/assets/deployments.json"
+import newAbi from "./abi.json"
 
 const AuctionContext = createContext()
 
@@ -23,10 +24,10 @@ export function AuctionProvider({ children }) {
     const auctionContractAddress = deployments.RoboNounsVRGDA.address
 
     const providerUrl =
-        "https://eth-goerli.g.alchemy.com/v2/8kIFZ8iBRuBDAQqIH73BfPB8ESBwbIUt"
+        "https://goerli.infura.io/v3/ec36f80cbd0e4bdd826ccb9e8f533a9d"
     const provider = new ethers.providers.JsonRpcProvider(providerUrl)
 
-    const auctionContractABI = deployments.RoboNounsVRGDA.abi
+    const auctionContractABI = newAbi.abi
     const contract = new ethers.Contract(
         auctionContractAddress,
         auctionContractABI,
@@ -38,13 +39,13 @@ export function AuctionProvider({ children }) {
             const lastTokenBlock = await contract.lastTokenBlock()
             setLastTokenBlock(lastTokenBlock.toNumber())
 
-            const nounMeta = await contract.fetchNextNoun()
-            addNounData(nounMeta)
-
             const currVRGDAPrice = await contract.getCurrentVRGDAPrice()
             const maxPrice =
                 reservePrice > currVRGDAPrice ? reservePrice : currVRGDAPrice
             setCurrMintPrice(ethers.utils.formatEther(maxPrice))
+
+            const nounMeta = await contract.fetchNextNoun()
+            addNounData(nounMeta)
         } catch (error) {
             console.error("Error fetching NFT metadata and price info:", error)
         }
