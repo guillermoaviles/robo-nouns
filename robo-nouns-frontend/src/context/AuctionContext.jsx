@@ -69,8 +69,6 @@ export function AuctionProvider({ children }) {
             const maxPrice =
                 reservePrice > currVRGDAPrice ? reservePrice : currVRGDAPrice
             setCurrMintPrice(ethers.utils.formatEther(maxPrice))
-
-            const nounMeta = await contract.fetchNextNoun()
             addNounData(nounMeta)
         } catch (error) {
             console.error("Error fetching NFT metadata and price info:", error)
