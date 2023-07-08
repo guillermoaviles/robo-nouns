@@ -29,7 +29,7 @@ const Auction = () => {
     }, [])
 
     return (
-        <div className="bg-nouns-lime mx-auto mt-2">
+        <div className="bg-nouns-lime lg:mx-auto mt-2">
             <div className="flex flex-wrap justify-center">
                 <div className="flex md:w-full lg:w-1/2">
                     <NounImg />
