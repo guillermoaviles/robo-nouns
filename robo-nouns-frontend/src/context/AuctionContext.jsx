@@ -22,7 +22,8 @@ export function AuctionProvider({ children }) {
     const auctionContractAddress = deployments.RoboNounsVRGDA.address
 
     const providerUrl =
-        "https://goerli.infura.io/v3/ec36f80cbd0e4bdd826ccb9e8f533a9d"
+        // "https://goerli.infura.io/v3/ec36f80cbd0e4bdd826ccb9e8f533a9d"
+        "https://eth-goerli.g.alchemy.com/v2/8kIFZ8iBRuBDAQqIH73BfPB8ESBwbIUt"
     const provider = new ethers.providers.JsonRpcProvider(providerUrl)
 
     const auctionContractABI = newAbi.abi
