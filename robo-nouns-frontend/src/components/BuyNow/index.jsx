@@ -15,6 +15,7 @@ export default function BuyNow({ nft, currMintPrice }) {
     const { contract } = useContract(auctionContractAddress)
 
     const call = async () => {
+        console.log(contract)
         try {
             if (!contract) {
                 throw new Error("Contract is undefined")
