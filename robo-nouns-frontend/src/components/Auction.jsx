@@ -35,7 +35,7 @@ const Auction = () => {
                     <NounImg />
                 </div>
                 <div
-                    className={`flex xlg:w-1/2 xlg:bg-nouns-lime items-center pt-6 md:pt-0 pb-0 md:min-h-[520px] md:min-w-[520px] ${
+                    className={`flex xlg:w-1/2 xlg:bg-nouns-lime items-center pt-6 md:pt-0 pb-0 lg:min-h-[520px] lg:min-w-[520px] ${
                         flexDirection === "column" ? "bg-dark-gray w-full" : ""
                     }`}
                     style={{
@@ -43,7 +43,7 @@ const Auction = () => {
                     }}
                 >
                     <div>
-                        <div className="mb-2">
+                        <div className="mb-2 md:mt-4 lg:mt-0">
                             <div className="flex flex-col mb-0">
                                 <div className="w-full">
                                     <div className="w-auto">
@@ -125,7 +125,7 @@ const Auction = () => {
                                             <div className="col-lg-12">
                                                 <div className="flex flex-col space-y-10">
                                                     <AuctionPriceRange />
-                                                    <div className="w-[160px]">
+                                                    <div className="w-[160px] flex justify-center text-center items-center">
                                                         <BuyNow
                                                             nft={nounNFTMeta[0]}
                                                             currMintPrice={
