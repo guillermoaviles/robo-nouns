@@ -8,16 +8,15 @@ export default function NounImg() {
     return (
         <div className="flex w-full ml-auto lg:w-[520px]">
             <div className="w-full relative">
-                <div className="w-full">
                     <Image
                         src={nounNFTMeta[0]?.svg ? `data:image/svg+xml;base64,${nounNFTMeta[0]?.svg}` : loadingNoun}
                         alt="Noun Image"
-                        className="md:absolute top-0 left-0 w-full"
+                        className="md:w-1/2 lg:w-full mx-auto"
                         width={300}
                         height={300}
                     />
                 </div>
-            </div>
+            
         </div>
     )
 }
