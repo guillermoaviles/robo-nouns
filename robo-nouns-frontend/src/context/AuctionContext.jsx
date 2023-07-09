@@ -29,7 +29,6 @@ export function AuctionProvider({ children }) {
     const auctionContractAddress = deployments.RoboNounsVRGDA.address
 
     const providerUrl =
-        // "https://goerli.infura.io/v3/ec36f80cbd0e4bdd826ccb9e8f533a9d"
         "https://eth-goerli.g.alchemy.com/v2/8kIFZ8iBRuBDAQqIH73BfPB8ESBwbIUt"
     const provider = new ethers.providers.JsonRpcProvider(providerUrl)
 
@@ -44,21 +43,12 @@ export function AuctionProvider({ children }) {
         try {
             const nextNounData = await contract.fetchNextNoun()
 
-            // TODO: write a better check so newly fetched noun doesn't overwrite all the existing ones
-            // Add a check whether the fetched noun already exists in the array
-            if (
-                nouns[0] === null ||
-                (nextNounData.blockNumber !== nouns[0].blockNumber &&
-                    !nouns.some(
-                        (noun) =>
-                            noun &&
-                            noun.blockNumber === nextNounData.blockNumber
-                    ))
-            ) {
+            if (JSON.stringify(nouns[0]) !== JSON.stringify(nextNounData)) {
                 setNouns((prevNouns) => [
                     nextNounData,
                     ...prevNouns.slice(0, 3),
                 ])
+                setTimeout(resolve, 100) // Wait for 100ms
             }
         } catch (error) {
             console.error("Error fetching NFT metadata and price info:", error)
@@ -105,17 +95,21 @@ export function AuctionProvider({ children }) {
                 try {
                     const latestNoun = await contract.fetchNextNoun()
                     let initialNouns = [latestNoun]
+                    let lastKnownBlock = latestNoun.blockNumber.toNumber() // using BigNumber's toNumber method to get actual number
 
                     for (let i = 1; i < 4; i++) {
                         const noun = await contract.fetchNoun(
-                            (latestNoun.blockNumber - i).toString()
+                            (lastKnownBlock - i).toString()
                         )
                         // Check if the noun is already in the initialNouns array
                         if (
                             !initialNouns.some(
-                                (n) => n.blockNumber === noun.blockNumber
+                                (n) =>
+                                    n.blockNumber.toNumber() ===
+                                    noun.blockNumber.toNumber()
                             )
                         ) {
+                            // using BigNumber's toNumber method to get actual number
                             initialNouns.push(noun)
                         }
                     }
@@ -137,6 +131,7 @@ export function AuctionProvider({ children }) {
         if (initialFetchComplete) {
             const interval = setInterval(() => {
                 fetchContractData()
+                console.log("nouns", nouns)
                 console.log("currMintPrice", currMintPrice)
                 console.log("reservePrice", reservePrice)
                 console.log("lastTokenBlock", lastTokenBlock)
