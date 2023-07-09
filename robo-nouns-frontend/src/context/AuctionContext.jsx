@@ -1,4 +1,10 @@
-import { createContext, useContext, useEffect, useState } from "react"
+import {
+    createContext,
+    useContext,
+    useEffect,
+    useState,
+    useCallback,
+} from "react"
 import { useContract } from "@thirdweb-dev/react"
 import { ethers } from "ethers"
 import deployments from "../../../robo-nouns-contracts/assets/deployments.json"
@@ -11,7 +17,6 @@ export function useAuction() {
 }
 
 export function AuctionProvider({ children }) {
-    let length = 4
     const [nouns, setNouns] = useState(Array.from({ length: 4 }, () => null))
     const [lastTokenBlock, setLastTokenBlock] = useState(0)
     const [globalStartTime, setGlobalStartTime] = useState(0)
@@ -19,6 +24,8 @@ export function AuctionProvider({ children }) {
     const [reservePrice, setReservePrice] = useState("")
     const [currMintPrice, setCurrMintPrice] = useState("")
     const [targetPrice, setTargetPrice] = useState("")
+    const [initialFetchComplete, setInitialFetchComplete] = useState(false)
+
     const auctionContractAddress = deployments.RoboNounsVRGDA.address
 
     const providerUrl =
@@ -32,8 +39,34 @@ export function AuctionProvider({ children }) {
         provider
     )
 
-    const fetchContractData = async () => {
+    const fetchContractData = useCallback(async () => {
         try {
+            const nextNounData = await contract.fetchNextNoun()
+
+            // TODO: write a better check so newly fetched noun doesn't overwrite all the existing ones
+            // Add a check whether the fetched noun already exists in the array
+            if (
+                nouns[0] === null ||
+                (nextNounData.blockNumber !== nouns[0].blockNumber &&
+                    !nouns.some(
+                        (noun) =>
+                            noun &&
+                            noun.blockNumber === nextNounData.blockNumber
+                    ))
+            ) {
+                setNouns((prevNouns) => [
+                    nextNounData,
+                    ...prevNouns.slice(0, 3),
+                ])
+            }
+        } catch (error) {
+            console.error("Error fetching NFT metadata and price info:", error)
+        }
+    }, [contract, nouns])
+
+    // loading new state after minting
+    useEffect(() => {
+        const fetchNewAuctionState = async () => {
             const lastTokenBlock = await contract.lastTokenBlock()
             setLastTokenBlock(lastTokenBlock.toNumber())
 
@@ -41,30 +74,19 @@ export function AuctionProvider({ children }) {
             const maxPrice =
                 reservePrice > currVRGDAPrice ? reservePrice : currVRGDAPrice
             setCurrMintPrice(ethers.utils.formatEther(maxPrice))
-
-            const nounData = await contract.fetchNextNoun()
-
-            if (
-                nounData &&
-                (!nouns[0] || nounData.blockNumber !== nouns[0].blockNumber)
-            ) {
-                let initialNouns = []
-                for (let i = 1; i <= 3; i++) {
-                    const noun = await contract.fetchNoun(
-                        (nounData.blockNumber - i).toString()
-                    )
-                    initialNouns.push(noun || null)
-                }
-                setNouns([nounData, ...initialNouns])
-            }
-        } catch (error) {
-            console.error("Error fetching NFT metadata and price info:", error)
         }
-    }
 
+        fetchNewAuctionState()
+    }, [nouns])
+
+    // loading initial client state
     useEffect(() => {
-        // this only need to run once - these values are constant
         const setInitialValues = async () => {
+            // this will later update but only after minting
+            const lastTokenBlock = await contract.lastTokenBlock()
+            setLastTokenBlock(lastTokenBlock.toNumber())
+
+            // this only need to run once - these values are constant
             const startTime = await contract.startTime()
             setGlobalStartTime(startTime.toNumber())
 
@@ -76,40 +98,52 @@ export function AuctionProvider({ children }) {
 
             const targetPrice = await contract.targetPrice()
             setTargetPrice(ethers.utils.formatEther(targetPrice))
+
+            // fetching initial nouns
+            const fetchInitialNouns = async () => {
+                try {
+                    const latestNoun = await contract.fetchNextNoun()
+                    let initialNouns = [latestNoun]
+
+                    for (let i = 1; i < 4; i++) {
+                        const noun = await contract.fetchNoun(
+                            (latestNoun.blockNumber - i).toString()
+                        )
+                        // Check if the noun is already in the initialNouns array
+                        if (
+                            !initialNouns.some(
+                                (n) => n.blockNumber === noun.blockNumber
+                            )
+                        ) {
+                            initialNouns.push(noun)
+                        }
+                    }
+
+                    setNouns(initialNouns)
+                    setInitialFetchComplete(true)
+                } catch (error) {
+                    console.error("Error fetching initial nouns:", error)
+                }
+            }
+
+            fetchInitialNouns()
         }
 
         setInitialValues()
     }, [])
 
     useEffect(() => {
-        const fetchInitialNouns = async () => {
-            try {
-                let initialNouns = []
-                for (let i = 1; i <= 4; i++) {
-                    const noun = await contract.fetchNoun(
-                        (nouns[0]?.blockNumber - i).toString()
-                    )
-                    initialNouns.push(noun)
-                }
-                setNouns(initialNouns.reverse())
-            } catch (error) {
-                console.error("Error fetching initial nouns:", error)
-            }
+        if (initialFetchComplete) {
+            const interval = setInterval(() => {
+                fetchContractData()
+                console.log("currMintPrice", currMintPrice)
+                console.log("reservePrice", reservePrice)
+                console.log("lastTokenBlock", lastTokenBlock)
+                console.log("currBlockNumber", nouns[0]?.blockNumber.toString())
+            }, 1000)
+            return () => clearInterval(interval)
         }
-
-        fetchInitialNouns()
-    }, []) // Run this when nouns updates
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            fetchContractData()
-            console.log("currMintPrice", currMintPrice)
-            console.log("reservePrice", reservePrice)
-            console.log("lastTokenBlock", lastTokenBlock)
-            console.log("currBlockNumber", nouns[0]?.blockNumber.toString())
-        }, 1000)
-        return () => clearInterval(interval)
-    }, [fetchContractData])
+    }, [fetchContractData, initialFetchComplete])
 
     const auctionData = {
         auctionContractAddress,
