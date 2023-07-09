@@ -12,7 +12,7 @@ import { RoboNounsToken } from "contracts/RoboNounsToken.sol";
 import { toWadUnsafe, toDaysWadUnsafe, wadLn } from "solmate/src/utils/SignedWadMath.sol";
 
 contract RoboNounsVRGDA is IRoboNounsVRGDA, Ownable {
-    address public constant nounsDAO = 0xA7F1653E99CdE8f76839C70c64122456AFA5Cf6E;
+    address public constant nounsDAO = 0x0BC3807Ec262cB779b38D65b38158acC3bfedE10;
 
     /// @notice Time of sale of the first RoboNoun, used to calculate VRGDA price
     uint256 public startTime;
