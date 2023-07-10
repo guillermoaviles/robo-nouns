@@ -41,19 +41,25 @@ export function AuctionProvider({ children }) {
 
     const fetchContractData = useCallback(async () => {
         try {
-            const nextNounData = await contract.fetchNextNoun()
-
-            if (JSON.stringify(nouns[0]) !== JSON.stringify(nextNounData)) {
-                setNouns((prevNouns) => [
-                    nextNounData,
-                    ...prevNouns.slice(0, 3),
-                ])
-                setTimeout(resolve, 100) // Wait for 100ms
-            }
+          const nextNounData = await contract.fetchNextNoun();
+      
+          if (JSON.stringify(nouns[0]) !== JSON.stringify(nextNounData)) {
+            setNouns((prevNouns) => [
+              nextNounData,
+              ...prevNouns.slice(0, 3),
+            ]);
+          }
         } catch (error) {
-            console.error("Error fetching NFT metadata and price info:", error)
+          console.error("Error fetching NFT metadata and price info:", error);
         }
-    }, [contract, nouns])
+      }, [contract, nouns]);
+      
+      useEffect(() => {
+        const resolveTimeout = setTimeout(fetchContractData, 100);
+      
+        return () => clearTimeout(resolveTimeout);
+      }, [fetchContractData]);
+      
 
     // loading new state after minting
     useEffect(() => {
