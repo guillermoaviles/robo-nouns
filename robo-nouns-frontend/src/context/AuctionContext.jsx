@@ -147,12 +147,12 @@ export function AuctionProvider({ children }) {
     useEffect(() => {
         const fetchInterval = setInterval(() => {
             if (isPageVisible) {
-                fetchContractData();
+                setInitialFetchComplete(false);
             }
         }, 1000);
 
         return () => clearInterval(fetchInterval);
-    }, [fetchContractData, isPageVisible]);
+    }, [setInitialFetchComplete, isPageVisible]);
 
     const auctionData = {
         auctionContractAddress,
