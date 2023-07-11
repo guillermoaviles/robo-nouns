@@ -5,7 +5,7 @@ import BuyNow from "../BuyNow"
 import loadingNoun from "../../assets/loading-skull-noun.gif"
 
 const PrevNFTs = () => {
-    const { nouns, currMintPrice } = useAuction()
+    const { nounTwo, nounThree, nounFour, currMintPrice } = useAuction()
 
     return (
         <div className="w-full md:pt-0 pt-8 bg-dark-gray px-20">
@@ -17,8 +17,8 @@ const PrevNFTs = () => {
                     <Image
                         className="bg-nouns-lime"
                         src={
-                            nouns[1]?.svg
-                                ? `data:image/svg+xml;base64,${nouns[1]?.svg}`
+                            nounTwo?.svg
+                                ? `data:image/svg+xml;base64,${nounTwo?.svg}`
                                 : loadingNoun
                         }
                         alt={`NFT`}
@@ -27,7 +27,7 @@ const PrevNFTs = () => {
                     />
                     <div className="justify-center mt-10">
                         <BuyNow
-                            nft={nouns[1]}
+                            nft={nounTwo}
                             currMintPrice={currMintPrice}
                             nftNo={0}
                         />
@@ -37,8 +37,8 @@ const PrevNFTs = () => {
                     <Image
                         className="bg-nouns-lime"
                         src={
-                            nouns[2]?.svg
-                                ? `data:image/svg+xml;base64,${nouns[2]?.svg}`
+                            nounThree?.svg
+                                ? `data:image/svg+xml;base64,${nounThree?.svg}`
                                 : loadingNoun
                         }
                         alt={`NFT`}
@@ -47,7 +47,7 @@ const PrevNFTs = () => {
                     />
                     <div className="justify-center mt-10">
                         <BuyNow
-                            nft={nouns[2]}
+                            nft={nounThree}
                             currMintPrice={currMintPrice}
                             nftNo={1}
                         />
@@ -57,8 +57,8 @@ const PrevNFTs = () => {
                     <Image
                         className="bg-nouns-lime"
                         src={
-                            nouns[3]?.svg
-                                ? `data:image/svg+xml;base64,${nouns[3]?.svg}`
+                            nounFour?.svg
+                                ? `data:image/svg+xml;base64,${nounFour?.svg}`
                                 : loadingNoun
                         }
                         alt={`NFT`}
@@ -67,35 +67,12 @@ const PrevNFTs = () => {
                     />
                     <div className="justify-center mt-10">
                         <BuyNow
-                            nft={nouns[3]}
+                            nft={nounFour}
                             currMintPrice={currMintPrice}
                             nftNo={2}
                         />
                     </div>
                 </div>
-                {/* {prevNouns &&
-                    prevNouns.slice(-3).map((nft, index) => (
-                        <div key={index} className="py-6">
-                            <Image
-                                className="bg-nouns-lime"
-                                src={
-                                    nft?.svg
-                                        ? `data:image/svg+xml;base64,${nft?.svg}`
-                                        : loadingNoun
-                                }
-                                alt={`NFT ${index}`}
-                                width={280}
-                                height={200}
-                            />
-                            <div className="justify-center mt-10">
-                                <BuyNow
-                                    nft={nft}
-                                    currMintPrice={currMintPrice}
-                                    nftNo={index + 1}
-                                />
-                            </div>
-                        </div>
-                    ))} */}
             </div>
         </div>
     )

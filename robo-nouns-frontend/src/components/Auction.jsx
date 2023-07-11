@@ -8,7 +8,7 @@ import NounImg from "./NounImg"
 import { useAuction } from "@/context/AuctionContext.jsx"
 
 const Auction = () => {
-    const { nouns, currMintPrice } = useAuction()
+    const { nounNFTMeta, currMintPrice } = useAuction()
     const [flexDirection, setFlexDirection] = useState("row")
 
     useEffect(() => {
@@ -68,7 +68,7 @@ const Auction = () => {
                                             }`}
                                         >
                                             Robo Noun{" "}
-                                            {nouns[0]?.nounId?.toNumber() ||
+                                            {nounNFTMeta[0]?.nounId?.toNumber() ||
                                                 "0"}
                                         </h1>
                                     </div>
@@ -127,7 +127,7 @@ const Auction = () => {
                                                     <AuctionPriceRange />
                                                     <div className="w-[160px] flex justify-center text-center items-center">
                                                         <BuyNow
-                                                            nft={nouns[0]}
+                                                            nft={nounNFTMeta[0]}
                                                             currMintPrice={
                                                                 currMintPrice
                                                             }

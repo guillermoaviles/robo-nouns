@@ -207,7 +207,6 @@ export default function BuyNow({ nft, currMintPrice }) {
                                 <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm">
                                     <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                                         <div className="sm:flex sm:items-start">
-                                            {/* <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center bg-[#70e890] sm:mx-0 sm:h-14 sm:w-14"> */}
                                             {transactionStatus ===
                                                 "Pending" && (
                                                 <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center bg-[#70e890] sm:mx-0 sm:h-14 sm:w-14">
@@ -248,7 +247,6 @@ export default function BuyNow({ nft, currMintPrice }) {
                                                     </svg>
                                                 </div>
                                             )}
-                                            {/* </div> */}
                                             <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                                                 <Dialog.Title
                                                     as="h3"

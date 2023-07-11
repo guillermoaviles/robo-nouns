@@ -3,15 +3,15 @@ import { useAuction } from "../../context/AuctionContext"
 import loadingNoun from "../../assets/loading-skull-noun.gif"
 
 export default function NounImg() {
-    const { nouns } = useAuction()
+    const { nounNFTMeta } = useAuction()
 
     return (
         <div className="flex w-full ml-auto lg:w-[520px]">
             <div className="w-full relative">
                 <Image
                     src={
-                        nouns[0]?.svg
-                            ? `data:image/svg+xml;base64,${nouns[0]?.svg}`
+                        nounNFTMeta[0]?.svg
+                            ? `data:image/svg+xml;base64,${nounNFTMeta[0]?.svg}`
                             : loadingNoun
                     }
                     alt="Noun Image"
