@@ -53,7 +53,7 @@ export function AuctionProvider({ children }) {
         } catch (error) {
             console.error("Error fetching NFT metadata and price info:", error);
         }
-    }, [contract, nouns]);
+    }, [contract]);
 
 
     useEffect(() => {
