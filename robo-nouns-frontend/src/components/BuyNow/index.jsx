@@ -5,28 +5,15 @@ import { Fragment, useState } from "react"
 import { Dialog, Transition } from "@headlessui/react"
 import loadingNoun from "../../assets/loading-skull-noun.gif"
 import { useAuction } from "@/context/AuctionContext"
-import deployments from "../../../../robo-nouns-contracts/assets/deployments.json";
-import newAbi from "../../context/abi.json";
 
-export default function BuyNow({ nft, currMintPrice }) {
-  const { lastTokenBlock } = useAuction()
+export default function BuyNow({ nft }) {
+  const { lastTokenBlock, currMintPrice } = useAuction()
   const [showModal, setShowModal] = useState(false)
   const [transactionStatus, setTransactionStatus] = useState("")
   const [transactionHash, setTransactionHash] = useState("")
 
-  const auctionContractAddress = deployments.RoboNounsVRGDA.address;
-  const providerUrl =
-    "https://eth-goerli.g.alchemy.com/v2/8kIFZ8iBRuBDAQqIH73BfPB8ESBwbIUt";
-  const provider = new ethers.providers.JsonRpcProvider(providerUrl);
-  const auctionContractABI = newAbi.abi;
-  const contract = new ethers.Contract(
-    auctionContractAddress,
-    auctionContractABI,
-    provider
-  );
+  const { contract } = useContract("0x4Bf735467B36ab59c491049e32d76bC7755DCF90")
 
-  console.log('nft', nft?.blockNumber);
-  console.log('contract', contract);
   const call = async () => {
     console.log(contract)
     try {
