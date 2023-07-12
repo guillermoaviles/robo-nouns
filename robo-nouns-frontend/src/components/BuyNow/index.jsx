@@ -15,16 +15,10 @@ export default function BuyNow({ nft, currMintPrice }) {
     const { contract } = useContract(auctionContractAddress)
 
     const call = async () => {
-        console.log(contract)
         try {
             if (!contract) {
                 throw new Error("Contract is undefined")
             }
-            console.log("lastTokenBlock", lastTokenBlock)
-            console.log(
-                "currBlockNumber",
-                ethers.BigNumber.from(nft.blockNumber).toString()
-            )
             setShowModal(true)
             setTransactionStatus("Pending")
             const args = [ethers.BigNumber.from(nft.blockNumber).toString()]

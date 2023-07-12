@@ -6,7 +6,7 @@ export default function NounID() {
 	return (
 		<div className="font-londrina">
 			<h1 className="text-[#1C2228] text-7xl mt-2">
-				Robo Noun {nounNFTMeta && nounNFTMeta[0].nounId.toNumber()}
+				Robo Noun {nounNFTMeta && nounNFTMeta?.nounId.toNumber()}
 			</h1>
 		</div>
 	);

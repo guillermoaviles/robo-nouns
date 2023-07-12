@@ -16,9 +16,7 @@ export function useAuction() {
 
 export function AuctionProvider({ children }) {
     let length = 4;
-    const [nounNFTMeta, setNounNFTMeta] = useState(
-        Array.from({ length }, () => null)
-    )
+    const [nounNFTMeta, setNounNFTMeta] = useState("")
     const [nounTwo, setNounTwo] = useState("")
     const [nounThree, setNounThree] = useState("")
     const [nounFour, setNounFour] = useState("")
@@ -48,20 +46,20 @@ export function AuctionProvider({ children }) {
             setLastTokenBlock(lastTokenBlock.toNumber())
 
             const nounMeta = await contract.fetchNextNoun()
-            addNounData(nounMeta)
+            setNounNFTMeta(nounMeta)
 
             const nounTwo = await contract.fetchNoun(
-                nounNFTMeta[0]?.blockNumber.toNumber() - 1
+                nounNFTMeta.blockNumber.toNumber() - 1
             )
             setNounTwo(nounTwo)
 
             const nounThree = await contract.fetchNoun(
-                nounNFTMeta[0]?.blockNumber.toNumber() - 2
+                nounNFTMeta.blockNumber.toNumber() - 2
             )
             setNounThree(nounThree)
 
             const nounFour = await contract.fetchNoun(
-                nounNFTMeta[0]?.blockNumber.toNumber() - 3
+                nounNFTMeta.blockNumber.toNumber() - 3
             )
             setNounFour(nounFour)
 
@@ -96,58 +94,10 @@ export function AuctionProvider({ children }) {
     useEffect(() => {
         const interval = setInterval(() => {
             fetchNFTMetadata()
-            console.log("currMintPrice", currMintPrice)
-            console.log("reservePrice", reservePrice)
-            console.log("lastTokenBlock", lastTokenBlock)
-            console.log(
-                "currBlockNumber",
-                nounNFTMeta[0]?.blockNumber.toNumber()
-            )
         }, 1000)
         return () => clearInterval(interval)
     }, [nounNFTMeta])
 
-    const addNounData = (newNoun) => {
-        const isDuplicate = nounNFTMeta
-            ? nounNFTMeta.some(
-                  (noun) =>
-                      noun &&
-                      newNoun &&
-                      noun.blockNumber &&
-                      newNoun.blockNumber &&
-                      noun.blockNumber.toNumber() ===
-                          newNoun.blockNumber.toNumber()
-              )
-            : false
-        if (!isDuplicate) {
-            const updatedNounNFTMeta = [newNoun, ...nounNFTMeta]
-            if (updatedNounNFTMeta.length > length) {
-                updatedNounNFTMeta.pop()
-            }
-            setNounNFTMeta(updatedNounNFTMeta)
-        }
-    }
-
-    // const updateNounTwo = (newNounTwo) => {
-    //     setPrevNouns((prevNouns) => ({
-    //         ...prevNouns,
-    //         nounTwo: newNounTwo,
-    //     }))
-    // }
-
-    // const updateNounThree = (newNounThree) => {
-    //     setPrevNouns((prevNouns) => ({
-    //         ...prevNouns,
-    //         nounThree: newNounThree,
-    //     }))
-    // }
-
-    // const updateNounFour = (newNounFour) => {
-    //     setPrevNouns((prevNouns) => ({
-    //         ...prevNouns,
-    //         nounFour: newNounFour,
-    //     }))
-    // }
 
     const auctionData = {
         auctionContractAddress,

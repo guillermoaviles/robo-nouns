@@ -10,8 +10,8 @@ export default function NounImg() {
             <div className="w-full relative">
                 <Image
                     src={
-                        nounNFTMeta[0]?.svg
-                            ? `data:image/svg+xml;base64,${nounNFTMeta[0]?.svg}`
+                        nounNFTMeta?.svg
+                            ? `data:image/svg+xml;base64,${nounNFTMeta?.svg}`
                             : loadingNoun
                     }
                     alt="Noun Image"

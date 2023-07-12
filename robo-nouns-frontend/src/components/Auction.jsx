@@ -68,7 +68,7 @@ const Auction = () => {
                                             }`}
                                         >
                                             Robo Noun{" "}
-                                            {nounNFTMeta[0]?.nounId?.toNumber() ||
+                                            {nounNFTMeta?.nounId?.toNumber() ||
                                                 "0"}
                                         </h1>
                                     </div>
