@@ -73,29 +73,6 @@ const PrevNFTs = () => {
                         />
                     </div>
                 </div>
-                {/* {prevNouns &&
-                    prevNouns.slice(-3).map((nft, index) => (
-                        <div key={index} className="py-6">
-                            <Image
-                                className="bg-nouns-lime"
-                                src={
-                                    nft?.svg
-                                        ? `data:image/svg+xml;base64,${nft?.svg}`
-                                        : loadingNoun
-                                }
-                                alt={`NFT ${index}`}
-                                width={280}
-                                height={200}
-                            />
-                            <div className="justify-center mt-10">
-                                <BuyNow
-                                    nft={nft}
-                                    currMintPrice={currMintPrice}
-                                    nftNo={index + 1}
-                                />
-                            </div>
-                        </div>
-                    ))} */}
             </div>
         </div>
     )
