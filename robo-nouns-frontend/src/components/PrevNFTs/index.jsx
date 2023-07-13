@@ -5,7 +5,7 @@ import BuyNow from "../BuyNow"
 import loadingNoun from "../../assets/loading-skull-noun.gif"
 
 const PrevNFTs = () => {
-    const { nounTwo, nounThree, nounFour, currMintPrice } = useAuction()
+    const { nouns, currMintPrice } = useAuction()
 
     return (
         <div className="w-full md:pt-0 pt-8 bg-dark-gray px-20">
@@ -17,8 +17,8 @@ const PrevNFTs = () => {
                     <Image
                         className="bg-nouns-lime"
                         src={
-                            nounTwo?.svg
-                                ? `data:image/svg+xml;base64,${nounTwo?.svg}`
+                            nouns[1]?.svg
+                                ? `data:image/svg+xml;base64,${nouns[1]?.svg}`
                                 : loadingNoun
                         }
                         alt={`NFT`}
@@ -27,7 +27,7 @@ const PrevNFTs = () => {
                     />
                     <div className="justify-center mt-10">
                         <BuyNow
-                            nft={nounTwo}
+                            nft={nouns[1]}
                             currMintPrice={currMintPrice}
                             nftNo={0}
                         />
@@ -37,8 +37,8 @@ const PrevNFTs = () => {
                     <Image
                         className="bg-nouns-lime"
                         src={
-                            nounThree?.svg
-                                ? `data:image/svg+xml;base64,${nounThree?.svg}`
+                            nouns[2]?.svg
+                                ? `data:image/svg+xml;base64,${nouns[2]?.svg}`
                                 : loadingNoun
                         }
                         alt={`NFT`}
@@ -47,7 +47,7 @@ const PrevNFTs = () => {
                     />
                     <div className="justify-center mt-10">
                         <BuyNow
-                            nft={nounThree}
+                            nft={nouns[2]}
                             currMintPrice={currMintPrice}
                             nftNo={1}
                         />
@@ -57,8 +57,8 @@ const PrevNFTs = () => {
                     <Image
                         className="bg-nouns-lime"
                         src={
-                            nounFour?.svg
-                                ? `data:image/svg+xml;base64,${nounFour?.svg}`
+                            nouns[3]?.svg
+                                ? `data:image/svg+xml;base64,${nouns[3]?.svg}`
                                 : loadingNoun
                         }
                         alt={`NFT`}
@@ -67,7 +67,7 @@ const PrevNFTs = () => {
                     />
                     <div className="justify-center mt-10">
                         <BuyNow
-                            nft={nounFour}
+                            nft={nouns[3]}
                             currMintPrice={currMintPrice}
                             nftNo={2}
                         />

@@ -1,9 +1,4 @@
-import {
-    createContext,
-    useContext,
-    useEffect,
-    useState
-} from "react"
+import { createContext, useContext, useEffect, useState } from "react"
 import { ethers } from "ethers"
 import deployments from "../../../robo-nouns-contracts/assets/deployments.json"
 import newAbi from "./abi.json"
@@ -15,17 +10,15 @@ export function useAuction() {
 }
 
 export function AuctionProvider({ children }) {
-    let length = 4;
-    const [nounNFTMeta, setNounNFTMeta] = useState("")
-    const [nounTwo, setNounTwo] = useState("")
-    const [nounThree, setNounThree] = useState("")
-    const [nounFour, setNounFour] = useState("")
+    let length = 4
+    const [nouns, setNouns] = useState(Array.from({ length }, () => null))
     const [lastTokenBlock, setLastTokenBlock] = useState(0)
     const [globalStartTime, setGlobalStartTime] = useState(0)
     const [priceDecayInterval, setPriceDecayInterval] = useState(0)
     const [reservePrice, setReservePrice] = useState("")
     const [currMintPrice, setCurrMintPrice] = useState("")
     const [targetPrice, setTargetPrice] = useState("")
+    const [initialFetchComplete, setInitialFetchComplete] = useState(false)
 
     const auctionContractAddress = deployments.RoboNounsVRGDA.address
 
@@ -40,74 +33,146 @@ export function AuctionProvider({ children }) {
         provider
     )
 
-    const fetchNFTMetadata = async () => {
-        try {
-            const lastTokenBlock = await contract.lastTokenBlock()
-            setLastTokenBlock(lastTokenBlock.toNumber())
+    //   useEffect(() => {
+    //     // This only needs to run once - these values are constant
+    //     const setInitialValues = async () => {
+    //       const startTime = await contract.startTime();
+    //       setGlobalStartTime(startTime.toNumber());
 
-            const nounMeta = await contract.fetchNextNoun()
-            setNounNFTMeta(nounMeta)
+    //       const priceDecayInterval = await contract.priceDecayInterval();
+    //       setPriceDecayInterval(priceDecayInterval.toNumber());
 
-            const nounTwo = await contract.fetchNoun(
-                nounNFTMeta.blockNumber.toNumber() - 1
-            )
-            setNounTwo(nounTwo)
+    //       const reservePrice = await contract.reservePrice();
+    //       setReservePrice(ethers.utils.formatEther(reservePrice));
 
-            const nounThree = await contract.fetchNoun(
-                nounNFTMeta.blockNumber.toNumber() - 2
-            )
-            setNounThree(nounThree)
+    //       const targetPrice = await contract.targetPrice();
+    //       setTargetPrice(ethers.utils.formatEther(targetPrice));
+    //     };
 
-            const nounFour = await contract.fetchNoun(
-                nounNFTMeta.blockNumber.toNumber() - 3
-            )
-            setNounFour(nounFour)
+    //     setInitialValues();
+    //   }, []);
 
-            const currVRGDAPrice = await contract.getCurrentVRGDAPrice()
-            const maxPrice =
-                reservePrice > currVRGDAPrice ? reservePrice : currVRGDAPrice
-            setCurrMintPrice(ethers.utils.formatEther(maxPrice))
-        } catch (error) {
-            console.error("Error fetching NFT metadata and price info:", error)
+    useEffect(() => {
+        // defining a function inside useEffect to use async/await
+        const setInitialValues = async () => {
+            try {
+                // this will later update but only after minting
+                const lastTokenBlock = await contract.lastTokenBlock()
+                setLastTokenBlock(lastTokenBlock.toNumber())
+
+                // this only need to run once - these values are constant
+                const startTime = await contract.startTime()
+                setGlobalStartTime(startTime.toNumber())
+
+                const priceDecayInterval = await contract.priceDecayInterval()
+                setPriceDecayInterval(priceDecayInterval.toNumber())
+
+                const reservePrice = await contract.reservePrice()
+                setReservePrice(ethers.utils.formatEther(reservePrice))
+
+                const targetPrice = await contract.targetPrice()
+                setTargetPrice(ethers.utils.formatEther(targetPrice))
+
+                // fetching initial nouns
+
+                const latestNoun = await contract.fetchNextNoun()
+                let initialNouns = [latestNoun]
+                let lastKnownBlock = latestNoun.blockNumber.toNumber() // using BigNumber's toNumber method to get actual number
+
+                for (let i = 1; i < 4; i++) {
+                    const noun = await contract.fetchNoun(
+                        (lastKnownBlock - i).toString()
+                    )
+                    // Check if the noun is already in the initialNouns array
+                    if (
+                        !initialNouns.some(
+                            (n) =>
+                                n.blockNumber.toNumber() ===
+                                noun.blockNumber.toNumber()
+                        )
+                    ) {
+                        // using BigNumber's toNumber method to get actual number
+                        initialNouns.push(noun)
+                    }
+                }
+
+                setNouns(initialNouns)
+                // this helps to indicate that initial fetch is complete
+                // so that another useEffect that's dependent on <initialFetchComplete> can run
+                setInitialFetchComplete(true)
+            } catch (error) {
+                console.error("Error fetching initial nouns:", error)
+            }
+        }
+        if (!initialFetchComplete) {
+            setInitialValues()
+        }
+    }, [initialFetchComplete])
+
+    const addNounData = (newNoun) => {
+        const isDuplicate = nouns
+            ? nouns.some(
+                  (noun) =>
+                      noun &&
+                      newNoun &&
+                      noun.blockNumber &&
+                      newNoun.blockNumber &&
+                      noun.blockNumber.toNumber() ===
+                          newNoun.blockNumber.toNumber()
+              )
+            : false
+        if (!isDuplicate) {
+            const updatedNouns = [newNoun, ...nouns]
+            if (updatedNouns.length > length) {
+                updatedNouns.pop()
+            }
+            setNouns(updatedNouns)
         }
     }
 
     useEffect(() => {
-        // this only need to run once - these values are constant
-        const setInitialValues = async () => {
-            const startTime = await contract.startTime()
-            setGlobalStartTime(startTime.toNumber())
+        const fetchNFTMetadata = async () => {
+            try {
+                const lastTokenBlock = await contract.lastTokenBlock()
+                setLastTokenBlock(lastTokenBlock.toNumber())
 
-            const priceDecayInterval = await contract.priceDecayInterval()
-            setPriceDecayInterval(priceDecayInterval.toNumber())
+                const nounMeta = await contract.fetchNextNoun()
+                addNounData(nounMeta)
 
-            const reservePrice = await contract.reservePrice()
-            setReservePrice(ethers.utils.formatEther(reservePrice))
-
-            const targetPrice = await contract.targetPrice()
-            setTargetPrice(ethers.utils.formatEther(targetPrice))
+                const currVRGDAPrice = await contract.getCurrentVRGDAPrice()
+                const currMintPrice =
+                    reservePrice > currVRGDAPrice
+                        ? reservePrice
+                        : currVRGDAPrice
+                setCurrMintPrice(ethers.utils.formatEther(currMintPrice))
+            } catch (error) {
+                console.error(
+                    "Error fetching NFT metadata and price info:",
+                    error
+                )
+            }
         }
 
-        setInitialValues()
-    }, [])
-
-    useEffect(() => {
         const interval = setInterval(() => {
             fetchNFTMetadata()
+            console.log("nouns", nouns)
         }, 1000)
-        return () => clearInterval(interval)
-    }, [nounNFTMeta])
 
+        return () => clearInterval(interval)
+    }, [
+        initialFetchComplete,
+        nouns,
+        currMintPrice,
+        reservePrice,
+        lastTokenBlock,
+        addNounData,
+    ])
 
     const auctionData = {
         auctionContractAddress,
         contract,
         lastTokenBlock,
-        nounNFTMeta,
-        nounTwo,
-        nounThree,
-        nounFour,
-        setNounNFTMeta,
+        nouns,
         reservePrice,
         globalStartTime,
         priceDecayInterval,
