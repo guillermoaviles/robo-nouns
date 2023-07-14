@@ -139,7 +139,9 @@ export function AuctionProvider({ children }) {
                 const nounMeta = await contract.fetchNextNoun()
                 addNounData(nounMeta)
 
-                const currVRGDAPrice = await contract.getCurrentVRGDAPrice()
+                const currVRGDAPrice = (
+                    await contract.getCurrentVRGDAPrice()
+                ).toString()
                 const currMintPrice =
                     reservePrice > currVRGDAPrice
                         ? reservePrice
