@@ -138,11 +138,11 @@ task("deploy-goerli", "Deploy contracts to goerli").setAction(
         await delay(5)
 
         // VRGDA values
-        const reservePrice = "15000000000000000"
-        const targetPrice = "75000000000000000"
+        const reservePrice = ethers.utils.parseEther("0.015") // 0.015 ETH == 15000000000000000 wei
+        const targetPrice = ethers.utils.parseEther("0.075") // 0.075 ETH == 75000000000000000 wei
         const priceDecayPercent = "31" + "0000000000000000" // priceDecayPercent = 31% or 0.31 * 1e18 = "310000000000000000"
-        const perTimeUnit = "2" + "000000000000000000" // perTimeUnit = 2 nouns per 12 hours or 2 * 1e18 = "1000000000000000000"
-        const updateInterval = "300" // updateInterval = 5 minutes
+        const perTimeUnit = "2" + "000000000000000000" // perTimeUnit = 2 nouns per 12 hours or 2 * 1e18 = "2000000000000000000"
+        const updateInterval = "600" // updateInterval = 10 minutes
         const targetSaleInterval = "86400" // targetSaleInterval = 24 hours
 
         const roboNounsVRGDA = await (
@@ -160,8 +160,8 @@ task("deploy-goerli", "Deploy contracts to goerli").setAction(
             name: "RoboNounsVRGDA",
             address: roboNounsVRGDA.address,
             constructorArguments: [
-                reservePrice,
-                targetPrice,
+                reservePrice.toString(),
+                targetPrice.toString(),
                 priceDecayPercent,
                 perTimeUnit,
                 updateInterval,
@@ -179,13 +179,13 @@ task("deploy-goerli", "Deploy contracts to goerli").setAction(
             await c.instance.deployTransaction.wait()
             c.address = c.instance.address
             try {
-            await saveDeployedContract(
-                network.chainId,
-                c.name,
-                c.address,
-                c.instance.interface.format("json")
-            )
-            console.log("Saved deployed contract")
+                await saveDeployedContract(
+                    network.chainId,
+                    c.name,
+                    c.address,
+                    c.instance.interface.format("json")
+                )
+                console.log("Saved deployed contract")
             } catch (e) {
                 console.log("Error saving deployed contract: ", e)
             }

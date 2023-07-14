@@ -25,13 +25,6 @@ task(
     )
     .setAction(
         async ({ nftDescriptor, nounsDescriptor }, { ethers, network }) => {
-            const options = {
-                gasLimit:
-                    network.name === "hardhat" || network.name === "localhost"
-                        ? 15_000_000
-                        : 5000000,
-            }
-
             const descriptorFactory = await ethers.getContractFactory(
                 "NounsDescriptorV2",
                 {
@@ -61,46 +54,49 @@ task(
 
             try {
                 console.log("Adding backgrounds and palettes...")
-                await descriptorContract.addManyBackgrounds(bgcolors)
-                await delay(2)
-                console.log("Backgrounds added.")
+                // await descriptorContract.addManyBackgrounds(bgcolors)
+                // await delay(2)
+                // console.log("Backgrounds added.")
 
-                await descriptorContract.setPalette(
-                    0,
-                    `0x000000${palette.join("")}`
-                )
-                await delay(2)
+                // await descriptorContract.setPalette(
+                //     0,
+                //     `0x000000${palette.join("")}`
+                // )
+                // await delay(2)
 
-                await descriptorContract.addBodies(
-                    bodiesPage.encodedCompressed,
-                    bodiesPage.originalLength,
-                    bodiesPage.itemCount,
-                    options
-                )
-                await delay(2)
+                // await descriptorContract.addBodies(
+                //     bodiesPage.encodedCompressed,
+                //     bodiesPage.originalLength,
+                //     bodiesPage.itemCount,
+                //     options
+                // )
+                // await delay(2)
 
-                await descriptorContract.addHeads(
-                    headsPage.encodedCompressed,
-                    headsPage.originalLength,
-                    headsPage.itemCount,
-                    options
-                )
-                await delay(2)
+                // await descriptorContract.addHeads(
+                //     headsPage.encodedCompressed,
+                //     headsPage.originalLength,
+                //     headsPage.itemCount,
+                //     options
+                // )
+                // await delay(2)
 
-                await descriptorContract.addGlasses(
-                    glassesPage.encodedCompressed,
-                    glassesPage.originalLength,
-                    glassesPage.itemCount,
-                    options
-                )
-                await delay(2)
+                // console.log("Adding glasses...")
+                // await descriptorContract.addGlasses(
+                //     glassesPage.encodedCompressed,
+                //     glassesPage.originalLength,
+                //     glassesPage.itemCount,
+                //     options
+                // )
+                // await delay(2)
+                // console.log("Glasses added.")
 
+                console.log("Adding accessories...")
                 await descriptorContract.addAccessories(
                     accessoriesPage.encodedCompressed,
                     accessoriesPage.originalLength,
-                    accessoriesPage.itemCount,
-                    options
+                    accessoriesPage.itemCount
                 )
+                console.log("Accessories added.")
 
                 console.log(
                     "Descriptor populated with palettes and accessories."

@@ -77,6 +77,11 @@ const config: HardhatUserConfig = {
         outputFile: "gas-report.txt",
     },
     networks: {
+        mainnet: {
+            url: process.env.MAINNET_RPC_URL || "",
+            accounts: getWallet(),
+            gasPrice: 14500000000,
+        },
         hardhat: {
             blockGasLimit: 15_000_000,
             // forking: {
@@ -133,8 +138,7 @@ const config: HardhatUserConfig = {
         goerli: {
             url: process.env.GOERLI_RPC_URL || "",
             accounts: getWallet(),
-            gas: 30_000_000,
-            gasPrice: 1000000000,
+            gasPrice: 3000000000,
         },
         harmonyTest: {
             url: process.env.HARMONY_TEST_RPC_URL || "",
@@ -179,6 +183,7 @@ const config: HardhatUserConfig = {
     },
     etherscan: {
         apiKey: {
+            mainnet: process.env.ETHERSCAN_API_KEY || "",
             arbitrumTestnet: process.env.ARBISCAN_API_KEY || "",
             auroraTestnet: process.env.AURORA_API_KEY || "",
             avalancheFujiTestnet: process.env.SNOWTRACE_API_KEY || "",
