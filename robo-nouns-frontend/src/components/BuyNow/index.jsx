@@ -31,7 +31,6 @@ export default function BuyNow({ nft, currMintPrice }) {
             const receipt = tx.receipt
             console.log("receipt", receipt)
             setTransactionStatus("Success")
-            setTransactionHash(`${tx.receipt.transactionHash}`)
         } catch (err) {
             console.error("contract call failure", err)
             setTransactionStatus("Failed")

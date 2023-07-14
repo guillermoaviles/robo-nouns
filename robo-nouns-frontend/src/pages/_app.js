@@ -5,7 +5,7 @@ import { AuctionProvider } from "../context/AuctionContext";
 
 export default function App({ Component, pageProps }) {
 	return (
-		<ThirdwebProvider activeChain="goerli">
+		<ThirdwebProvider activeChain="ethereum">
 			<AuctionProvider>
 				<Component {...pageProps} />
 			</AuctionProvider>
