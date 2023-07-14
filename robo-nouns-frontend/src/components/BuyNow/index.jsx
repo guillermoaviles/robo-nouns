@@ -279,7 +279,7 @@ export default function BuyNow({ nft, currMintPrice }) {
                                             {transactionStatus ===
                                                 "Success" && (
                                                 <a
-                                                    href={`https://goerli.etherscan.io/tx/${transactionHash}`}
+                                                    href={`https://etherscan.io/tx/${transactionHash}`}
                                                     target="_blank"
                                                     rel="noreferrer"
                                                 >
